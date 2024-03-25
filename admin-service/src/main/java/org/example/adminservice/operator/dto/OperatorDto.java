@@ -1,25 +1,10 @@
-package org.example.adminservice.operator.model;
+package org.example.adminservice.operator.dto;
 
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document
-public class Operator {
-    @Id
+public class OperatorDto {
     private String id;
     private String code;
     private String name;
     private String IBAN;
-
-    public Operator(String code, String name, String IBAN) {
-        this.code = code;
-        this.name = name;
-        this.IBAN = IBAN;
-    }
-    public Operator(){
-
-    }
 
     public String getId() {
         return id;
@@ -35,6 +20,10 @@ public class Operator {
 
     public String getIBAN() {
         return IBAN;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setCode(String code) {

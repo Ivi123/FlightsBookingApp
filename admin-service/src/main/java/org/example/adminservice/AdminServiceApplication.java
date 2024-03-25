@@ -14,12 +14,4 @@ public class AdminServiceApplication {
         SpringApplication.run(AdminServiceApplication.class, args);
     }
 
-
-@Bean
-public CommandLineRunner commandLineRunner(OperatorRepository operatorRepository) {
-    return args -> {
-        var operator = new Operator("Tarom", "12233333");
-        operatorRepository.save(operator);
-    };
-}
 }
