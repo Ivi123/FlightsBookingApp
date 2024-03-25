@@ -1,7 +1,7 @@
 package org.example.adminservice.operator.service;
 
 import org.example.adminservice.operator.dto.OperatorDto;
-import org.example.adminservice.operator.exceptions.OperatorNotFoundException;
+import org.example.adminservice.operator.exception.OperatorNotFoundException;
 import org.example.adminservice.operator.mapper.OperatorMapper;
 import org.example.adminservice.operator.model.Operator;
 import org.example.adminservice.operator.repository.OperatorRepository;

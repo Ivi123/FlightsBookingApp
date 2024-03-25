@@ -1,4 +1,4 @@
-package org.example.adminservice.operator.exceptions;
+package org.example.adminservice.operator.exception;
 
 public class OperatorNotFoundException extends RuntimeException{
     public OperatorNotFoundException(String id) {
