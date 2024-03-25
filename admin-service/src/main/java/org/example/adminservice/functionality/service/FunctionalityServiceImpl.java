@@ -6,6 +6,9 @@ import org.example.adminservice.functionality.model.Functionality;
 import org.example.adminservice.functionality.repository.FunctionalityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class FunctionalityServiceImpl implements FunctionalityService {
     private final FunctionalityMapper mapper;
@@ -22,5 +25,20 @@ public class FunctionalityServiceImpl implements FunctionalityService {
         Functionality functionality = mapper.dtoToEntity(dto);
 
         return functionalityRepository.save(functionality);
+    }
+
+    @Override
+    public List<Functionality> getAll() {
+        return functionalityRepository.findAll();
+    }
+
+    @Override
+    public List<Functionality> getAllByOperatorId(String operatorId) {
+        return functionalityRepository.findAllByOperatorId(operatorId);
+    }
+
+    @Override
+    public Optional<Functionality> getById(String id) {
+        return functionalityRepository.findById(id);
     }
 }
