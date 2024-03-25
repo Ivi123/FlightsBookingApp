@@ -33,8 +33,9 @@ public class OperatorServiceImpl implements  OperatorService{
         if(targetOperator.isPresent()){
             targetOperator.get().setIBAN(dto.getIBAN());
             return operatorRepository.save(targetOperator.get());
+        }else{
+            throw new OperatorNotFoundException(id);
         }
-        return null;
     }
 
     @Override

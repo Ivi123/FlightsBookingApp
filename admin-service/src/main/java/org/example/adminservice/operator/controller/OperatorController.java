@@ -29,8 +29,8 @@ public class OperatorController {
         return  new ResponseEntity<>(operatorList,HttpStatus.OK);
     }
     @PutMapping("/modify-iban/{id}")
-    public ResponseEntity<Operator> modifyOperator(@PathVariable String id, @RequestBody OperatorDto dto){
+    public ResponseEntity<Operator> modifyOperator(@PathVariable String id, @Valid @RequestBody OperatorDto dto){
         Operator operator = operatorService.modifyIban(id,dto);
-        return new ResponseEntity<>(operator, HttpStatus.OK);
+        return new ResponseEntity<>(operator, HttpStatus.ACCEPTED);
     }
 }
