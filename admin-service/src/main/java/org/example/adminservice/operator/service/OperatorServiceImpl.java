@@ -42,4 +42,10 @@ public class OperatorServiceImpl implements  OperatorService{
     public List<Operator> getAll() {
         return operatorRepository.findAll();
     }
+
+    @Override
+    public Operator getById(String id) {
+        return  operatorRepository.findById(id)
+                .orElseThrow(() -> new OperatorNotFoundException(id));
+    }
 }

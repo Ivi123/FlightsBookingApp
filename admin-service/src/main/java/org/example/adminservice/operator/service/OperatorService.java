@@ -8,8 +8,10 @@ import java.util.List;
 public interface OperatorService {
     Operator addOperator(OperatorDto dto);
 
-    Operator modifyIban(String id,OperatorDto dto);
+    Operator modifyIban(String id, OperatorDto dto);
 
     List<Operator> getAll();
+
+    Operator getById(String Id);
 
 }

@@ -2,6 +2,7 @@ package org.example.adminservice.operator.controller;
 
 import jakarta.validation.Valid;
 import org.example.adminservice.operator.dto.OperatorDto;
+import org.example.adminservice.operator.exception.OperatorNotFoundException;
 import org.example.adminservice.operator.model.Operator;
 import org.example.adminservice.operator.service.OperatorService;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,17 @@ public class OperatorController {
         return  new ResponseEntity<>(operatorList,HttpStatus.OK);
     }
     @PutMapping("/modify-iban/{id}")
-    public ResponseEntity<Operator> modifyOperator(@PathVariable String id, @Valid @RequestBody OperatorDto dto){
+    public ResponseEntity<Operator> modifyOperator(@PathVariable String id, @RequestBody OperatorDto dto){
         Operator operator = operatorService.modifyIban(id,dto);
         return new ResponseEntity<>(operator, HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Operator> getOperatorById(@PathVariable String id) {
+        try {
+            Operator operator = operatorService.getById(id);
+            return new ResponseEntity<>(operator,HttpStatus.OK);
+        } catch (OperatorNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
