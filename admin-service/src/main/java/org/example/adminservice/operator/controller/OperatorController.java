@@ -1,5 +1,6 @@
 package org.example.adminservice.operator.controller;
 
+import jakarta.validation.Valid;
 import org.example.adminservice.operator.dto.OperatorDto;
 import org.example.adminservice.operator.model.Operator;
 import org.example.adminservice.operator.service.OperatorService;
@@ -18,7 +19,7 @@ public class OperatorController {
         this.operatorService = operatorService;
     }
     @PostMapping("/add")
-    public ResponseEntity<Operator> addOperator(@RequestBody OperatorDto dto){
+    public ResponseEntity<Operator> addOperator(@Valid @RequestBody OperatorDto dto){
         Operator operator = operatorService.addOperator(dto);
         return new ResponseEntity<>(operator, HttpStatus.CREATED);
     }

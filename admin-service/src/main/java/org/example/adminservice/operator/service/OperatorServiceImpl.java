@@ -1,6 +1,7 @@
 package org.example.adminservice.operator.service;
 
 import org.example.adminservice.operator.dto.OperatorDto;
+import org.example.adminservice.operator.exceptions.OperatorNotFoundException;
 import org.example.adminservice.operator.mapper.OperatorMapper;
 import org.example.adminservice.operator.model.Operator;
 import org.example.adminservice.operator.repository.OperatorRepository;
@@ -27,7 +28,8 @@ public class OperatorServiceImpl implements  OperatorService{
 
     @Override
     public Operator modifyIban(String id, OperatorDto dto) {
-        Optional<Operator> targetOperator = operatorRepository.findById(id);
+        Optional<Operator> targetOperator = Optional.ofNullable
+                (operatorRepository.findById(id).orElseThrow(() -> new OperatorNotFoundException(id)));
         if(targetOperator.isPresent()){
             targetOperator.get().setIBAN(dto.getIBAN());
             return operatorRepository.save(targetOperator.get());
