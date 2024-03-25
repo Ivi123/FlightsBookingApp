@@ -2,7 +2,8 @@ package org.example.adminservice.functionality.controller;
 
 import jakarta.validation.Valid;
 import org.example.adminservice.functionality.dto.FunctionalityDto;
-import org.example.adminservice.functionality.exceptions.FunctionalityNotFoundException;
+import org.example.adminservice.functionality.dto.UpdateFunctionalityDto;
+import org.example.adminservice.functionality.exception.FunctionalityNotFoundException;
 import org.example.adminservice.functionality.model.Functionality;
 import org.example.adminservice.functionality.service.FunctionalityService;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/functionalities")
@@ -44,5 +44,12 @@ public class FunctionalityController {
         Functionality functionality = functionalityService.getById(id)
                 .orElseThrow(() -> new FunctionalityNotFoundException(id));
         return new ResponseEntity<>(functionality, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Functionality> updateFunctionality(@Valid @RequestBody UpdateFunctionalityDto updateDto,
+                                                             @PathVariable String id) {
+        Functionality functionality = functionalityService.updateFunctionality(id, updateDto);
+        return new ResponseEntity<>(functionality, HttpStatus.ACCEPTED);
     }
 }

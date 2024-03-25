@@ -1,4 +1,4 @@
-package org.example.adminservice.functionality.exceptions;
+package org.example.adminservice.functionality.exception;
 
 public class FunctionalityNotFoundException extends RuntimeException {
     public FunctionalityNotFoundException(String id) {

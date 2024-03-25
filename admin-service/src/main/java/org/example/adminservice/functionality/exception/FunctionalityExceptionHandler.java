@@ -1,4 +1,4 @@
-package org.example.adminservice.functionality.exceptions;
+package org.example.adminservice.functionality.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
