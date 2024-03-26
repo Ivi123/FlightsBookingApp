@@ -14,4 +14,7 @@ public interface OperatorService {
 
     Operator getById(String Id);
 
+    Operator getByName(String name);
+
+    void deleteOperatorById(String id);
 }

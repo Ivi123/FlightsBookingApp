@@ -48,4 +48,22 @@ public class OperatorServiceImpl implements  OperatorService{
         return  operatorRepository.findById(id)
                 .orElseThrow(() -> new OperatorNotFoundException(id));
     }
+
+    @Override
+    public Operator getByName(String name) {
+        return operatorRepository.findByName(name)
+                .orElseThrow(() -> new OperatorNotFoundException("Operator not found with name: " + name));
+    }
+
+    @Override
+    public void deleteOperatorById(String id) {
+        Optional<Operator> optionalOperator = operatorRepository.findById(id);
+        if (optionalOperator.isPresent()) {
+            Operator operator = optionalOperator.get();
+            operatorRepository.delete(operator);
+        } else {
+            throw new OperatorNotFoundException("Operator with id: " + id+" not found");
+        }
+
+    }
 }
