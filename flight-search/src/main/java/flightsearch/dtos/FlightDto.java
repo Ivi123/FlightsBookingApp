@@ -1,5 +1,6 @@
-package org.example.adminservice.flight.dto;
-public class FlightDTO {
+package flightsearch.dtos;
+
+public class FlightDto {
     private String id;
     private String operatorId;
     private String departure;

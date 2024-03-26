@@ -1,5 +1,5 @@
 package org.example.adminservice.flight.controller;
-import org.example.adminservice.flight.dto.FlightDTO;
+import org.example.adminservice.flight.dto.FlightDto;
 import org.example.adminservice.flight.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +14,28 @@ public class FlightController {
     private FlightService flightService;
 
     @GetMapping("/all")
-    public List<FlightDTO> getAllFlights() {
+    public List<FlightDto> getAllFlights() {
         return flightService.getAllFlights();
     }
 
+    @GetMapping("/filter")
+    public List<FlightDto> getByDepAndDest(@RequestParam String departure,
+                                           @RequestParam String destination) {
+        return flightService.getByDepAndDest(departure, destination);
+    }
+
     @GetMapping("/{id}")
-    public FlightDTO getFlightById(@PathVariable String id) {
+    public FlightDto getFlightById(@PathVariable String id) {
         return flightService.getFlightById(id);
     }
 
     @PostMapping("/add")
-    public FlightDTO saveFlight(@RequestBody FlightDTO flightDTO) {
+    public FlightDto saveFlight(@RequestBody FlightDto flightDTO) {
         return flightService.createFlight(flightDTO);
     }
 
     @PutMapping("/update")
-    public FlightDTO updateFlight(@RequestBody FlightDTO flightDTO) {
+    public FlightDto updateFlight(@RequestBody FlightDto flightDTO) {
         return flightService.updateFlight(flightDTO);
     }
 

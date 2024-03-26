@@ -1,5 +1,5 @@
 package org.example.adminservice.flight.service.impl;
-import org.example.adminservice.flight.dto.FlightDTO;
+import org.example.adminservice.flight.dto.FlightDto;
 import org.example.adminservice.flight.exception.FlightNotFoundException;
 import org.example.adminservice.flight.mapper.FlightMapper;
 import org.example.adminservice.flight.model.Flight;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +24,7 @@ public class FlightServiceImpl implements FlightService {
     private FlightMapper flightMapper;
 
     @Override
-    public List<FlightDTO> getAllFlights() {
+    public List<FlightDto> getAllFlights() {
         return  flightRepository.findAll()
                 .stream()
                 .map(flightMapper::entityToDto)
@@ -33,14 +32,14 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightDTO getFlightById(String id) {
+    public FlightDto getFlightById(String id) {
         return flightRepository.findById(id)
                 .map(flightMapper::entityToDto)
                 .orElseThrow(() -> new FlightNotFoundException(id));
     }
 
     @Override
-    public FlightDTO createFlight(FlightDTO flightDTO) {
+    public FlightDto createFlight(FlightDto flightDTO) {
         Flight flight = flightMapper.dtoToEntity(flightDTO);
         if (operatorRepository.existsById(flight.getOperatorId())) {
             return flightMapper.entityToDto(flightRepository.save(flight));
@@ -50,7 +49,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightDTO updateFlight(FlightDTO flightDTO) {
+    public FlightDto updateFlight(FlightDto flightDTO) {
         if (operatorRepository.existsById(flightDTO.getOperatorId())) {
             return flightRepository.findById(flightDTO.getId())
                     .map(existingFlight -> {
@@ -72,6 +71,11 @@ public class FlightServiceImpl implements FlightService {
         } else {
             throw new FlightNotFoundException(id);
         }
+    }
+
+    @Override
+    public List<FlightDto> getByDepAndDest(String departure, String destination) {
+        return flightRepository.findByDepartureAndDestination(departure, destination);
     }
 }
 

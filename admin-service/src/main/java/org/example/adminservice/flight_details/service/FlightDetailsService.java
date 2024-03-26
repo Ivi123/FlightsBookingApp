@@ -1,18 +1,17 @@
 package org.example.adminservice.flight_details.service;
 
-import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
-import org.springframework.stereotype.Service;
+import org.example.adminservice.flight_details.dto.FlightDetailsDto;
 
 import java.util.List;
 
 public interface FlightDetailsService {
-    List<FlightDetailsDTO> getAllFlightDetails();
+    List<FlightDetailsDto> getAllFlightDetails();
 
-    FlightDetailsDTO getFlightDetailsById(String id);
+    FlightDetailsDto getFlightDetailsById(String id);
 
-    FlightDetailsDTO createFlightDetails(FlightDetailsDTO flightDetailsDTO);
+    FlightDetailsDto createFlightDetails(FlightDetailsDto flightDetailsDTO);
 
-    FlightDetailsDTO updateFlightDetails(FlightDetailsDTO flightDetailsDTO);
+    FlightDetailsDto updateFlightDetails(FlightDetailsDto flightDetailsDTO);
 
     void deleteFlightDetails(String id);
 }
