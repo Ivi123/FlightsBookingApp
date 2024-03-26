@@ -6,6 +6,9 @@ import org.example.adminservice.functionality.exception.FunctionalityNotFoundExc
 import org.example.adminservice.functionality.mapper.FunctionalityMapper;
 import org.example.adminservice.functionality.model.Functionality;
 import org.example.adminservice.functionality.repository.FunctionalityRepository;
+import org.example.adminservice.operator.exception.OperatorNotFoundException;
+import org.example.adminservice.operator.model.Operator;
+import org.example.adminservice.operator.repository.OperatorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +19,28 @@ import java.util.Optional;
 public class FunctionalityServiceImpl implements FunctionalityService {
     private final FunctionalityMapper mapper;
     private final FunctionalityRepository functionalityRepository;
+    private final OperatorRepository operatorRepository;
     private final ModelMapper modelMapper;
 
     public FunctionalityServiceImpl(FunctionalityMapper mapper,
                                     FunctionalityRepository functionalityRepository,
+                                    OperatorRepository operatorRepository,
                                     ModelMapper modelMapper) {
         this.mapper = mapper;
         this.functionalityRepository = functionalityRepository;
+        this.operatorRepository = operatorRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
     public Functionality add(FunctionalityDto dto) {
         Functionality functionality = mapper.dtoToEntity(dto);
-
-        return functionalityRepository.save(functionality);
+        Optional<Operator> targetOperator = operatorRepository.findById(dto.getOperatorId());
+        if (targetOperator.isPresent()) {
+            return functionalityRepository.save(functionality);
+        } else {
+            throw new OperatorNotFoundException(dto.getOperatorId());
+        }
     }
 
     @Override
