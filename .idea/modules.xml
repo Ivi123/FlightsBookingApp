@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Flights-App.iml" filepath="$PROJECT_DIR$/.idea/Flights-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/admin-service/admin-service.iml" filepath="$PROJECT_DIR$/admin-service/admin-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flight-search/flight-search.iml" filepath="$PROJECT_DIR$/flight-search/flight-search.iml" />
     </modules>
   </component>
 </project>
