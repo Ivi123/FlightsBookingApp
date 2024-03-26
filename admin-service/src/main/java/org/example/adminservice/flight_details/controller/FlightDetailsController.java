@@ -13,7 +13,7 @@ public class FlightDetailsController {
     @Autowired
     private FlightDetailsService flightDetailsService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<FlightDetailsDTO> getAllFlightDetails() {
         return flightDetailsService.getAllFlightDetails();
     }
@@ -23,17 +23,17 @@ public class FlightDetailsController {
         return flightDetailsService.getFlightDetailsById(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public FlightDetailsDTO saveFlightDetails(@RequestBody FlightDetailsDTO flightDetailsDTO) {
         return flightDetailsService.createFlightDetails(flightDetailsDTO);
     }
 
-    @PutMapping("/{id}")
-    public FlightDetailsDTO updateFlightDetails(@PathVariable String id, @RequestBody FlightDetailsDTO flightDetailsDTO) {
-        return flightDetailsService.updateFlightDetails(id, flightDetailsDTO);
+    @PutMapping("/update")
+    public FlightDetailsDTO updateFlightDetails(@RequestBody FlightDetailsDTO flightDetailsDTO) {
+        return flightDetailsService.updateFlightDetails(flightDetailsDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteFlightDetails(@PathVariable String id) {
         flightDetailsService.deleteFlightDetails(id);
     }

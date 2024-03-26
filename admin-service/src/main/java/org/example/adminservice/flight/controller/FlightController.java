@@ -13,7 +13,7 @@ public class FlightController {
     @Autowired
     private FlightService flightService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<FlightDTO> getAllFlights() {
         return flightService.getAllFlights();
     }
@@ -23,17 +23,17 @@ public class FlightController {
         return flightService.getFlightById(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public FlightDTO saveFlight(@RequestBody FlightDTO flightDTO) {
         return flightService.createFlight(flightDTO);
     }
 
-    @PutMapping("/{id}")
-    public FlightDTO updateFlight(@PathVariable String id, @RequestBody FlightDTO flightDTO) {
-        return flightService.updateFlight(id, flightDTO);
+    @PutMapping("/update")
+    public FlightDTO updateFlight(@RequestBody FlightDTO flightDTO) {
+        return flightService.updateFlight(flightDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteFlight(@PathVariable String id) {
         flightService.deleteFlight(id);
     }

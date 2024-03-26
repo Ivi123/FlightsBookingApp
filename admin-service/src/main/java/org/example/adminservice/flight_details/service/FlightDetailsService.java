@@ -12,7 +12,7 @@ public interface FlightDetailsService {
 
     FlightDetailsDTO createFlightDetails(FlightDetailsDTO flightDetailsDTO);
 
-    FlightDetailsDTO updateFlightDetails(String id, FlightDetailsDTO flightDetailsDTO);
+    FlightDetailsDTO updateFlightDetails(FlightDetailsDTO flightDetailsDTO);
 
     void deleteFlightDetails(String id);
 }

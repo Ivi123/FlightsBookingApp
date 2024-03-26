@@ -1,5 +1,7 @@
 package org.example.adminservice.flight_details.service.impl;
 
+import org.example.adminservice.flight.exception.FlightNotFoundException;
+import org.example.adminservice.flight.repository.FlightRepository;
 import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
 import org.example.adminservice.flight_details.exception.FlightDetailsNotFoundException;
 import org.example.adminservice.flight_details.mapper.FlightDetailsMapper;
@@ -17,7 +19,8 @@ public class FlightDetailsServiceImpl implements FlightDetailsService {
 
     @Autowired
     private FlightDetailsRepository flightDetailsRepository;
-
+    @Autowired
+    private FlightRepository flightRepository;
     @Autowired
     private FlightDetailsMapper flightDetailsMapper;
 
@@ -38,19 +41,27 @@ public class FlightDetailsServiceImpl implements FlightDetailsService {
     @Override
     public FlightDetailsDTO createFlightDetails(FlightDetailsDTO flightDetailsDTO) {
         FlightDetails flightDetails = flightDetailsMapper.dtoToEntity(flightDetailsDTO);
-        return flightDetailsMapper.entityToDto(flightDetailsRepository.save(flightDetails));
+        if (flightRepository.existsById(flightDetails.getFlightId())) {
+            return flightDetailsMapper.entityToDto(flightDetailsRepository.save(flightDetails));
+        } else {
+            throw new FlightNotFoundException(flightDetails.getFlightId());
+        }
     }
 
     @Override
-    public FlightDetailsDTO updateFlightDetails(String id, FlightDetailsDTO flightDetailsDTO) {
-        return flightDetailsRepository.findById(id)
-                .map(existingFlightDetails -> {
-                    existingFlightDetails.setNumberOfSeats(flightDetailsDTO.getNumberOfSeats());
-                    existingFlightDetails.setDate(flightDetailsDTO.getDate());
-                    existingFlightDetails.setFlightId(flightDetailsDTO.getFlightId());
-                    return flightDetailsMapper.entityToDto(flightDetailsRepository.save(existingFlightDetails));
-                })
-                .orElseThrow(() -> new FlightDetailsNotFoundException(id));
+    public FlightDetailsDTO updateFlightDetails(FlightDetailsDTO flightDetailsDTO) {
+        if (flightRepository.existsById(flightDetailsDTO.getFlightId())) {
+            return flightDetailsRepository.findById(flightDetailsDTO.getId())
+                    .map(existingFlightDetails -> {
+                        existingFlightDetails.setNumberOfSeats(flightDetailsDTO.getNumberOfSeats());
+                        existingFlightDetails.setDate(flightDetailsDTO.getDate());
+                        existingFlightDetails.setFlightId(flightDetailsDTO.getFlightId());
+                        return flightDetailsMapper.entityToDto(flightDetailsRepository.save(existingFlightDetails));
+                    })
+                    .orElseThrow(() -> new FlightDetailsNotFoundException(flightDetailsDTO.getId()));
+        } else {
+            throw new FlightNotFoundException(flightDetailsDTO.getFlightId());
+        }
     }
 
     @Override

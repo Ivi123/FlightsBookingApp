@@ -11,7 +11,7 @@ public interface FlightService {
 
     FlightDTO createFlight(FlightDTO flightDTO);
 
-    FlightDTO updateFlight(String id, FlightDTO flightDTO);
+    FlightDTO updateFlight(FlightDTO flightDTO);
 
     void deleteFlight(String id);
 }

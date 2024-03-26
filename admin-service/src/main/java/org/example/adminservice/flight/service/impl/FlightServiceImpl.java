@@ -5,6 +5,8 @@ import org.example.adminservice.flight.mapper.FlightMapper;
 import org.example.adminservice.flight.model.Flight;
 import org.example.adminservice.flight.repository.FlightRepository;
 import org.example.adminservice.flight.service.FlightService;
+import org.example.adminservice.operator.exception.OperatorNotFoundException;
+import org.example.adminservice.operator.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,8 @@ public class FlightServiceImpl implements FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
-
+    @Autowired
+    private OperatorRepository operatorRepository;
     @Autowired
     private FlightMapper flightMapper;
 
@@ -39,19 +42,27 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightDTO createFlight(FlightDTO flightDTO) {
         Flight flight = flightMapper.dtoToEntity(flightDTO);
-        return flightMapper.entityToDto(flightRepository.save(flight));
+        if (operatorRepository.existsById(flight.getOperatorId())) {
+            return flightMapper.entityToDto(flightRepository.save(flight));
+        } else {
+            throw new OperatorNotFoundException(flight.getOperatorId());
+        }
     }
 
     @Override
-    public FlightDTO updateFlight(String id, FlightDTO flightDTO) {
-        return flightRepository.findById(id)
-                .map(existingFlight -> {
-                    existingFlight.setDeparture(flightDTO.getDeparture());
-                    existingFlight.setDestination(flightDTO.getDestination());
-                    existingFlight.setOperatorId(flightDTO.getOperatorId());
-                    return flightMapper.entityToDto(flightRepository.save(existingFlight));
-                })
-                .orElseThrow(() -> new FlightNotFoundException(id));
+    public FlightDTO updateFlight(FlightDTO flightDTO) {
+        if (operatorRepository.existsById(flightDTO.getOperatorId())) {
+            return flightRepository.findById(flightDTO.getId())
+                    .map(existingFlight -> {
+                        existingFlight.setDeparture(flightDTO.getDeparture());
+                        existingFlight.setDestination(flightDTO.getDestination());
+                        existingFlight.setOperatorId(flightDTO.getOperatorId());
+                        return flightMapper.entityToDto(flightRepository.save(existingFlight));
+                    })
+                    .orElseThrow(() -> new FlightNotFoundException(flightDTO.getId()));
+        } else {
+            throw new OperatorNotFoundException(flightDTO.getOperatorId());
+        }
     }
 
     @Override
