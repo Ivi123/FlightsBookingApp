@@ -37,6 +37,4 @@ public class FlightController {
     public void deleteFlight(@PathVariable String id) {
         flightService.deleteFlight(id);
     }
-
-    // You can add more endpoints for specific operations as needed
 }

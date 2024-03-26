@@ -1,6 +1,6 @@
-package org.example.adminservice.flightdetails.controller;
-import org.example.adminservice.flightdetails.dto.FlightDetailsDTO;
-import org.example.adminservice.flightdetails.service.FlightDetailsService;
+package org.example.adminservice.flight_details.controller;
+import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
+import org.example.adminservice.flight_details.service.FlightDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +37,6 @@ public class FlightDetailsController {
     public void deleteFlightDetails(@PathVariable String id) {
         flightDetailsService.deleteFlightDetails(id);
     }
-
-    // You can add more endpoints for specific operations as needed
 }
 
 

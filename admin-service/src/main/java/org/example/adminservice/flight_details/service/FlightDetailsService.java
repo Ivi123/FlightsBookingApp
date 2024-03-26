@@ -1,11 +1,10 @@
-package org.example.adminservice.flightdetails.service;
+package org.example.adminservice.flight_details.service;
 
-import org.example.adminservice.flightdetails.dto.FlightDetailsDTO;
+import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface FlightDetailsService {
     List<FlightDetailsDTO> getAllFlightDetails();
 

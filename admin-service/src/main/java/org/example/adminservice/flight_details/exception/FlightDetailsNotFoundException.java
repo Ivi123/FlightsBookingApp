@@ -1,4 +1,4 @@
-package org.example.adminservice.flightdetails.exception;
+package org.example.adminservice.flight_details.exception;
 
 public class FlightDetailsNotFoundException extends RuntimeException {
     public FlightDetailsNotFoundException(String id) {

@@ -1,6 +1,6 @@
-package org.example.adminservice.flightdetails.mapper;
-import org.example.adminservice.flightdetails.dto.FlightDetailsDTO;
-import org.example.adminservice.flightdetails.model.FlightDetails;
+package org.example.adminservice.flight_details.mapper;
+import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
+import org.example.adminservice.flight_details.model.FlightDetails;
 import org.springframework.stereotype.Component;
 
 @Component

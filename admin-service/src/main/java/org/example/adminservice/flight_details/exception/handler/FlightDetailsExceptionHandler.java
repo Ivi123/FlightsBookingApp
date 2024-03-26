@@ -1,6 +1,6 @@
-package org.example.adminservice.flightdetails.exception.handler;
+package org.example.adminservice.flight_details.exception.handler;
 
-import org.example.adminservice.flightdetails.exception.FlightDetailsNotFoundException;
+import org.example.adminservice.flight_details.exception.FlightDetailsNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

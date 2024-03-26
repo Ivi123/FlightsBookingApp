@@ -1,16 +1,18 @@
-package org.example.adminservice.flightdetails.service.impl;
+package org.example.adminservice.flight_details.service.impl;
 
-import org.example.adminservice.flightdetails.dto.FlightDetailsDTO;
-import org.example.adminservice.flightdetails.exception.FlightDetailsNotFoundException;
-import org.example.adminservice.flightdetails.mapper.FlightDetailsMapper;
-import org.example.adminservice.flightdetails.model.FlightDetails;
-import org.example.adminservice.flightdetails.repository.FlightDetailsRepository;
-import org.example.adminservice.flightdetails.service.FlightDetailsService;
+import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
+import org.example.adminservice.flight_details.exception.FlightDetailsNotFoundException;
+import org.example.adminservice.flight_details.mapper.FlightDetailsMapper;
+import org.example.adminservice.flight_details.model.FlightDetails;
+import org.example.adminservice.flight_details.repository.FlightDetailsRepository;
+import org.example.adminservice.flight_details.service.FlightDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class FlightDetailsServiceImpl implements FlightDetailsService {
 
     @Autowired

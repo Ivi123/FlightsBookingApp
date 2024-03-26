@@ -1,5 +1,10 @@
-package org.example.adminservice.flightdetails.dto;
-public class FlightDetailsDTO {
+package org.example.adminservice.flight_details.model;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "flight_details")
+public class FlightDetails {
+    @Id
     private String id;
     private String flightId;
     private int numberOfSeats;
