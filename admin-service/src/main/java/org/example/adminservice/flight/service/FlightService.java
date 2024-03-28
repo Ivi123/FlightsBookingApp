@@ -1,6 +1,7 @@
 package org.example.adminservice.flight.service;
 import org.example.adminservice.flight.dto.FlightDto;
 
+import java.util.Date;
 import java.util.List;
 
 public interface FlightService {
@@ -14,5 +15,5 @@ public interface FlightService {
 
     void deleteFlight(String id);
 
-    List<FlightDto> getByDepAndDest(String departure, String destination);
+    List<FlightDto> getByDepDestAndDate(String departure, String destination, String date);
 }

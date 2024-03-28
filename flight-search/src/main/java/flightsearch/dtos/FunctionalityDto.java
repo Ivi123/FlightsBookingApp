@@ -1,10 +1,10 @@
 package flightsearch.dtos;
 
-public class FlightDto {
+public class FunctionalityDto {
     private String id;
     private String operatorId;
-    private String departure;
-    private String destination;
+    private String URL;
+    private FunctionalityType type;
 
     public String getId() {
         return id;
@@ -22,19 +22,19 @@ public class FlightDto {
         this.operatorId = operatorId;
     }
 
-    public String getDeparture() {
-        return departure;
+    public String getURL() {
+        return URL;
     }
 
-    public void setDeparture(String departure) {
-        this.departure = departure;
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 
-    public String getDestination() {
-        return destination;
+    public FunctionalityType getType() {
+        return type;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setType(FunctionalityType type) {
+        this.type = type;
     }
 }

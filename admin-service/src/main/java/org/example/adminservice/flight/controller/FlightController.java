@@ -20,8 +20,9 @@ public class FlightController {
 
     @GetMapping("/filter")
     public List<FlightDto> getByDepAndDest(@RequestParam String departure,
-                                           @RequestParam String destination) {
-        return flightService.getByDepAndDest(departure, destination);
+                                           @RequestParam String destination,
+                                           @RequestParam String date) {
+        return flightService.getByDepDestAndDate(departure, destination, date);
     }
 
     @GetMapping("/{id}")
