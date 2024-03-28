@@ -1,10 +1,16 @@
 package flightsearch.dtos;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class FlightDetailsDto {
     private String id;
     private String flightId;
+    private LocalDate date;
+    private LocalDateTime departureTime;
+    private LocalDateTime arrivalTime;
     private int numberOfSeats;
-    private String date;
+    private double standardPrice;
 
     public String getId() {
         return id;
@@ -30,11 +36,35 @@ public class FlightDetailsDto {
         this.numberOfSeats = numberOfSeats;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalDateTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public double getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(double standardPrice) {
+        this.standardPrice = standardPrice;
     }
 }
