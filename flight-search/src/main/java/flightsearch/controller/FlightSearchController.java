@@ -1,6 +1,6 @@
 package flightsearch.controller;
 
-import flightsearch.dtos.OperatorFlightDto;
+import flightsearch.dtos.FlightResponseDto;
 import flightsearch.service.FlightSearchService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,7 @@ public class FlightSearchController {
     }
 
     @GetMapping
-    public Flux<OperatorFlightDto> getFlights(@RequestParam String departure,
+    public Flux<FlightResponseDto> getFlights(@RequestParam String departure,
                                               @RequestParam String destination,
                                               @RequestParam String date) {
         return flightSearchService.searchFlights(departure, destination, date);

@@ -1,8 +1,8 @@
 package flightsearch.service;
 
 import flightsearch.dtos.FunctionalityDto;
-import flightsearch.dtos.LocalFlightDto;
-import flightsearch.dtos.OperatorFlightDto;
+import flightsearch.dtos.FlightDto;
+import flightsearch.dtos.FlightResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,8 +24,8 @@ public class FlightSearchService {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
     }
 
-    public Flux<OperatorFlightDto> searchFlights(String departure, String destination, String date) {
-        Flux<LocalFlightDto> localFlights = retrieveLocalFlights(departure, destination, date);
+    public Flux<FlightResponseDto> searchFlights(String departure, String destination, String date) {
+        Flux<FlightDto> localFlights = retrieveLocalFlights(departure, destination, date);
         Flux<String> distinctOperatorIds = extractDistinctOperatorIds(localFlights);
         Flux<String> urls = extractFlightSearchUrls(distinctOperatorIds);
         urls.subscribe(System.out::println);
@@ -34,7 +34,7 @@ public class FlightSearchService {
     }
 
     //aici extrag toate zborurile din baza de date locala, in functie de departure, destination si date
-    private Flux<LocalFlightDto> retrieveLocalFlights(String departure, String destination, String date) {
+    private Flux<FlightDto> retrieveLocalFlights(String departure, String destination, String date) {
         return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/flights/filter")
@@ -43,14 +43,14 @@ public class FlightSearchService {
                         .queryParam("date", date)
                         .build())
                 .retrieve()
-                .bodyToFlux(LocalFlightDto.class);
+                .bodyToFlux(FlightDto.class);
     }
 
     //aici extrag un flux de elemente unice cu toti operatorii(id-urile lor) ce au zboruri disponibile
     // in functie de filtrele date
-    private Flux<String> extractDistinctOperatorIds(Flux<LocalFlightDto> localFlights) {
+    private Flux<String> extractDistinctOperatorIds(Flux<FlightDto> localFlights) {
         return localFlights
-                .map(LocalFlightDto::getOperatorId)
+                .map(FlightDto::getOperatorId)
                 .distinct();
     }
 
@@ -72,7 +72,7 @@ public class FlightSearchService {
     }
 
     //iterez prin fiecare url si creez un request catre el
-    private Flux<OperatorFlightDto> requestFlightsFromOperators(Flux<String> urls, String departure,
+    private Flux<FlightResponseDto> requestFlightsFromOperators(Flux<String> urls, String departure,
                                                                 String destination, String date) {
       return urls.flatMap(url -> {
             try {
@@ -84,7 +84,7 @@ public class FlightSearchService {
     }
 
     //aici descompun si compun la loc url-ul pentru a putea fi apelat serviciul extern local
-    private Flux<OperatorFlightDto> makeHttpRequestForFlights(String url, String departure, String destination, String date) {
+    private Flux<FlightResponseDto> makeHttpRequestForFlights(String url, String departure, String destination, String date) {
         String baseUrl = determineBaseUrl(url);
         String completeUrl = baseUrl + "/flight-search";
 
@@ -95,7 +95,7 @@ public class FlightSearchService {
                         .queryParam("date", date)
                         .build())
                 .retrieve()
-                .bodyToFlux(OperatorFlightDto.class);
+                .bodyToFlux(FlightResponseDto.class);
     }
 
     private String determineBaseUrl(String url) {

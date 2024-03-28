@@ -1,6 +1,6 @@
 package flightsearch.dtos;
 
-public class OperatorFlightDto {
+public class FlightDto {
     private String id;
     private String operatorId;
     private String departure;
