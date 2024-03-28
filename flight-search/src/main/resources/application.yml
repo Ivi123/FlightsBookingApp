@@ -3,6 +3,6 @@ server:
 external:
   api:
     tarom:
-      baseurl: http://localhost:8083
+      baseurl: http://localhost:8083/tarom
     lufthansa:
-      baseurl: http://localhost:8084
+      baseurl: http://localhost:8084/lufthansa
