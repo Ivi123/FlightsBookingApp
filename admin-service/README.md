@@ -79,3 +79,190 @@ Response:
     "iban": " RO19BACX0000001124019001"
 }
 ```
+#### Get operator by id http://localhost:8080/operator/66014ba0795e9d6bda686019
+
+Response:
+
+```
+{
+    "id": "66014ba0795e9d6bda686019",
+    "code": "ROT",
+    "name": "Tarom",
+    "iban": "RO53RNCB0082005630560001"
+}
+```
+
+#### Get operator by name http://localhost:8080/operator/name/Tarom
+
+Response:
+
+``` 
+{
+    "id": "66014ba0795e9d6bda686019",
+    "code": "ROT",
+    "name": "Tarom",
+    "iban": "RO53RNCB0082005630560001"
+}
+```
+
+#### Delete operator by id  DELETE http://localhost:8080/operator/660661b9069b7e64e70a00ed
+
+### FLIGHT
+
+#### Add flight: POST http://localhost:8080/flights/add
+
+Body:
+
+``` 
+{
+    "operatorId":"660583f82900e209ee0fbe69",
+    "departure":"New York",
+    "destination":"London"
+}
+```
+
+#### Get all flights: http://localhost:8080/flights/all
+
+Response:
+
+``` 
+[
+    {
+        "id": "6602756acc4f882dcac177a8",
+        "operatorId": "⁠66014ba0795e9d6bda686019",
+        "departure": "Bucharest",
+        "destination": "Sevilla"
+    },
+    {
+        "id": "66056ba0683acd001abdd47a",
+        "operatorId": "66014ba0795e9d6bda686019",
+        "departure": "New York",
+        "destination": "London"
+    },
+    {
+        "id": "660585bc2900e209ee0fbe6a",
+        "operatorId": "660583f82900e209ee0fbe69",
+        "departure": "New York",
+        "destination": "London"
+    }
+]
+
+```
+
+#### Get flight by id http://localhost:8080/flights/66056ba0683acd001abdd47a
+
+Response:
+
+``` 
+{
+    "id": "66056ba0683acd001abdd47a",
+    "operatorId": "66014ba0795e9d6bda686019",
+    "departure": "New York",
+    "destination": "London"
+}
+```
+
+#### Get flight by departure & destination & date:
+
+GET http://localhost:8080/flights/filter?departure=New York&destination=London&date=2024-04-02
+Response:
+
+``` 
+[
+    {
+        "id": "66056ba0683acd001abdd47a",
+        "operatorId": "66014ba0795e9d6bda686019",
+        "departure": "New York",
+        "destination": "London"
+    },
+    {
+        "id": "660585bc2900e209ee0fbe6a",
+        "operatorId": "660583f82900e209ee0fbe69",
+        "departure": "New York",
+        "destination": "London"
+    }
+]
+```
+
+#### Delete flight by id : http://localhost:8080/flights/delete/6606641c069b7e64e70a00ee
+
+### FLIGHT_DETAILS
+
+##### Post flight details : http://localhost:8080/flight-details/add
+
+Request:
+
+``` 
+{
+    "flightId":"660585bc2900e209ee0fbe6a",
+    "numberOfSeats":88,
+    "date":"2024-04-02"
+}
+```
+
+#### Get all flight details: http://localhost:8080/flight-details/all
+
+Response:
+
+``` 
+[
+    {
+        "id": "66056bff683acd001abdd47b",
+        "flightId": "66056ba0683acd001abdd47a",
+        "numberOfSeats": 88,
+        "date": "2024-04-02"
+    },
+    {
+        "id": "660586ae2900e209ee0fbe6b",
+        "flightId": "660585bc2900e209ee0fbe6a",
+        "numberOfSeats": 88,
+        "date": "2024-04-02"
+    }
+]
+```
+
+#### Get flight_details by id : http://localhost:8080/flight-details/66056bff683acd001abdd47b
+
+Response:
+
+```
+{
+    "id": "66056bff683acd001abdd47b",
+    "flightId": "66056ba0683acd001abdd47a",
+    "numberOfSeats": 88,
+    "date": "2024-04-02"
+}
+
+```
+
+### FUNCTIONALITIES
+
+#### Add functionality : POST http://localhost:8080/functionalities/add
+
+Request:
+
+``` 
+{
+    "URL":"http://lufthansa.com/flight-search",
+    "type":"FLIGHT_SEARCH",
+    "operatorId":"660583f82900e209ee0fbe69"
+}
+```
+
+#### Get all functionalities: http://localhost:8080/functionalities
+
+#### Get all by operator id : http://localhost:8080/functionalities/operator/660583f82900e209ee0fbe69
+
+#### Get by id : http://localhost:8080/functionalities/6605877f2900e209ee0fbe6c
+
+#### Update functionality: http://localhost:8080/functionalities/update/660150c5344cea1094e80870
+
+Body:
+
+``` 
+{
+    "URL":"http://lufthansa.com/flight-search",
+    "type":"FLIGHT_SEARCH"
+}
+```
+
