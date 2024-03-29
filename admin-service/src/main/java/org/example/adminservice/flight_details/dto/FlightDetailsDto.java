@@ -1,5 +1,5 @@
 package org.example.adminservice.flight_details.dto;
-public class FlightDetailsDTO {
+public class FlightDetailsDto {
     private String id;
     private String flightId;
     private int numberOfSeats;

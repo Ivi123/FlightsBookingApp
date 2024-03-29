@@ -1,12 +1,12 @@
 package org.example.adminservice.flight_details.mapper;
-import org.example.adminservice.flight_details.dto.FlightDetailsDTO;
+import org.example.adminservice.flight_details.dto.FlightDetailsDto;
 import org.example.adminservice.flight_details.model.FlightDetails;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FlightDetailsMapper {
 
-    public FlightDetails dtoToEntity(FlightDetailsDTO dto) {
+    public FlightDetails dtoToEntity(FlightDetailsDto dto) {
         if (dto == null) {
             return null;
         }
@@ -19,11 +19,11 @@ public class FlightDetailsMapper {
         return entity;
     }
 
-    public FlightDetailsDTO entityToDto(FlightDetails entity) {
+    public FlightDetailsDto entityToDto(FlightDetails entity) {
         if (entity == null) {
             return null;
         }
-        FlightDetailsDTO dto = new FlightDetailsDTO();
+        FlightDetailsDto dto = new FlightDetailsDto();
 
         dto.setId(entity.getId());
         dto.setFlightId(entity.getFlightId());
