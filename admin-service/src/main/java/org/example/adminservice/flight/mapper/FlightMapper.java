@@ -15,6 +15,8 @@ public class FlightMapper {
         entity.setOperatorId(dto.getOperatorId());
         entity.setDeparture(dto.getDeparture());
         entity.setDestination(dto.getDestination());
+        entity.setDate(dto.getDate());
+        entity.setNumberOfSeats(dto.getNumberOfSeats());
 
         return entity;
     }
@@ -29,6 +31,8 @@ public class FlightMapper {
         dto.setOperatorId(entity.getOperatorId());
         dto.setDeparture(entity.getDeparture());
         dto.setDestination(entity.getDestination());
+        dto.setDate(entity.getDate());
+        dto.setNumberOfSeats(entity.getNumberOfSeats());
 
         return dto;
     }

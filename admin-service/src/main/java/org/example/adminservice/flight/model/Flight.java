@@ -9,6 +9,24 @@ public class Flight {
     private String operatorId;
     private String departure;
     private String destination;
+    private int numberOfSeats;
+    private String date;
+
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getId() {
         return id;
