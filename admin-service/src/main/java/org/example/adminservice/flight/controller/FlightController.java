@@ -1,5 +1,6 @@
 package org.example.adminservice.flight.controller;
 import org.example.adminservice.flight.dto.FlightDto;
+import org.example.adminservice.flight.model.Flight;
 import org.example.adminservice.flight.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,11 @@ public class FlightController {
     }
 
     @GetMapping("/filter")
-    public List<FlightDto> getByDepAndDest(@RequestParam String departure,
-                                           @RequestParam String destination,
-                                           @RequestParam String date) {
-        return flightService.getByDepDestAndDate(departure, destination, date);
+    public List<Flight> getByDepDestAndDate(@RequestParam String departure,
+                                            @RequestParam String destination,
+                                            @RequestParam String dateFrom,
+                                            @RequestParam String dateTo) {
+        return flightService.findByDepartureDestinationAndDate(departure, destination, dateFrom, dateTo);
     }
 
     @GetMapping("/{id}")
