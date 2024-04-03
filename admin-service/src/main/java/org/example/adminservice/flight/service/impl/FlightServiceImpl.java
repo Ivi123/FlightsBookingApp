@@ -8,6 +8,9 @@ import org.example.adminservice.flight.service.FlightService;
 import org.example.adminservice.operator.exception.OperatorNotFoundException;
 import org.example.adminservice.operator.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,8 @@ public class FlightServiceImpl implements FlightService {
     private OperatorRepository operatorRepository;
     @Autowired
     private FlightMapper flightMapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public List<FlightDto> getAllFlights() {
@@ -74,9 +79,21 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightDto> getByDepDestAndDate(String departure, String destination, String date) {
+    public List<Flight> findByDepartureDestinationAndDate(String departure, String destination, String dateFrom, String dateTo) {
+        Query query = new Query();
+        if (!departure.isEmpty()) {
+            query.addCriteria(Criteria.where("departure").is(departure));
+        }
+        if (!destination.isEmpty()) {
+            query.addCriteria(Criteria.where("destination").is(destination));
+        }
+        if (!dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            query.addCriteria(Criteria.where("date").gte(dateFrom).lte(dateTo));
+        }
+        query.addCriteria(Criteria.where("numberOfSeats").gt(0));
 
-        return flightRepository.findByDepartureAndDestinationAndDate(departure, destination, date);
+        return mongoTemplate.find(query, Flight.class);
     }
+
 }
 

@@ -24,23 +24,24 @@ public class FlightSearchService {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
     }
 
-    public Flux<FlightResponseDto> searchFlights(String departure, String destination, String date) {
-        Flux<FlightDto> localFlights = retrieveLocalFlights(departure, destination, date);
+    public Flux<FlightResponseDto> searchFlights(String departure, String destination, String dateFrom, String dateTo) {
+        Flux<FlightDto> localFlights = retrieveLocalFlights(departure, destination, dateFrom, dateTo);
         Flux<String> distinctOperatorIds = extractDistinctOperatorIds(localFlights);
         Flux<String> urls = extractFlightSearchUrls(distinctOperatorIds);
         urls.subscribe(System.out::println);
 
-        return requestFlightsFromOperators(urls, departure, destination, date);
+        return requestFlightsFromOperators(urls, departure, destination, dateFrom, dateTo);
     }
 
     //aici extrag toate zborurile din baza de date locala, in functie de departure, destination si date
-    private Flux<FlightDto> retrieveLocalFlights(String departure, String destination, String date) {
+    private Flux<FlightDto> retrieveLocalFlights(String departure, String destination, String dateFrom, String dateTo) {
         return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/flights/filter")
                         .queryParam("departure", departure)
                         .queryParam("destination", destination)
-                        .queryParam("date", date)
+                        .queryParam("dateFrom", dateFrom)
+                        .queryParam("dateTo", dateTo)
                         .build())
                 .retrieve()
                 .bodyToFlux(FlightDto.class);
@@ -73,10 +74,10 @@ public class FlightSearchService {
 
     //iterez prin fiecare url si creez un request catre el
     private Flux<FlightResponseDto> requestFlightsFromOperators(Flux<String> urls, String departure,
-                                                                String destination, String date) {
+                                                                String destination, String dateFrom, String dateTo) {
       return urls.flatMap(url -> {
             try {
-                return makeHttpRequestForFlights(url, departure, destination, date);
+                return makeHttpRequestForFlights(url, departure, destination, dateFrom, dateTo);
             } catch (IllegalArgumentException e) {
                 return Flux.empty(); //empty ca sa continue cu celelalte url-uri
             }
@@ -84,7 +85,8 @@ public class FlightSearchService {
     }
 
     //aici descompun si compun la loc url-ul pentru a putea fi apelat serviciul extern local
-    private Flux<FlightResponseDto> makeHttpRequestForFlights(String url, String departure, String destination, String date) {
+    private Flux<FlightResponseDto> makeHttpRequestForFlights(String url, String departure, String destination,
+                                                              String dateFrom, String dateTo) {
         String baseUrl = determineBaseUrl(url);
         String completeUrl = baseUrl + "/flight-search";
 
@@ -92,7 +94,8 @@ public class FlightSearchService {
                 .uri(completeUrl, uriBuilder -> uriBuilder
                         .queryParam("departure", departure)
                         .queryParam("destination", destination)
-                        .queryParam("date", date)
+                        .queryParam("dateFrom", dateFrom)
+                        .queryParam("dateTo", dateTo)
                         .build())
                 .retrieve()
                 .bodyToFlux(FlightResponseDto.class);
