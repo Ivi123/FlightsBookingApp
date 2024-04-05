@@ -5,16 +5,15 @@ import org.example.adminservice.flight.mapper.FlightMapper;
 import org.example.adminservice.flight.model.Flight;
 import org.example.adminservice.flight.repository.FlightRepository;
 import org.example.adminservice.flight.service.FlightService;
-import org.example.adminservice.flight_details.model.FlightDetails;
-import org.example.adminservice.flight_details.repository.FlightDetailsRepository;
 import org.example.adminservice.operator.exception.OperatorNotFoundException;
 import org.example.adminservice.operator.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,11 +22,11 @@ public class FlightServiceImpl implements FlightService {
     @Autowired
     private FlightRepository flightRepository;
     @Autowired
-    private FlightDetailsRepository flightDetailsRepository;
-    @Autowired
     private OperatorRepository operatorRepository;
     @Autowired
     private FlightMapper flightMapper;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public List<FlightDto> getAllFlights() {
@@ -80,19 +79,21 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightDto> getByDepDestAndDate(String departure, String destination, String date) {
-        List<FlightDto> allFlights = flightRepository.findByDepartureAndDestination(departure, destination);
-        List<FlightDto> filteredFlights = new ArrayList<>();
-
-        for (FlightDto flight : allFlights) {
-            Optional<FlightDetails> detailsOpt = flightDetailsRepository.findByFlightId(flight.getId());
-
-            if (detailsOpt.isPresent() && detailsOpt.get().getDate().equals(date)) {
-                filteredFlights.add(flight);
-            }
+    public List<Flight> findByDepartureDestinationAndDate(String departure, String destination, String dateFrom, String dateTo) {
+        Query query = new Query();
+        if (!departure.isEmpty()) {
+            query.addCriteria(Criteria.where("departure").is(departure));
         }
+        if (!destination.isEmpty()) {
+            query.addCriteria(Criteria.where("destination").is(destination));
+        }
+        if (!dateFrom.isEmpty() && !dateTo.isEmpty()) {
+            query.addCriteria(Criteria.where("date").gte(dateFrom).lte(dateTo));
+        }
+        query.addCriteria(Criteria.where("numberOfSeats").gt(0));
 
-        return filteredFlights;
+        return mongoTemplate.find(query, Flight.class);
     }
+
 }
 

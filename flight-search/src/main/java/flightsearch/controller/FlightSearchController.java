@@ -22,7 +22,8 @@ public class FlightSearchController {
     @GetMapping
     public Flux<FlightResponseDto> getFlights(@RequestParam String departure,
                                               @RequestParam String destination,
-                                              @RequestParam String date) {
-        return flightSearchService.searchFlights(departure, destination, date);
+                                              @RequestParam String dateFrom,
+                                              @RequestParam String dateTo) {
+        return flightSearchService.searchFlights(departure, destination, dateFrom, dateTo);
     }
 }
