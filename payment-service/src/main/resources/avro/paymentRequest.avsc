@@ -1,0 +1,51 @@
+{
+  "namespace": "org.example.dto",
+  "type": "record",
+  "name": "PaymentRequest",
+  "fields": [
+    {
+      "name": "id",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "bookingId",
+      "type": "string"
+    },
+    {
+      "name": "price",
+      "type": "double"
+    },
+    {
+      "name": "cardNumber",
+      "type": "string"
+    },
+    {
+      "name": "cardHolderName",
+      "type": "string"
+    },
+    {
+      "name": "expirationMonth",
+      "type": "string"
+    },
+    {
+      "name": "expirationYear",
+      "type": "string"
+    },
+    {
+      "name": "cvv",
+      "type": "int"
+    },
+    {
+      "name": "currency",
+      "type": "string"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    }
+  ]
+}
