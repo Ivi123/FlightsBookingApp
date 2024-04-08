@@ -2,11 +2,9 @@ package org.example.paymentservice.config.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.example.dto.PaymentRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,7 +13,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Configuration
 public class KafkaProducerConfig {
 
     // Injecting properties from application.properties
@@ -50,6 +48,7 @@ public class KafkaProducerConfig {
         config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
         config.put(ProducerConfig.LINGER_MS_CONFIG, linger);
         config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
+        config.put("schema.registry.url", "http://localhost:8081");
         return config;
     }
 
@@ -60,32 +59,24 @@ public class KafkaProducerConfig {
     }
 
     // Kafka template for booking topic
-    @Primary
     @Bean
-    KafkaTemplate<String, Object> bookingKafkaTemplate() {
+    KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
+//    @Bean
+//    NewTopic createTopicBooking() {
+//        return TopicBuilder.name("payment-response-topic").partitions(3).replicas(1)
+//                .configs(Map.of("min.insync.replicas", "2"))
+//                .build();
+//    }
+//
+//    // Bean for creating the notification topic
+//    @Bean
+//    NewTopic createTopicNotification() {
+//        return TopicBuilder.name("notification-topic").partitions(3).replicas(1)
+//                .configs(Map.of("min.insync.replicas", "2"))
+//                .build();
+//    }
 
-    // Kafka template for notification topic
-    @Bean
-    KafkaTemplate<String, Object> notificationKafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
-
-    // Bean for creating the payment response topic
-    @Bean
-    NewTopic createTopicBooking() {
-        return TopicBuilder.name("payment-response-topic").partitions(3).replicas(2)
-                .configs(Map.of("min.insync.replicas", "2"))
-                .build();
-    }
-
-    // Bean for creating the notification topic
-    @Bean
-    NewTopic createTopicNotification() {
-        return TopicBuilder.name("notification-topic").partitions(3).replicas(2)
-                .configs(Map.of("min.insync.replicas", "2"))
-                .build();
-    }
 
 }

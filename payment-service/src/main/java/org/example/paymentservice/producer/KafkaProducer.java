@@ -14,18 +14,16 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class KafkaProducer {
     private static final Logger log = LoggerFactory.getLogger(KafkaProducer.class);
-    private final KafkaTemplate<String, Object> bookingKafkaTemplate;
-    private final KafkaTemplate<String, Object> notificationKafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
      * Constructor for KafkaProducer.
      *
      * @param kafkaTemplate             KafkaTemplate for sending messages to payment-response-topic.
-     * @param notificationKafkaTemplate KafkaTemplate for sending notification messages to notification-topic.
+
      */
-    public KafkaProducer(KafkaTemplate<String, Object> kafkaTemplate, KafkaTemplate<String, Object> notificationKafkaTemplate) {
-        this.bookingKafkaTemplate = kafkaTemplate;
-        this.notificationKafkaTemplate = notificationKafkaTemplate;
+    public KafkaProducer( KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     /**
@@ -42,9 +40,9 @@ public class KafkaProducer {
                 throw new RuntimeException(e);
             }
             log.info("Sending message to payment-response-topic:: {}, {}", key, paymentRequest);
-            bookingKafkaTemplate.send("payment-response-topic", key, paymentRequest);
+            kafkaTemplate.send("payment-response-topic", key, paymentRequest);
             log.info("Sending message to notification-topic:: {}, {}", key, paymentRequest);
-            notificationKafkaTemplate.send("notification-topic", key, paymentRequest);
+            kafkaTemplate.send("notification-topic", key, paymentRequest);
             return null;
         }).whenComplete((r, e) -> {
             if (e == null) {
