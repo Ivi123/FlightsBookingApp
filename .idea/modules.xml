@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Flights-App.iml" filepath="$PROJECT_DIR$/.idea/Flights-App.iml" />
-      <module fileurl="file://$PROJECT_DIR$/admin-service/admin-service.iml" filepath="$PROJECT_DIR$/admin-service/admin-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/flight-search/flight-search.iml" filepath="$PROJECT_DIR$/flight-search/flight-search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/FlightsBookingApp.iml" filepath="$PROJECT_DIR$/.idea/FlightsBookingApp.iml" />
     </modules>
   </component>
 </project>
