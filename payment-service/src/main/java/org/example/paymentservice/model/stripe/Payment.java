@@ -1,4 +1,4 @@
-package org.example.paymentservice.model;
+package org.example.paymentservice.model.stripe;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

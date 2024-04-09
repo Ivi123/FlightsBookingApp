@@ -1,15 +1,15 @@
-package org.example.paymentservice.service;
+package org.example.paymentservice.service.stripe;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentIntentCollection;
 import org.example.dto.PaymentRequest;
-import org.example.paymentservice.mapper.PaymentMapper;
-import org.example.paymentservice.model.Payment;
+import org.example.paymentservice.mapper.stripe.PaymentMapper;
 import org.example.paymentservice.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,22 +55,32 @@ public class PaymentProcessingService {
                 log.info("*** status: {}", intent.getStatus());
 
                 // Update status in the database
+                Mono<Void> updateStatusMono;
                 if (!intent.getStatus().equalsIgnoreCase("succeeded")) {
-                    paymentService.updatePaymentStatus(paymentId, "failed");
+                    updateStatusMono = paymentService.updatePaymentStatus(paymentId, "failed");
                 } else {
-                    paymentService.updatePaymentStatus(paymentId, "succeeded");
+                    updateStatusMono = paymentService.updatePaymentStatus(paymentId, "succeeded");
                 }
 
-                // Retrieve payment details
-                Payment p = paymentService.findById(paymentId);
-                PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(p);
-
-                // Send payment details via Kafka
-                kafkaProducer.sendMessage(bookingId, paymentRequest);
-                break;
+                updateStatusMono
+                        .then(paymentService.findById(paymentId))
+                        .flatMap(payment -> {
+                            PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                            return Mono.fromRunnable(() -> kafkaProducer.sendMessage(bookingId, paymentRequest))
+                                    .thenReturn(payment); // Return the payment after sending the message
+                        })
+                        .subscribe(
+                                payment -> {
+                                    // Handle successful processing
+                                },
+                                error -> {
+                                    // Handle errors
+                                }
+                        );
             }
         } catch (StripeException e) {
             e.printStackTrace();
         }
     }
+
 }

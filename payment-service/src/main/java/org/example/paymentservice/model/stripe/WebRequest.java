@@ -1,4 +1,4 @@
-package org.example.paymentservice.model;
+package org.example.paymentservice.model.stripe;
 
 import jakarta.validation.constraints.*;
 

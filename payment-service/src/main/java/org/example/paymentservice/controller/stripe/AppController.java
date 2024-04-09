@@ -1,7 +1,7 @@
-package org.example.paymentservice.controller;
+package org.example.paymentservice.controller.stripe;
 
-import org.example.paymentservice.model.WebRequest;
-import org.example.paymentservice.service.PaymentProcessingService;
+import org.example.paymentservice.model.stripe.WebRequest;
+import org.example.paymentservice.service.stripe.PaymentProcessingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
