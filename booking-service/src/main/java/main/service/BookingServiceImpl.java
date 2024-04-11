@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService{
                     // Preparing admin request based on the booking details
                     AdminRequest adminRequest = adminRequestMapper.toAdminRequest(bookingMapper.toEntity(bookingDTO));
                     // Sending to admin topic for initial processing
-                    bookingProducerService.sendAdminRequest("admin-request-topic", adminRequest);
+                    bookingProducerService.sendAdminRequest(bookingDTO.getBookingId(), adminRequest);
                 });
     }
 

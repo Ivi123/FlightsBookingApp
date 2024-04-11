@@ -4,6 +4,7 @@ import avro.BookingNotification;
 import avro.PaymentRequest;
 import main.constants.notifications.NotificationMessagesConstants;
 import main.kafka.mappers.NotificationRequestMapper;
+import main.kafka.producer.BookingProducerService;
 import main.mapper.BookingMapper;
 import main.kafka.mappers.AdminRequestMapper;
 import main.kafka.mappers.PaymentRequestMapper;
@@ -36,6 +37,9 @@ public class AdminRequestConsumer {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
+    @Autowired
+    private BookingProducerService bookingProducerService;
+
     @KafkaListener(topics = "admin-response-topic", groupId = "admin-response-group")
     public void handleAdminResponse(AdminRequest adminResponse) {
         bookingRepository.findById(adminResponse.getBookingId()).flatMap(booking -> {
@@ -43,24 +47,26 @@ public class AdminRequestConsumer {
                 // Send successful booking notification
                 BookingNotification bookingSuccessfulNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_SUCCESSFUL_MESSAGE);
-                kafkaTemplate
-                        .send("booking-notification-topic", bookingSuccessfulNotification);
+                bookingProducerService
+                        .sendBookingNotificationRequest(booking.getId(), bookingSuccessfulNotification);
                 // Check if booking hasn't expired
                 if (booking.getExpiresAt().isAfter(LocalDateTime.now())) {
                     // Prepare and send payment request
                     PaymentRequest paymentRequest = paymentRequestMapper
                             .toPaymentRequest(bookingMapper.toDTO(booking));
-                    kafkaTemplate.send("payment-request-topic", paymentRequest);
+                    bookingProducerService
+                            .sendPaymentRequest(booking.getId(), paymentRequest);
                 } else {
                     // Handle expired booking
                     booking.setStatus("EXPIRED");
                     AdminRequest adminRequest = adminRequestMapper.toAdminRequest(booking);
-                    adminRequest.setStatus("FAILED");
-                    kafkaTemplate.send("admin-request-topic", adminRequest);
+                    bookingProducerService
+                            .sendAdminRequest(booking.getId(), adminRequest);
 
                     // Send expired booking notification
                     BookingNotification bookingExpiredNotification = notificationRequestMapper.toBookingNotification(booking, NotificationMessagesConstants.BOOKING_EXPIRED_MESSAGE);
-                    kafkaTemplate.send("booking-notification-topic", bookingExpiredNotification);
+                    bookingProducerService
+                            .sendBookingNotificationRequest(booking.getId(), bookingExpiredNotification);
 
                     return bookingRepository.save(booking);
 
@@ -70,8 +76,8 @@ public class AdminRequestConsumer {
                 // Send rejected booking notification
                 BookingNotification bookingRejectedNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_REJECTED_MESSAGE);
-                kafkaTemplate
-                        .send("booking-notification-topic", bookingRejectedNotification);
+                bookingProducerService
+                        .sendBookingNotificationRequest(booking.getId(), bookingRejectedNotification);
                 // Save booking as FAILED in the database
                 return bookingRepository.save(booking);
             }

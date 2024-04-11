@@ -4,6 +4,7 @@ import avro.AdminRequest;
 import avro.BookingNotification;
 import avro.PaymentRequest;
 import main.constants.notifications.NotificationMessagesConstants;
+import main.kafka.producer.BookingProducerService;
 import main.mapper.PaymentDetailsMapper;
 import main.kafka.mappers.AdminRequestMapper;
 import main.kafka.mappers.NotificationRequestMapper;
@@ -29,6 +30,9 @@ public class PaymentRequestConsumer {
     @Autowired
     private NotificationRequestMapper notificationRequestMapper;
 
+    @Autowired
+    private BookingProducerService bookingProducerService;
+
     @KafkaListener(topics = "payment-response-topic", groupId = "payment-response-group")
     public void handlePaymentDetailsResponse(PaymentRequest paymentResponse) {
         bookingRepository.findById(paymentResponse.getBookingId()).flatMap(booking -> {
@@ -39,8 +43,8 @@ public class PaymentRequestConsumer {
                 // Send payment successful notification
                 BookingNotification paymentSuccessfulNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.PAYMEMT_SUCCESSFUL_MESSAGE);
-                kafkaTemplate
-                        .send("payment-notification-topic", paymentSuccessfulNotification);
+                bookingProducerService
+                        .sendPaymentNotificationRequest(booking.getId(), paymentSuccessfulNotification);
             } else {
                 // Update booking status, notify, and inform admin to revert seats
                 booking.setStatus("FAILED");
@@ -48,13 +52,13 @@ public class PaymentRequestConsumer {
                 // Send payment failed notification
                 BookingNotification paymentFailedNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.PAYMENT_UNSUCCESSFUL_MESSAGE);
-                kafkaTemplate
-                        .send("payment-notification-topic", paymentFailedNotification);
+                bookingProducerService
+                        .sendPaymentNotificationRequest(booking.getId(), paymentFailedNotification);
 
                 // Send message to admin to revert the request
                 AdminRequest revertRequest = adminRequestMapper.toAdminRequest(booking);
                 revertRequest.setStatus("FAILED");
-                kafkaTemplate.send("admin-request-topic", revertRequest);
+                bookingProducerService.sendAdminRequest(booking.getId(), revertRequest);
             }
             return bookingRepository.save(booking);
         }).subscribe();
