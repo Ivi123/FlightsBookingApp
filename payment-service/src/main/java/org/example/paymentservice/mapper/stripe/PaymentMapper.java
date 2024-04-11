@@ -1,6 +1,7 @@
 package org.example.paymentservice.mapper.stripe;
 
-import org.example.dto.PaymentRequest;
+
+import avro.PaymentRequest;
 import org.example.paymentservice.model.stripe.Payment;
 
 public class PaymentMapper {

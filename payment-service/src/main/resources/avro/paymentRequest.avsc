@@ -1,5 +1,5 @@
 {
-  "namespace": "org.example.dto",
+  "namespace": "avro",
   "type": "record",
   "name": "PaymentRequest",
   "fields": [

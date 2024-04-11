@@ -5,6 +5,7 @@ import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
 import org.example.paymentservice.model.paypal.CompletedOrder;
 import org.example.paymentservice.model.paypal.PaymentOrder;
+import org.example.paymentservice.service.stripe.PaymentServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ public class PayPalService {
     private final static Logger log = LoggerFactory.getLogger(PayPalService.class);
 
     private final PayPalHttpClient payPalHttpClient;
+   private final PaymentServiceImpl paymentService;
 
     @Value("${paypal.returnUrl}")
     private String returnUrl;
@@ -27,8 +29,9 @@ public class PayPalService {
     @Value("${paypal.cancelUrl}")
     private String cancelUrl;
 
-    public PayPalService(PayPalHttpClient payPalHttpClient) {
+    public PayPalService(PayPalHttpClient payPalHttpClient, PaymentServiceImpl paymentService) {
         this.payPalHttpClient = payPalHttpClient;
+        this.paymentService = paymentService;
     }
 
     // Method to create a payment order
@@ -128,11 +131,17 @@ public class PayPalService {
         try {
             HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersGetRequest);
             Order order = httpResponse.result();
-            log.info("*** Order created at:"+ order.createTime());
-            log.info("*** Order made by: "+order.payer().email());
-            log.info("*** Payment id: "+order.purchaseUnits().get(0).items().get(0).name());
+            //update payment in bd
+            String paymentId = order.purchaseUnits().get(0).items().get(0).name();
+            String status = order.status();
+
+
+            log.info("*** Payment id: {}",paymentId);
             log.info("*** BookingId:"+order.purchaseUnits().get(0).items().get(0).description());
             log.info("*** Amount:"+order.purchaseUnits().get(0).amountWithBreakdown().value());
+            log.info("****"+ status);
+
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);

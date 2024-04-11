@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package org.example.dto;
+package avro;
 
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -5803511847913230676L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentRequest\",\"namespace\":\"org.example.dto\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"cardNumber\",\"type\":\"string\"},{\"name\":\"cardHolderName\",\"type\":\"string\"},{\"name\":\"expirationMonth\",\"type\":\"string\"},{\"name\":\"expirationYear\",\"type\":\"string\"},{\"name\":\"cvv\",\"type\":\"int\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = 8676384663334068845L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"cardNumber\",\"type\":\"string\"},{\"name\":\"cardHolderName\",\"type\":\"string\"},{\"name\":\"expirationMonth\",\"type\":\"string\"},{\"name\":\"expirationYear\",\"type\":\"string\"},{\"name\":\"cvv\",\"type\":\"int\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -295,8 +295,8 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * Creates a new PaymentRequest RecordBuilder.
    * @return A new PaymentRequest RecordBuilder
    */
-  public static org.example.dto.PaymentRequest.Builder newBuilder() {
-    return new org.example.dto.PaymentRequest.Builder();
+  public static avro.PaymentRequest.Builder newBuilder() {
+    return new avro.PaymentRequest.Builder();
   }
 
   /**
@@ -304,8 +304,8 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * @param other The existing builder to copy.
    * @return A new PaymentRequest RecordBuilder
    */
-  public static org.example.dto.PaymentRequest.Builder newBuilder(org.example.dto.PaymentRequest.Builder other) {
-    return new org.example.dto.PaymentRequest.Builder(other);
+  public static avro.PaymentRequest.Builder newBuilder(avro.PaymentRequest.Builder other) {
+    return new avro.PaymentRequest.Builder(other);
   }
 
   /**
@@ -313,8 +313,8 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * @param other The existing instance to copy.
    * @return A new PaymentRequest RecordBuilder
    */
-  public static org.example.dto.PaymentRequest.Builder newBuilder(org.example.dto.PaymentRequest other) {
-    return new org.example.dto.PaymentRequest.Builder(other);
+  public static avro.PaymentRequest.Builder newBuilder(avro.PaymentRequest other) {
+    return new avro.PaymentRequest.Builder(other);
   }
 
   /**
@@ -343,7 +343,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(org.example.dto.PaymentRequest.Builder other) {
+    private Builder(avro.PaymentRequest.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -391,7 +391,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
      * Creates a Builder by copying an existing PaymentRequest instance
      * @param other The existing instance to copy.
      */
-    private Builder(org.example.dto.PaymentRequest other) {
+    private Builder(avro.PaymentRequest other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -448,7 +448,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setId(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setId(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -468,7 +468,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'id' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearId() {
+    public avro.PaymentRequest.Builder clearId() {
       id = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -487,7 +487,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'bookingId'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setBookingId(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setBookingId(java.lang.CharSequence value) {
       validate(fields()[1], value);
       this.bookingId = value;
       fieldSetFlags()[1] = true;
@@ -507,7 +507,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'bookingId' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearBookingId() {
+    public avro.PaymentRequest.Builder clearBookingId() {
       bookingId = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -526,7 +526,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'price'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setPrice(double value) {
+    public avro.PaymentRequest.Builder setPrice(double value) {
       validate(fields()[2], value);
       this.price = value;
       fieldSetFlags()[2] = true;
@@ -546,7 +546,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'price' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearPrice() {
+    public avro.PaymentRequest.Builder clearPrice() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -564,7 +564,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'cardNumber'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setCardNumber(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setCardNumber(java.lang.CharSequence value) {
       validate(fields()[3], value);
       this.cardNumber = value;
       fieldSetFlags()[3] = true;
@@ -584,7 +584,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'cardNumber' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearCardNumber() {
+    public avro.PaymentRequest.Builder clearCardNumber() {
       cardNumber = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -603,7 +603,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'cardHolderName'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setCardHolderName(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setCardHolderName(java.lang.CharSequence value) {
       validate(fields()[4], value);
       this.cardHolderName = value;
       fieldSetFlags()[4] = true;
@@ -623,7 +623,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'cardHolderName' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearCardHolderName() {
+    public avro.PaymentRequest.Builder clearCardHolderName() {
       cardHolderName = null;
       fieldSetFlags()[4] = false;
       return this;
@@ -642,7 +642,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'expirationMonth'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setExpirationMonth(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setExpirationMonth(java.lang.CharSequence value) {
       validate(fields()[5], value);
       this.expirationMonth = value;
       fieldSetFlags()[5] = true;
@@ -662,7 +662,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'expirationMonth' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearExpirationMonth() {
+    public avro.PaymentRequest.Builder clearExpirationMonth() {
       expirationMonth = null;
       fieldSetFlags()[5] = false;
       return this;
@@ -681,7 +681,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'expirationYear'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setExpirationYear(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setExpirationYear(java.lang.CharSequence value) {
       validate(fields()[6], value);
       this.expirationYear = value;
       fieldSetFlags()[6] = true;
@@ -701,7 +701,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'expirationYear' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearExpirationYear() {
+    public avro.PaymentRequest.Builder clearExpirationYear() {
       expirationYear = null;
       fieldSetFlags()[6] = false;
       return this;
@@ -720,7 +720,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'cvv'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setCvv(int value) {
+    public avro.PaymentRequest.Builder setCvv(int value) {
       validate(fields()[7], value);
       this.cvv = value;
       fieldSetFlags()[7] = true;
@@ -740,7 +740,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'cvv' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearCvv() {
+    public avro.PaymentRequest.Builder clearCvv() {
       fieldSetFlags()[7] = false;
       return this;
     }
@@ -758,7 +758,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'currency'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setCurrency(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setCurrency(java.lang.CharSequence value) {
       validate(fields()[8], value);
       this.currency = value;
       fieldSetFlags()[8] = true;
@@ -778,7 +778,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'currency' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearCurrency() {
+    public avro.PaymentRequest.Builder clearCurrency() {
       currency = null;
       fieldSetFlags()[8] = false;
       return this;
@@ -797,7 +797,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * @param value The value of 'status'.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder setStatus(java.lang.CharSequence value) {
+    public avro.PaymentRequest.Builder setStatus(java.lang.CharSequence value) {
       validate(fields()[9], value);
       this.status = value;
       fieldSetFlags()[9] = true;
@@ -817,7 +817,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Clears the value of the 'status' field.
       * @return This builder.
       */
-    public org.example.dto.PaymentRequest.Builder clearStatus() {
+    public avro.PaymentRequest.Builder clearStatus() {
       status = null;
       fieldSetFlags()[9] = false;
       return this;

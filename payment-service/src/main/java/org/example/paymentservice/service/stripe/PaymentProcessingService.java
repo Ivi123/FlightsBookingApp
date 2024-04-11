@@ -1,9 +1,9 @@
 package org.example.paymentservice.service.stripe;
 
+import avro.PaymentRequest;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentIntentCollection;
-import org.example.dto.PaymentRequest;
 import org.example.paymentservice.mapper.stripe.PaymentMapper;
 import org.example.paymentservice.producer.KafkaProducer;
 import org.slf4j.Logger;
