@@ -1,0 +1,23 @@
+{
+  "namespace": "avro",
+  "type": "record",
+  "name": "BookingNotification",
+  "fields": [
+    {
+      "name": "message",
+      "type": "string"
+    },
+    {
+      "name": "userEmail",
+      "type": "string"
+    },
+    {
+      "name": "bookingId",
+      "type": "string"
+    },
+    {
+      "name": "paymentId",
+      "type": "string"
+    }
+  ]
+}
