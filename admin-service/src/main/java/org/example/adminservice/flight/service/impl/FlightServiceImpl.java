@@ -1,4 +1,5 @@
 package org.example.adminservice.flight.service.impl;
+
 import org.example.adminservice.flight.dto.FlightDto;
 import org.example.adminservice.flight.exception.FlightNotFoundException;
 import org.example.adminservice.flight.mapper.FlightMapper;
@@ -30,7 +31,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<FlightDto> getAllFlights() {
-        return  flightRepository.findAll()
+        return flightRepository.findAll()
                 .stream()
                 .map(flightMapper::entityToDto)
                 .collect(Collectors.toList());
@@ -61,6 +62,7 @@ public class FlightServiceImpl implements FlightService {
                         existingFlight.setDeparture(flightDTO.getDeparture());
                         existingFlight.setDestination(flightDTO.getDestination());
                         existingFlight.setOperatorId(flightDTO.getOperatorId());
+                        existingFlight.setNumberOfSeats(flightDTO.getNumberOfSeats());
                         return flightMapper.entityToDto(flightRepository.save(existingFlight));
                     })
                     .orElseThrow(() -> new FlightNotFoundException(flightDTO.getId()));
@@ -94,6 +96,23 @@ public class FlightServiceImpl implements FlightService {
 
         return mongoTemplate.find(query, Flight.class);
     }
+
+    @Override
+    public Flight findByDepartureDestinationDateAndOperatorId(String departure, String destination, String date, String operatorId) {
+        Query query = new Query();
+        if (!departure.isEmpty()) {
+            query.addCriteria(Criteria.where("departure").is(departure));
+        }
+        if (!destination.isEmpty()) {
+            query.addCriteria(Criteria.where("destination").is(destination));
+        }
+        if (!operatorId.isEmpty()) {
+            query.addCriteria(Criteria.where("operatorId").is(operatorId));
+        }
+        return mongoTemplate.findOne(query, Flight.class);
+    }
+
+
 
 }
 

@@ -1,7 +1,7 @@
 package org.example.paymentservice.consumer;
 
+import avro.PaymentRequest;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.example.dto.PaymentRequest;
 import org.example.paymentservice.mapper.stripe.PaymentMapper;
 import org.example.paymentservice.model.stripe.Payment;
 import org.example.paymentservice.service.stripe.PaymentServiceImpl;
