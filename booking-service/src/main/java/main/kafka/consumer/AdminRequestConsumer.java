@@ -11,7 +11,7 @@ import main.kafka.mappers.PaymentRequestMapper;
 import main.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,12 +35,9 @@ public class AdminRequestConsumer {
     private NotificationRequestMapper notificationRequestMapper;
 
     @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
-
-    @Autowired
     private BookingProducerService bookingProducerService;
 
-    @KafkaListener(topics = "admin-response-topic", groupId = "admin-response-group")
+    @KafkaListener(topics = "admin-response-topic", groupId = "admin-response-group", containerFactory = "adminRequestKafkaListenerContainerFactory")
     public void handleAdminResponse(AdminRequest adminResponse) {
         bookingRepository.findById(adminResponse.getBookingId()).flatMap(booking -> {
             if (adminResponse.getStatus().equals("SUCCEEDED")) {
@@ -48,25 +45,25 @@ public class AdminRequestConsumer {
                 BookingNotification bookingSuccessfulNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_SUCCESSFUL_MESSAGE);
                 bookingProducerService
-                        .sendBookingNotificationRequest(booking.getId(), bookingSuccessfulNotification);
+                        .sendBookingNotificationRequest(booking.getBookingId(), bookingSuccessfulNotification);
                 // Check if booking hasn't expired
                 if (booking.getExpiresAt().isAfter(LocalDateTime.now())) {
                     // Prepare and send payment request
                     PaymentRequest paymentRequest = paymentRequestMapper
                             .toPaymentRequest(bookingMapper.toDTO(booking));
                     bookingProducerService
-                            .sendPaymentRequest(booking.getId(), paymentRequest);
+                            .sendPaymentRequest(booking.getBookingId(), paymentRequest);
                 } else {
                     // Handle expired booking
                     booking.setStatus("EXPIRED");
                     AdminRequest adminRequest = adminRequestMapper.toAdminRequest(booking);
                     bookingProducerService
-                            .sendAdminRequest(booking.getId(), adminRequest);
+                            .sendAdminRequest(booking.getBookingId(), adminRequest);
 
                     // Send expired booking notification
                     BookingNotification bookingExpiredNotification = notificationRequestMapper.toBookingNotification(booking, NotificationMessagesConstants.BOOKING_EXPIRED_MESSAGE);
                     bookingProducerService
-                            .sendBookingNotificationRequest(booking.getId(), bookingExpiredNotification);
+                            .sendBookingNotificationRequest(booking.getBookingId(), bookingExpiredNotification);
 
                     return bookingRepository.save(booking);
 
@@ -77,7 +74,7 @@ public class AdminRequestConsumer {
                 BookingNotification bookingRejectedNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_REJECTED_MESSAGE);
                 bookingProducerService
-                        .sendBookingNotificationRequest(booking.getId(), bookingRejectedNotification);
+                        .sendBookingNotificationRequest(booking.getBookingId(), bookingRejectedNotification);
                 // Save booking as FAILED in the database
                 return bookingRepository.save(booking);
             }

@@ -9,8 +9,6 @@ import java.util.List;
 public class Booking {
 
     @Id
-    private String id;
-
     private String bookingId;
     private String userId;
     private FlightDetails flightDetails;
@@ -20,14 +18,6 @@ public class Booking {
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
     private LocalDateTime updatedAt;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getBookingId() {
         return bookingId;

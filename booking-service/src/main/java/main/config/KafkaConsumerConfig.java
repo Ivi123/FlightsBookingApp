@@ -1,4 +1,4 @@
-package config;
+package main.config;
 
 import avro.AdminRequest;
 import avro.PaymentRequest;
@@ -18,7 +18,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
     private String bootstrapServers;
 
     @Value("${spring.kafka.consumer.properties.schema.registry.url}")

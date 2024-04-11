@@ -11,15 +11,11 @@ import main.kafka.mappers.NotificationRequestMapper;
 import main.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class PaymentRequestConsumer {
-
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -29,11 +25,10 @@ public class PaymentRequestConsumer {
     private AdminRequestMapper adminRequestMapper;
     @Autowired
     private NotificationRequestMapper notificationRequestMapper;
-
     @Autowired
     private BookingProducerService bookingProducerService;
 
-    @KafkaListener(topics = "payment-response-topic", groupId = "payment-response-group")
+    @KafkaListener(topics = "payment-response-topic", groupId = "payment-response-group", containerFactory = "paymentRequestKafkaListenerContainerFactory")
     public void handlePaymentDetailsResponse(PaymentRequest paymentResponse) {
         bookingRepository.findById(paymentResponse.getBookingId()).flatMap(booking -> {
             if (paymentResponse.getStatus().equals("SUCCEEDED")) {
@@ -44,7 +39,7 @@ public class PaymentRequestConsumer {
                 BookingNotification paymentSuccessfulNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.PAYMEMT_SUCCESSFUL_MESSAGE);
                 bookingProducerService
-                        .sendPaymentNotificationRequest(booking.getId(), paymentSuccessfulNotification);
+                        .sendPaymentNotificationRequest(booking.getBookingId(), paymentSuccessfulNotification);
             } else {
                 // Update booking status, notify, and inform admin to revert seats
                 booking.setStatus("FAILED");
@@ -53,12 +48,12 @@ public class PaymentRequestConsumer {
                 BookingNotification paymentFailedNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.PAYMENT_UNSUCCESSFUL_MESSAGE);
                 bookingProducerService
-                        .sendPaymentNotificationRequest(booking.getId(), paymentFailedNotification);
+                        .sendPaymentNotificationRequest(booking.getBookingId(), paymentFailedNotification);
 
                 // Send message to admin to revert the request
                 AdminRequest revertRequest = adminRequestMapper.toAdminRequest(booking);
                 revertRequest.setStatus("FAILED");
-                bookingProducerService.sendAdminRequest(booking.getId(), revertRequest);
+                bookingProducerService.sendAdminRequest(booking.getBookingId(), revertRequest);
             }
             return bookingRepository.save(booking);
         }).subscribe();

@@ -35,6 +35,8 @@ public class BookingMapper {
             booking.setFlightDetails(flightDetailsMapper.toEntity(bookingDTO.getFlightDetails()));
         }
 
+        booking.setStatus(bookingDTO.getStatus());
+
         return booking;
     }
 
@@ -55,6 +57,8 @@ public class BookingMapper {
         if (booking.getFlightDetails() != null) {
             bookingDTO.setFlightDetails(flightDetailsMapper.toDTO(booking.getFlightDetails()));
         }
+
+        bookingDTO.setStatus(booking.getStatus());
 
         return bookingDTO;
     }

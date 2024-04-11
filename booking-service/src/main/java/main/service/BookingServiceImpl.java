@@ -20,15 +20,12 @@ public class BookingServiceImpl implements BookingService{
 
     @Autowired
     private BookingRepository bookingRepository;
-
     @Autowired
     private PaymentRequestMapper paymentRequestMapper;
-
     @Autowired
     private AdminRequestMapper adminRequestMapper;
     @Autowired
     private BookingMapper bookingMapper;
-
     @Autowired
     private BookingProducerService bookingProducerService;
 

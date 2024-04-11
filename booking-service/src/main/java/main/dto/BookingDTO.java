@@ -16,8 +16,9 @@ public class BookingDTO {
     private PaymentDetailsDTO paymentDetails;
     private List<PassengerDetailsDTO> passengerDetails;
     private FlightDetailsDTO flightDetails;
-
     private LocalDateTime createdAt;
+
+    private String status;
 
     public LocalDateTime getExpiresAt() {
         return expiresAt;
@@ -95,5 +96,13 @@ public class BookingDTO {
 
     public void setFlightDetails(FlightDetailsDTO flightDetails) {
         this.flightDetails = flightDetails;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
