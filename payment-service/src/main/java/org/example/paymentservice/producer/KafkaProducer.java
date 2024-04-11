@@ -22,7 +22,7 @@ public class KafkaProducer {
      * @param kafkaTemplate             KafkaTemplate for sending messages to payment-response-topic.
 
      */
-    public KafkaProducer( KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaProducer(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
