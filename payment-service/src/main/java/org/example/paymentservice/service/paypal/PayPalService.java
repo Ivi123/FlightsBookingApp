@@ -1,10 +1,13 @@
 package org.example.paymentservice.service.paypal;
 
+import avro.PaymentRequest;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
+import org.example.paymentservice.mapper.stripe.PaymentMapper;
 import org.example.paymentservice.model.paypal.CompletedOrder;
 import org.example.paymentservice.model.paypal.PaymentOrder;
+import org.example.paymentservice.producer.KafkaProducer;
 import org.example.paymentservice.service.stripe.PaymentServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,7 @@ public class PayPalService {
 
     private final PayPalHttpClient payPalHttpClient;
    private final PaymentServiceImpl paymentService;
+   private final KafkaProducer kafkaProducer;
 
     @Value("${paypal.returnUrl}")
     private String returnUrl;
@@ -29,9 +33,10 @@ public class PayPalService {
     @Value("${paypal.cancelUrl}")
     private String cancelUrl;
 
-    public PayPalService(PayPalHttpClient payPalHttpClient, PaymentServiceImpl paymentService) {
+    public PayPalService(PayPalHttpClient payPalHttpClient, PaymentServiceImpl paymentService, KafkaProducer kafkaProducer) {
         this.payPalHttpClient = payPalHttpClient;
         this.paymentService = paymentService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     // Method to create a payment order
@@ -133,13 +138,31 @@ public class PayPalService {
             Order order = httpResponse.result();
             //update payment in bd
             String paymentId = order.purchaseUnits().get(0).items().get(0).name();
-            String status = order.status();
+            String bookingId = order.purchaseUnits().get(0).items().get(0).description();
+            // Update status in the database
+            Mono<Void> updateStatusMono;
+            if (!order.status().equalsIgnoreCase("COMPLETED")) {
+                updateStatusMono = paymentService.updatePaymentStatus(paymentId, "failed");
+            } else {
+                updateStatusMono = paymentService.updatePaymentStatus(paymentId, "succeeded");
+            }
+
+            updateStatusMono
+                    .then(paymentService.findById(paymentId))
+                    .flatMap(payment -> {
+                        PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                        return Mono.fromRunnable(() -> kafkaProducer.sendMessage(bookingId, paymentRequest))
+                                .thenReturn(payment); // Return the payment after sending the message
+                    })
+                    .subscribe(
+
+                    );
 
 
             log.info("*** Payment id: {}",paymentId);
             log.info("*** BookingId:"+order.purchaseUnits().get(0).items().get(0).description());
             log.info("*** Amount:"+order.purchaseUnits().get(0).amountWithBreakdown().value());
-            log.info("****"+ status);
+            log.info("****"+ order.status());
 
 
 
