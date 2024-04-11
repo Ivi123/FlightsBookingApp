@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 6401227355312825156L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AdminRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"operatorId\",\"type\":\"string\"},{\"name\":\"flightId\",\"type\":\"string\"},{\"name\":\"departure\",\"type\":\"string\"},{\"name\":\"destination\",\"type\":\"string\"},{\"name\":\"numberOfSeats\",\"type\":\"int\"},{\"name\":\"standardPrice\",\"type\":\"double\"},{\"name\":\"date\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = 6065030716465957116L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AdminRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"default\":null},{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"operatorId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"flightId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"departure\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"destination\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"numberOfSeats\",\"type\":\"int\"},{\"name\":\"standardPrice\",\"type\":\"double\"},{\"name\":\"date\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"status\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"default\":null}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -51,16 +51,16 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.CharSequence id;
-  @Deprecated public java.lang.CharSequence bookingId;
-  @Deprecated public java.lang.CharSequence operatorId;
-  @Deprecated public java.lang.CharSequence flightId;
-  @Deprecated public java.lang.CharSequence departure;
-  @Deprecated public java.lang.CharSequence destination;
+  @Deprecated public java.lang.String id;
+  @Deprecated public java.lang.String bookingId;
+  @Deprecated public java.lang.String operatorId;
+  @Deprecated public java.lang.String flightId;
+  @Deprecated public java.lang.String departure;
+  @Deprecated public java.lang.String destination;
   @Deprecated public int numberOfSeats;
   @Deprecated public double standardPrice;
-  @Deprecated public java.lang.CharSequence date;
-  @Deprecated public java.lang.CharSequence status;
+  @Deprecated public java.lang.String date;
+  @Deprecated public java.lang.String status;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -82,7 +82,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * @param date The new value for date
    * @param status The new value for status
    */
-  public AdminRequest(java.lang.CharSequence id, java.lang.CharSequence bookingId, java.lang.CharSequence operatorId, java.lang.CharSequence flightId, java.lang.CharSequence departure, java.lang.CharSequence destination, java.lang.Integer numberOfSeats, java.lang.Double standardPrice, java.lang.CharSequence date, java.lang.CharSequence status) {
+  public AdminRequest(java.lang.String id, java.lang.String bookingId, java.lang.String operatorId, java.lang.String flightId, java.lang.String departure, java.lang.String destination, java.lang.Integer numberOfSeats, java.lang.Double standardPrice, java.lang.String date, java.lang.String status) {
     this.id = id;
     this.bookingId = bookingId;
     this.operatorId = operatorId;
@@ -117,16 +117,16 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: id = (java.lang.CharSequence)value$; break;
-    case 1: bookingId = (java.lang.CharSequence)value$; break;
-    case 2: operatorId = (java.lang.CharSequence)value$; break;
-    case 3: flightId = (java.lang.CharSequence)value$; break;
-    case 4: departure = (java.lang.CharSequence)value$; break;
-    case 5: destination = (java.lang.CharSequence)value$; break;
+    case 0: id = (java.lang.String)value$; break;
+    case 1: bookingId = (java.lang.String)value$; break;
+    case 2: operatorId = (java.lang.String)value$; break;
+    case 3: flightId = (java.lang.String)value$; break;
+    case 4: departure = (java.lang.String)value$; break;
+    case 5: destination = (java.lang.String)value$; break;
     case 6: numberOfSeats = (java.lang.Integer)value$; break;
     case 7: standardPrice = (java.lang.Double)value$; break;
-    case 8: date = (java.lang.CharSequence)value$; break;
-    case 9: status = (java.lang.CharSequence)value$; break;
+    case 8: date = (java.lang.String)value$; break;
+    case 9: status = (java.lang.String)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -135,7 +135,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'id' field.
    * @return The value of the 'id' field.
    */
-  public java.lang.CharSequence getId() {
+  public java.lang.String getId() {
     return id;
   }
 
@@ -143,7 +143,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'id' field.
    * @param value the value to set.
    */
-  public void setId(java.lang.CharSequence value) {
+  public void setId(java.lang.String value) {
     this.id = value;
   }
 
@@ -151,7 +151,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'bookingId' field.
    * @return The value of the 'bookingId' field.
    */
-  public java.lang.CharSequence getBookingId() {
+  public java.lang.String getBookingId() {
     return bookingId;
   }
 
@@ -159,7 +159,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'bookingId' field.
    * @param value the value to set.
    */
-  public void setBookingId(java.lang.CharSequence value) {
+  public void setBookingId(java.lang.String value) {
     this.bookingId = value;
   }
 
@@ -167,7 +167,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'operatorId' field.
    * @return The value of the 'operatorId' field.
    */
-  public java.lang.CharSequence getOperatorId() {
+  public java.lang.String getOperatorId() {
     return operatorId;
   }
 
@@ -175,7 +175,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'operatorId' field.
    * @param value the value to set.
    */
-  public void setOperatorId(java.lang.CharSequence value) {
+  public void setOperatorId(java.lang.String value) {
     this.operatorId = value;
   }
 
@@ -183,7 +183,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'flightId' field.
    * @return The value of the 'flightId' field.
    */
-  public java.lang.CharSequence getFlightId() {
+  public java.lang.String getFlightId() {
     return flightId;
   }
 
@@ -191,7 +191,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'flightId' field.
    * @param value the value to set.
    */
-  public void setFlightId(java.lang.CharSequence value) {
+  public void setFlightId(java.lang.String value) {
     this.flightId = value;
   }
 
@@ -199,7 +199,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'departure' field.
    * @return The value of the 'departure' field.
    */
-  public java.lang.CharSequence getDeparture() {
+  public java.lang.String getDeparture() {
     return departure;
   }
 
@@ -207,7 +207,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'departure' field.
    * @param value the value to set.
    */
-  public void setDeparture(java.lang.CharSequence value) {
+  public void setDeparture(java.lang.String value) {
     this.departure = value;
   }
 
@@ -215,7 +215,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'destination' field.
    * @return The value of the 'destination' field.
    */
-  public java.lang.CharSequence getDestination() {
+  public java.lang.String getDestination() {
     return destination;
   }
 
@@ -223,7 +223,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'destination' field.
    * @param value the value to set.
    */
-  public void setDestination(java.lang.CharSequence value) {
+  public void setDestination(java.lang.String value) {
     this.destination = value;
   }
 
@@ -263,7 +263,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'date' field.
    * @return The value of the 'date' field.
    */
-  public java.lang.CharSequence getDate() {
+  public java.lang.String getDate() {
     return date;
   }
 
@@ -271,7 +271,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'date' field.
    * @param value the value to set.
    */
-  public void setDate(java.lang.CharSequence value) {
+  public void setDate(java.lang.String value) {
     this.date = value;
   }
 
@@ -279,7 +279,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'status' field.
    * @return The value of the 'status' field.
    */
-  public java.lang.CharSequence getStatus() {
+  public java.lang.String getStatus() {
     return status;
   }
 
@@ -287,7 +287,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
    * Sets the value of the 'status' field.
    * @param value the value to set.
    */
-  public void setStatus(java.lang.CharSequence value) {
+  public void setStatus(java.lang.String value) {
     this.status = value;
   }
 
@@ -323,16 +323,16 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<AdminRequest>
     implements org.apache.avro.data.RecordBuilder<AdminRequest> {
 
-    private java.lang.CharSequence id;
-    private java.lang.CharSequence bookingId;
-    private java.lang.CharSequence operatorId;
-    private java.lang.CharSequence flightId;
-    private java.lang.CharSequence departure;
-    private java.lang.CharSequence destination;
+    private java.lang.String id;
+    private java.lang.String bookingId;
+    private java.lang.String operatorId;
+    private java.lang.String flightId;
+    private java.lang.String departure;
+    private java.lang.String destination;
     private int numberOfSeats;
     private double standardPrice;
-    private java.lang.CharSequence date;
-    private java.lang.CharSequence status;
+    private java.lang.String date;
+    private java.lang.String status;
 
     /** Creates a new Builder */
     private Builder() {
@@ -439,7 +439,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'id' field.
       * @return The value.
       */
-    public java.lang.CharSequence getId() {
+    public java.lang.String getId() {
       return id;
     }
 
@@ -448,7 +448,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setId(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setId(java.lang.String value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -478,7 +478,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'bookingId' field.
       * @return The value.
       */
-    public java.lang.CharSequence getBookingId() {
+    public java.lang.String getBookingId() {
       return bookingId;
     }
 
@@ -487,7 +487,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'bookingId'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setBookingId(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setBookingId(java.lang.String value) {
       validate(fields()[1], value);
       this.bookingId = value;
       fieldSetFlags()[1] = true;
@@ -517,7 +517,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'operatorId' field.
       * @return The value.
       */
-    public java.lang.CharSequence getOperatorId() {
+    public java.lang.String getOperatorId() {
       return operatorId;
     }
 
@@ -526,7 +526,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'operatorId'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setOperatorId(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setOperatorId(java.lang.String value) {
       validate(fields()[2], value);
       this.operatorId = value;
       fieldSetFlags()[2] = true;
@@ -556,7 +556,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'flightId' field.
       * @return The value.
       */
-    public java.lang.CharSequence getFlightId() {
+    public java.lang.String getFlightId() {
       return flightId;
     }
 
@@ -565,7 +565,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'flightId'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setFlightId(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setFlightId(java.lang.String value) {
       validate(fields()[3], value);
       this.flightId = value;
       fieldSetFlags()[3] = true;
@@ -595,7 +595,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'departure' field.
       * @return The value.
       */
-    public java.lang.CharSequence getDeparture() {
+    public java.lang.String getDeparture() {
       return departure;
     }
 
@@ -604,7 +604,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'departure'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setDeparture(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setDeparture(java.lang.String value) {
       validate(fields()[4], value);
       this.departure = value;
       fieldSetFlags()[4] = true;
@@ -634,7 +634,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'destination' field.
       * @return The value.
       */
-    public java.lang.CharSequence getDestination() {
+    public java.lang.String getDestination() {
       return destination;
     }
 
@@ -643,7 +643,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'destination'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setDestination(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setDestination(java.lang.String value) {
       validate(fields()[5], value);
       this.destination = value;
       fieldSetFlags()[5] = true;
@@ -749,7 +749,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'date' field.
       * @return The value.
       */
-    public java.lang.CharSequence getDate() {
+    public java.lang.String getDate() {
       return date;
     }
 
@@ -758,7 +758,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'date'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setDate(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setDate(java.lang.String value) {
       validate(fields()[8], value);
       this.date = value;
       fieldSetFlags()[8] = true;
@@ -788,7 +788,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * Gets the value of the 'status' field.
       * @return The value.
       */
-    public java.lang.CharSequence getStatus() {
+    public java.lang.String getStatus() {
       return status;
     }
 
@@ -797,7 +797,7 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'status'.
       * @return This builder.
       */
-    public avro.AdminRequest.Builder setStatus(java.lang.CharSequence value) {
+    public avro.AdminRequest.Builder setStatus(java.lang.String value) {
       validate(fields()[9], value);
       this.status = value;
       fieldSetFlags()[9] = true;
@@ -828,16 +828,16 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
     public AdminRequest build() {
       try {
         AdminRequest record = new AdminRequest();
-        record.id = fieldSetFlags()[0] ? this.id : (java.lang.CharSequence) defaultValue(fields()[0]);
-        record.bookingId = fieldSetFlags()[1] ? this.bookingId : (java.lang.CharSequence) defaultValue(fields()[1]);
-        record.operatorId = fieldSetFlags()[2] ? this.operatorId : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.flightId = fieldSetFlags()[3] ? this.flightId : (java.lang.CharSequence) defaultValue(fields()[3]);
-        record.departure = fieldSetFlags()[4] ? this.departure : (java.lang.CharSequence) defaultValue(fields()[4]);
-        record.destination = fieldSetFlags()[5] ? this.destination : (java.lang.CharSequence) defaultValue(fields()[5]);
+        record.id = fieldSetFlags()[0] ? this.id : (java.lang.String) defaultValue(fields()[0]);
+        record.bookingId = fieldSetFlags()[1] ? this.bookingId : (java.lang.String) defaultValue(fields()[1]);
+        record.operatorId = fieldSetFlags()[2] ? this.operatorId : (java.lang.String) defaultValue(fields()[2]);
+        record.flightId = fieldSetFlags()[3] ? this.flightId : (java.lang.String) defaultValue(fields()[3]);
+        record.departure = fieldSetFlags()[4] ? this.departure : (java.lang.String) defaultValue(fields()[4]);
+        record.destination = fieldSetFlags()[5] ? this.destination : (java.lang.String) defaultValue(fields()[5]);
         record.numberOfSeats = fieldSetFlags()[6] ? this.numberOfSeats : (java.lang.Integer) defaultValue(fields()[6]);
         record.standardPrice = fieldSetFlags()[7] ? this.standardPrice : (java.lang.Double) defaultValue(fields()[7]);
-        record.date = fieldSetFlags()[8] ? this.date : (java.lang.CharSequence) defaultValue(fields()[8]);
-        record.status = fieldSetFlags()[9] ? this.status : (java.lang.CharSequence) defaultValue(fields()[9]);
+        record.date = fieldSetFlags()[8] ? this.date : (java.lang.String) defaultValue(fields()[8]);
+        record.status = fieldSetFlags()[9] ? this.status : (java.lang.String) defaultValue(fields()[9]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
