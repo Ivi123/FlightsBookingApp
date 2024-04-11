@@ -32,7 +32,7 @@ public class PayPalService {
     }
 
     // Method to create a payment order
-    public Mono<PaymentOrder> createPayment(Double totalAmount) {
+    public Mono<PaymentOrder> createPayment(Double totalAmount, String paymentId, String bookingId, String email) {
         return Mono.create(fluxSink -> {
             // Creating an order request
             OrderRequest orderRequest = new OrderRequest();
@@ -55,8 +55,8 @@ public class PayPalService {
             amountWithBreakdown.amountBreakdown(amountBreakdown);
 
             // Creating an item object for the payment
-            Item item = new Item().category("DIGITAL_GOODS").quantity("1").name("Flight")
-                    .description("Flight_id")
+            Item item = new Item().category("DIGITAL_GOODS").quantity("1").name(paymentId)
+                    .description(bookingId)
                     .unitAmount(money);
 
             // Adding item to the purchase unit request
@@ -130,6 +130,7 @@ public class PayPalService {
             Order order = httpResponse.result();
             log.info("*** Order created at:"+ order.createTime());
             log.info("*** Order made by: "+order.payer().email());
+            log.info("*** Payment id: "+order.purchaseUnits().get(0).items().get(0).name());
             log.info("*** BookingId:"+order.purchaseUnits().get(0).items().get(0).description());
             log.info("*** Amount:"+order.purchaseUnits().get(0).amountWithBreakdown().value());
 
