@@ -15,6 +15,7 @@ import java.text.MessageFormat;
 
 @Service
 public class KafkaConsumer {
+    private static final String PAYMENT_REQUEST_TOPIC ="payment-request-topic";
     private final PaymentServiceImpl paymentService;
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
@@ -23,7 +24,7 @@ public class KafkaConsumer {
         this.paymentService = paymentService;
     }
 
-    @KafkaListener(topics = "payment-request-topic", groupId = "payment-service")
+    @KafkaListener(topics = PAYMENT_REQUEST_TOPIC, groupId = "payment-service")
     public void listen(ConsumerRecord<String, PaymentRequest> consumerRecord, Acknowledgment ak) {
         try {
             PaymentRequest paymentRequest = consumerRecord.value();

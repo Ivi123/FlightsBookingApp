@@ -1,0 +1,128 @@
+version: '3.1'
+
+services:
+  mongodb:
+    image: mongo:latest
+    networks:
+      project:
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/local
+
+  mongo-express:
+    image: mongo-express:latest
+    depends_on:
+      - mongodb
+    networks:
+      project:
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    ports:
+      - "8083:8083"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    networks:
+      project:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    restart: unless-stopped
+
+  kafka1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka1
+    networks:
+      project:
+    ports:
+      - "8097:8097"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8097,PLAINTEXT://kafka1:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    restart: unless-stopped
+
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka2
+    networks:
+      project:
+    ports:
+      - "8098:8098"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8098,PLAINTEXT://kafka2:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    restart: unless-stopped
+
+  kafka3:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka3
+    networks:
+      project:
+    ports:
+      - "8099:8099"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8099,PLAINTEXT://kafka3:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    restart: unless-stopped
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema-registry
+    networks:
+      project:
+    ports:
+      - "8081:8081"
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092, kafka2:9092, kafka3:9092
+      SCHEMA_REGISTRY_DEBUG: 'true'
+    restart: always
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    networks:
+      project:
+    depends_on:
+      - kafka1
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092, kafka2:9092, kafka3:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
+networks:
+    project:
+
+volumes:
+  mongo-data:
+    driver: local

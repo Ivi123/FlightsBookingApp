@@ -7,3 +7,28 @@ spring:
       port: 27017
       database: flights-db
       authentication-database: admin
+
+  #kafka
+  kafka:
+    bootstrap-servers: localhost:8097,localhost:8098,localhost:8099
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      acks: all
+      retries: 10
+      properties:
+        retry.backoff.ms: 1000
+        delivery.timeout.ms: 120000
+        linger.ms: 0
+        request.timeout.ms: 30000
+        schema.registry.url: http://127.0.0.1:8081
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      group-id: admin-group
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+        schema:
+         registry:
+          url: http://127.0.0.1:8081

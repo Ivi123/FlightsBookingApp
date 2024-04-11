@@ -1,0 +1,52 @@
+{
+  "namespace": "avro",
+  "type": "record",
+  "name": "AdminRequest",
+  "fields": [
+    {
+      "name": "id",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "bookingId",
+      "type": "string"
+    },
+    {
+      "name": "operatorId",
+      "type": "string"
+    },
+    {
+      "name": "flightId",
+      "type": "string"
+    },
+    {
+      "name": "departure",
+      "type": "string"
+    },
+    {
+      "name": "destination",
+      "type": "string"
+    },
+    {
+      "name": "numberOfSeats",
+      "type": "int"
+    },
+    {
+      "name": "standardPrice",
+      "type": "double"
+    },
+    {
+      "name": "date",
+      "type": "string"
+    },
+    {
+      "name": "status",
+      "type": ["null", "string"],
+      "default": null
+    }
+  ]
+}

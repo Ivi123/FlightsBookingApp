@@ -1,6 +1,5 @@
 package org.example.paymentservice.mapper.stripe;
 
-
 import avro.PaymentRequest;
 import org.example.paymentservice.model.stripe.Payment;
 
