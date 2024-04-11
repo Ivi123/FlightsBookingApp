@@ -1,4 +1,4 @@
-package org.example.paymentservice.consumer.dlt;
+package org.example.adminservice.consumer.dlt;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,6 +13,6 @@ public class DltConsumerService {
     }
 
     public void sendToDLT(ConsumerRecord<?,?> consumerRecord){
-        kafkaTemplate.send("payment-request-topic.DLT",consumerRecord.key().toString(), consumerRecord.value());
+        kafkaTemplate.send("admin-request-topic.DLT",consumerRecord.key().toString(), consumerRecord.value());
     }
 }

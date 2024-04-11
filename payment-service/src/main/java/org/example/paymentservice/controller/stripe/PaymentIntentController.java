@@ -1,8 +1,8 @@
-package org.example.paymentservice.controller;
+package org.example.paymentservice.controller.stripe;
 
-import org.example.paymentservice.model.WebRequest;
-import org.example.paymentservice.model.WebResponse;
-import org.example.paymentservice.service.PaymentServiceImpl;
+import org.example.paymentservice.model.stripe.WebRequest;
+import org.example.paymentservice.model.stripe.WebResponse;
+import org.example.paymentservice.service.stripe.PaymentServiceImpl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

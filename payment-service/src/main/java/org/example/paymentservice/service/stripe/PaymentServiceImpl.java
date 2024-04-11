@@ -1,15 +1,15 @@
-package org.example.paymentservice.service;
+package org.example.paymentservice.service.stripe;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-import org.example.paymentservice.model.Payment;
-import org.example.paymentservice.model.WebRequest;
-import org.example.paymentservice.model.WebResponse;
+import org.example.paymentservice.model.stripe.Payment;
+import org.example.paymentservice.model.stripe.WebRequest;
+import org.example.paymentservice.model.stripe.WebResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Service
 public class PaymentServiceImpl implements PaymentService {
-    private final MongoTemplate mongoTemplate;
+    private final ReactiveMongoTemplate mongoTemplate;
     private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
     private static final String BOOKING_ID = "bookingId";
 
@@ -33,7 +33,7 @@ public class PaymentServiceImpl implements PaymentService {
      *
      * @param mongoTemplate The MongoDB template used for interacting with the database.
      */
-    public PaymentServiceImpl(MongoTemplate mongoTemplate) {
+    public PaymentServiceImpl(ReactiveMongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -87,12 +87,12 @@ public class PaymentServiceImpl implements PaymentService {
      * @param bookingId The booking ID associated with the payment.
      * @return The Payment object if found, otherwise null.
      */
-    public Payment findByCustomIdAndBookingId(String id, String bookingId) {
-        // Use the findOne method to search MongoDB by ID and bookingId
+    public Mono<Payment> findByCustomIdAndBookingId(String id, String bookingId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(id).and(BOOKING_ID).is(bookingId));
+        query.addCriteria(Criteria.where("_id").is(id).and("bookingId").is(bookingId));
         return mongoTemplate.findOne(query, Payment.class);
     }
+
 
     /**
      * Find a payment by its ID.
@@ -100,17 +100,19 @@ public class PaymentServiceImpl implements PaymentService {
      * @param id The ID of the payment.
      * @return The Payment object if found, otherwise null.
      */
-    public Payment findById(String id) {
+    public Mono<Payment> findById(String id) {
         return mongoTemplate.findById(id, Payment.class);
     }
+
 
     /**
      * Save a payment to the database.
      *
      * @param payment The payment object to be saved.
      */
-    public void savePayment(Payment payment) {
-        mongoTemplate.save(payment);
+    public Mono<Payment> savePayment(Payment payment) {
+        return mongoTemplate.save(payment)
+                .onErrorMap(e -> new RuntimeException("Failed to save payment: " + e.getMessage(), e));
     }
 
     /**
@@ -119,16 +121,18 @@ public class PaymentServiceImpl implements PaymentService {
      * @param paymentId The ID of the payment.
      * @param newStatus The new status of the payment.
      */
-    @Transactional
-    public void updatePaymentStatus(String paymentId, String newStatus) {
-        Payment payment = findById(paymentId);
-        if (payment != null) {
-            payment.setStatus(newStatus); // Update the payment status
-            mongoTemplate.save(payment); // Save the changes to the database
-        } else {
-            throw new RuntimeException("Payment with ID " + paymentId + " not found.");
-        }
+    public Mono<Void> updatePaymentStatus(String paymentId, String newStatus) {
+        return findById(paymentId)
+                .flatMap(payment -> {
+                    if (payment != null) {
+                        payment.setStatus(newStatus);
+                        return mongoTemplate.save(payment).then();
+                    } else {
+                        return Mono.error(new RuntimeException("Payment with ID " + paymentId + " not found."));
+                    }
+                });
     }
+
 
 
 }

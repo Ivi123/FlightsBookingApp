@@ -1,7 +1,7 @@
 {
   "namespace": "avro",
   "type": "record",
-  "name": "PaymentRequest",
+  "name": "AdminRequest",
   "fields": [
     {
       "name": "id",
@@ -16,36 +16,37 @@
       "type": "string"
     },
     {
-      "name": "price",
-      "type": "double"
-    },
-    {
-      "name": "cardNumber",
+      "name": "operatorId",
       "type": "string"
     },
     {
-      "name": "cardHolderName",
+      "name": "flightId",
       "type": "string"
     },
     {
-      "name": "expirationMonth",
+      "name": "departure",
       "type": "string"
     },
     {
-      "name": "expirationYear",
+      "name": "destination",
       "type": "string"
     },
     {
-      "name": "cvv",
+      "name": "numberOfSeats",
       "type": "int"
     },
     {
-      "name": "currency",
+      "name": "standardPrice",
+      "type": "double"
+    },
+    {
+      "name": "date",
       "type": "string"
     },
     {
       "name": "status",
-      "type": "string"
+      "type": ["null", "string"],
+      "default": null
     }
   ]
 }

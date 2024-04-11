@@ -1,98 +1,94 @@
 version: '3'
-
 services:
-  zookeeper11:
+
+  zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper11
-    ports:
-      - "2181:2181"
+    container_name: zookeeper
     networks:
-      - paymentProject
+      project:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
-  kafka_1:
+  kafka1:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka_1
+    container_name: kafka1
     networks:
-      - paymentProject
+      project:
     ports:
-      - "9092:9092"
+      - "8097:8097"
     depends_on:
-      - zookeeper11
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper11:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:9092,PLAINTEXT://kafka_1:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8097,PLAINTEXT://kafka1:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
 
-
-  kafka_2:
+  kafka2:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka_2
+    container_name: kafka2
     networks:
-      - paymentProject
+      project:
     ports:
-      - "9094:9094"
+      - "8098:8098"
     depends_on:
-      - zookeeper11
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper11:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:9094,PLAINTEXT://kafka_2:9095
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8098,PLAINTEXT://kafka2:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
 
-  kafka_3:
+  kafka3:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka_3
+    container_name: kafka3
     networks:
-      - paymentProject
+      project:
     ports:
-      - "9096:9096"
+      - "8099:8099"
     depends_on:
-      - zookeeper11
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper11:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_HOST:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:9094,PLAINTEXT://kafka_3:9097
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_HOST://localhost:8099,PLAINTEXT://kafka3:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-
-  kafka-ui1:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui1
-    networks:
-      - paymentProject
-    depends_on:
-      - zookeeper11
-      - kafka_1
-    ports:
-      - "8090:8080"
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_1:9093, kafka_2:9095, kafka_3:9097
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper11:2181
 
   schema-registry:
     image: confluentinc/cp-schema-registry:latest
     hostname: schema-registry
     networks:
-      - paymentProject
+      project:
     ports:
       - "8081:8081"
     depends_on:
-      - zookeeper11
-      - kafka_1
-      - kafka_2
-      - kafka_3
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper11:2181
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
       SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka_1:9093, kafka_2:9095, kafka_3:9097
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092, kafka2:9092, kafka3:9092
       SCHEMA_REGISTRY_DEBUG: 'true'
 
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    networks:
+      project:
+    depends_on:
+      - kafka1
+    ports:
+      - 8090:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092, kafka2:9092, kafka3:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
 networks:
-  paymentProject:
+  project:

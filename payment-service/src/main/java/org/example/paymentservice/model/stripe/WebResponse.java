@@ -1,4 +1,4 @@
-package org.example.paymentservice.model;
+package org.example.paymentservice.model.stripe;
 
 public class WebResponse {
     private String id;
