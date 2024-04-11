@@ -1,0 +1,19 @@
+{
+  "namespace": "com.example.notificationservice.dto",
+  "type": "record",
+  "name": "BookingNotification",
+  "fields": [
+    {
+      "name": "message",
+      "type": "string"
+    },
+    {
+      "name": "userEmail",
+      "type": "string"
+    },
+    {
+      "name": "bookingId",
+      "type": "string"
+    }
+  ]
+}
