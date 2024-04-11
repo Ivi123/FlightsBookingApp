@@ -5,28 +5,40 @@
  */
 package avro;
 
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Utf8;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
-@SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 8676384663334068845L;
+
+
   public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"default\":null},{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"cardNumber\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"cardHolderName\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"expirationMonth\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"expirationYear\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"cvv\",\"type\":\"int\"},{\"name\":\"currency\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"status\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
-  private static SpecificData MODEL$ = new SpecificData();
+  private static final SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<PaymentRequest> ENCODER =
-      new BinaryMessageEncoder<PaymentRequest>(MODEL$, SCHEMA$);
+      new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
   private static final BinaryMessageDecoder<PaymentRequest> DECODER =
-      new BinaryMessageDecoder<PaymentRequest>(MODEL$, SCHEMA$);
+      new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
+
+  /**
+   * Return the BinaryMessageEncoder instance used by this class.
+   * @return the message encoder used by this class
+   */
+  public static BinaryMessageEncoder<PaymentRequest> getEncoder() {
+    return ENCODER;
+  }
 
   /**
    * Return the BinaryMessageDecoder instance used by this class.
+   * @return the message decoder used by this class
    */
   public static BinaryMessageDecoder<PaymentRequest> getDecoder() {
     return DECODER;
@@ -35,32 +47,42 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   /**
    * Create a new BinaryMessageDecoder instance for this class that uses the specified {@link SchemaStore}.
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
+   * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
   public static BinaryMessageDecoder<PaymentRequest> createDecoder(SchemaStore resolver) {
-    return new BinaryMessageDecoder<PaymentRequest>(MODEL$, SCHEMA$, resolver);
+    return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
-  /** Serializes this PaymentRequest to a ByteBuffer. */
+  /**
+   * Serializes this PaymentRequest to a ByteBuffer.
+   * @return a buffer holding the serialized data for this instance
+   * @throws java.io.IOException if this instance could not be serialized
+   */
   public java.nio.ByteBuffer toByteBuffer() throws java.io.IOException {
     return ENCODER.encode(this);
   }
 
-  /** Deserializes a PaymentRequest from a ByteBuffer. */
+  /**
+   * Deserializes a PaymentRequest from a ByteBuffer.
+   * @param b a byte buffer holding serialized data for an instance of this class
+   * @return a PaymentRequest instance decoded from the given buffer
+   * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
+   */
   public static PaymentRequest fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
 
-  @Deprecated public java.lang.String id;
-  @Deprecated public java.lang.String bookingId;
-  @Deprecated public double price;
-  @Deprecated public java.lang.String cardNumber;
-  @Deprecated public java.lang.String cardHolderName;
-  @Deprecated public java.lang.String expirationMonth;
-  @Deprecated public java.lang.String expirationYear;
-  @Deprecated public int cvv;
-  @Deprecated public java.lang.String currency;
-  @Deprecated public java.lang.String status;
+  private java.lang.String id;
+  private java.lang.String bookingId;
+  private double price;
+  private java.lang.String cardNumber;
+  private java.lang.String cardHolderName;
+  private java.lang.String expirationMonth;
+  private java.lang.String expirationYear;
+  private int cvv;
+  private java.lang.String currency;
+  private java.lang.String status;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -95,8 +117,14 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     this.status = status;
   }
 
+  @Override
+  public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
+
+  @Override
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+
   // Used by DatumWriter.  Applications should not call.
+  @Override
   public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return id;
@@ -109,25 +137,26 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     case 7: return cvv;
     case 8: return currency;
     case 9: return status;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
   // Used by DatumReader.  Applications should not call.
+  @Override
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: id = (java.lang.String)value$; break;
-    case 1: bookingId = (java.lang.String)value$; break;
+    case 0: id = value$ != null ? value$.toString() : null; break;
+    case 1: bookingId = value$ != null ? value$.toString() : null; break;
     case 2: price = (java.lang.Double)value$; break;
-    case 3: cardNumber = (java.lang.String)value$; break;
-    case 4: cardHolderName = (java.lang.String)value$; break;
-    case 5: expirationMonth = (java.lang.String)value$; break;
-    case 6: expirationYear = (java.lang.String)value$; break;
+    case 3: cardNumber = value$ != null ? value$.toString() : null; break;
+    case 4: cardHolderName = value$ != null ? value$.toString() : null; break;
+    case 5: expirationMonth = value$ != null ? value$.toString() : null; break;
+    case 6: expirationYear = value$ != null ? value$.toString() : null; break;
     case 7: cvv = (java.lang.Integer)value$; break;
-    case 8: currency = (java.lang.String)value$; break;
-    case 9: status = (java.lang.String)value$; break;
-    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    case 8: currency = value$ != null ? value$.toString() : null; break;
+    case 9: status = value$ != null ? value$.toString() : null; break;
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
@@ -138,6 +167,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   public java.lang.String getId() {
     return id;
   }
+
 
   /**
    * Sets the value of the 'id' field.
@@ -155,6 +185,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     return bookingId;
   }
 
+
   /**
    * Sets the value of the 'bookingId' field.
    * @param value the value to set.
@@ -167,15 +198,16 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * Gets the value of the 'price' field.
    * @return The value of the 'price' field.
    */
-  public java.lang.Double getPrice() {
+  public double getPrice() {
     return price;
   }
+
 
   /**
    * Sets the value of the 'price' field.
    * @param value the value to set.
    */
-  public void setPrice(java.lang.Double value) {
+  public void setPrice(double value) {
     this.price = value;
   }
 
@@ -186,6 +218,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   public java.lang.String getCardNumber() {
     return cardNumber;
   }
+
 
   /**
    * Sets the value of the 'cardNumber' field.
@@ -203,6 +236,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     return cardHolderName;
   }
 
+
   /**
    * Sets the value of the 'cardHolderName' field.
    * @param value the value to set.
@@ -218,6 +252,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   public java.lang.String getExpirationMonth() {
     return expirationMonth;
   }
+
 
   /**
    * Sets the value of the 'expirationMonth' field.
@@ -235,6 +270,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     return expirationYear;
   }
 
+
   /**
    * Sets the value of the 'expirationYear' field.
    * @param value the value to set.
@@ -247,15 +283,16 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * Gets the value of the 'cvv' field.
    * @return The value of the 'cvv' field.
    */
-  public java.lang.Integer getCvv() {
+  public int getCvv() {
     return cvv;
   }
+
 
   /**
    * Sets the value of the 'cvv' field.
    * @param value the value to set.
    */
-  public void setCvv(java.lang.Integer value) {
+  public void setCvv(int value) {
     this.cvv = value;
   }
 
@@ -266,6 +303,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   public java.lang.String getCurrency() {
     return currency;
   }
+
 
   /**
    * Sets the value of the 'currency' field.
@@ -282,6 +320,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   public java.lang.String getStatus() {
     return status;
   }
+
 
   /**
    * Sets the value of the 'status' field.
@@ -305,7 +344,11 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * @return A new PaymentRequest RecordBuilder
    */
   public static avro.PaymentRequest.Builder newBuilder(avro.PaymentRequest.Builder other) {
-    return new avro.PaymentRequest.Builder(other);
+    if (other == null) {
+      return new avro.PaymentRequest.Builder();
+    } else {
+      return new avro.PaymentRequest.Builder(other);
+    }
   }
 
   /**
@@ -314,12 +357,17 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * @return A new PaymentRequest RecordBuilder
    */
   public static avro.PaymentRequest.Builder newBuilder(avro.PaymentRequest other) {
-    return new avro.PaymentRequest.Builder(other);
+    if (other == null) {
+      return new avro.PaymentRequest.Builder();
+    } else {
+      return new avro.PaymentRequest.Builder(other);
+    }
   }
 
   /**
    * RecordBuilder for PaymentRequest instances.
    */
+  @org.apache.avro.specific.AvroGenerated
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<PaymentRequest>
     implements org.apache.avro.data.RecordBuilder<PaymentRequest> {
 
@@ -336,7 +384,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
 
     /** Creates a new Builder */
     private Builder() {
-      super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
     }
 
     /**
@@ -347,43 +395,43 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
-        fieldSetFlags()[0] = true;
+        fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
       if (isValidValue(fields()[1], other.bookingId)) {
         this.bookingId = data().deepCopy(fields()[1].schema(), other.bookingId);
-        fieldSetFlags()[1] = true;
+        fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
       if (isValidValue(fields()[2], other.price)) {
         this.price = data().deepCopy(fields()[2].schema(), other.price);
-        fieldSetFlags()[2] = true;
+        fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
       if (isValidValue(fields()[3], other.cardNumber)) {
         this.cardNumber = data().deepCopy(fields()[3].schema(), other.cardNumber);
-        fieldSetFlags()[3] = true;
+        fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
       if (isValidValue(fields()[4], other.cardHolderName)) {
         this.cardHolderName = data().deepCopy(fields()[4].schema(), other.cardHolderName);
-        fieldSetFlags()[4] = true;
+        fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
       if (isValidValue(fields()[5], other.expirationMonth)) {
         this.expirationMonth = data().deepCopy(fields()[5].schema(), other.expirationMonth);
-        fieldSetFlags()[5] = true;
+        fieldSetFlags()[5] = other.fieldSetFlags()[5];
       }
       if (isValidValue(fields()[6], other.expirationYear)) {
         this.expirationYear = data().deepCopy(fields()[6].schema(), other.expirationYear);
-        fieldSetFlags()[6] = true;
+        fieldSetFlags()[6] = other.fieldSetFlags()[6];
       }
       if (isValidValue(fields()[7], other.cvv)) {
         this.cvv = data().deepCopy(fields()[7].schema(), other.cvv);
-        fieldSetFlags()[7] = true;
+        fieldSetFlags()[7] = other.fieldSetFlags()[7];
       }
       if (isValidValue(fields()[8], other.currency)) {
         this.currency = data().deepCopy(fields()[8].schema(), other.currency);
-        fieldSetFlags()[8] = true;
+        fieldSetFlags()[8] = other.fieldSetFlags()[8];
       }
       if (isValidValue(fields()[9], other.status)) {
         this.status = data().deepCopy(fields()[9].schema(), other.status);
-        fieldSetFlags()[9] = true;
+        fieldSetFlags()[9] = other.fieldSetFlags()[9];
       }
     }
 
@@ -392,7 +440,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
      * @param other The existing instance to copy.
      */
     private Builder(avro.PaymentRequest other) {
-            super(SCHEMA$);
+      super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
@@ -443,6 +491,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       return id;
     }
 
+
     /**
       * Sets the value of the 'id' field.
       * @param value The value of 'id'.
@@ -482,6 +531,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       return bookingId;
     }
 
+
     /**
       * Sets the value of the 'bookingId' field.
       * @param value The value of 'bookingId'.
@@ -517,9 +567,10 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Gets the value of the 'price' field.
       * @return The value.
       */
-    public java.lang.Double getPrice() {
+    public double getPrice() {
       return price;
     }
+
 
     /**
       * Sets the value of the 'price' field.
@@ -558,6 +609,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     public java.lang.String getCardNumber() {
       return cardNumber;
     }
+
 
     /**
       * Sets the value of the 'cardNumber' field.
@@ -598,6 +650,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       return cardHolderName;
     }
 
+
     /**
       * Sets the value of the 'cardHolderName' field.
       * @param value The value of 'cardHolderName'.
@@ -636,6 +689,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     public java.lang.String getExpirationMonth() {
       return expirationMonth;
     }
+
 
     /**
       * Sets the value of the 'expirationMonth' field.
@@ -676,6 +730,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       return expirationYear;
     }
 
+
     /**
       * Sets the value of the 'expirationYear' field.
       * @param value The value of 'expirationYear'.
@@ -711,9 +766,10 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       * Gets the value of the 'cvv' field.
       * @return The value.
       */
-    public java.lang.Integer getCvv() {
+    public int getCvv() {
       return cvv;
     }
+
 
     /**
       * Sets the value of the 'cvv' field.
@@ -753,6 +809,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       return currency;
     }
 
+
     /**
       * Sets the value of the 'currency' field.
       * @param value The value of 'currency'.
@@ -791,6 +848,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     public java.lang.String getStatus() {
       return status;
     }
+
 
     /**
       * Sets the value of the 'status' field.
@@ -839,6 +897,8 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
         record.currency = fieldSetFlags()[8] ? this.currency : (java.lang.String) defaultValue(fields()[8]);
         record.status = fieldSetFlags()[9] ? this.status : (java.lang.String) defaultValue(fields()[9]);
         return record;
+      } catch (org.apache.avro.AvroMissingFieldException e) {
+        throw e;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
       }
@@ -863,4 +923,131 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     READER$.read(this, SpecificData.getDecoder(in));
   }
 
+  @Override protected boolean hasCustomCoders() { return true; }
+
+  @Override public void customEncode(org.apache.avro.io.Encoder out)
+    throws java.io.IOException
+  {
+    if (this.id == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeString(this.id);
+    }
+
+    out.writeString(this.bookingId);
+
+    out.writeDouble(this.price);
+
+    out.writeString(this.cardNumber);
+
+    out.writeString(this.cardHolderName);
+
+    out.writeString(this.expirationMonth);
+
+    out.writeString(this.expirationYear);
+
+    out.writeInt(this.cvv);
+
+    out.writeString(this.currency);
+
+    out.writeString(this.status);
+
+  }
+
+  @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
+    throws java.io.IOException
+  {
+    org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
+    if (fieldOrder == null) {
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.id = null;
+      } else {
+        this.id = in.readString();
+      }
+
+      this.bookingId = in.readString();
+
+      this.price = in.readDouble();
+
+      this.cardNumber = in.readString();
+
+      this.cardHolderName = in.readString();
+
+      this.expirationMonth = in.readString();
+
+      this.expirationYear = in.readString();
+
+      this.cvv = in.readInt();
+
+      this.currency = in.readString();
+
+      this.status = in.readString();
+
+    } else {
+      for (int i = 0; i < 10; i++) {
+        switch (fieldOrder[i].pos()) {
+        case 0:
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.id = null;
+          } else {
+            this.id = in.readString();
+          }
+          break;
+
+        case 1:
+          this.bookingId = in.readString();
+          break;
+
+        case 2:
+          this.price = in.readDouble();
+          break;
+
+        case 3:
+          this.cardNumber = in.readString();
+          break;
+
+        case 4:
+          this.cardHolderName = in.readString();
+          break;
+
+        case 5:
+          this.expirationMonth = in.readString();
+          break;
+
+        case 6:
+          this.expirationYear = in.readString();
+          break;
+
+        case 7:
+          this.cvv = in.readInt();
+          break;
+
+        case 8:
+          this.currency = in.readString();
+          break;
+
+        case 9:
+          this.status = in.readString();
+          break;
+
+        default:
+          throw new java.io.IOException("Corrupt ResolvingDecoder.");
+        }
+      }
+    }
+  }
 }
+
+
+
+
+
+
+
+
+
+

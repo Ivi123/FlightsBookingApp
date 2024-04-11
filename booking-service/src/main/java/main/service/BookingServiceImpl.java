@@ -58,7 +58,7 @@ public class BookingServiceImpl implements BookingService{
                 .map(bookingMapper::toEntity)
                 .flatMap(booking -> {
                     // Set initial status and expiration time as needed
-                    booking.setStatus("PENDING");
+                    booking.setStatus("INITIATED");
                     booking.setCreatedAt(LocalDateTime.now());
                     booking.setExpiresAt(LocalDateTime.now().plusMinutes(15)); // Set expiration 15 minutes from now
                     return bookingRepository.save(booking);

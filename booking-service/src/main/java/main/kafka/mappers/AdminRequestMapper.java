@@ -26,6 +26,8 @@ public class AdminRequestMapper {
         String date = booking.getFlightDetails().getDeparture();
         adminRequest.setDate(date);
 
+        adminRequest.setStatus(booking.getStatus());
+
         return adminRequest;
     }
 }

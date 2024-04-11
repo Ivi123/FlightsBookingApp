@@ -5,17 +5,19 @@
  */
 package avro;
 
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Utf8;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 6401227355312825156L;
+  private static final long serialVersionUID = 6065030716465957116L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AdminRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"default\":null},{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"operatorId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"flightId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"departure\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"destination\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"numberOfSeats\",\"type\":\"int\"},{\"name\":\"standardPrice\",\"type\":\"double\"},{\"name\":\"date\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"status\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AdminRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"default\":null},{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"operatorId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"flightId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"departure\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"destination\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"numberOfSeats\",\"type\":\"int\"},{\"name\":\"standardPrice\",\"type\":\"double\"},{\"name\":\"date\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"status\",\"type\":[\"null\",{\"type\":\"string\",\"avro.java.string\":\"String\"}],\"default\":null}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -950,7 +952,13 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
 
     out.writeString(this.date);
 
-    out.writeString(this.status);
+    if (this.status == null) {
+      out.writeIndex(0);
+      out.writeNull();
+    } else {
+      out.writeIndex(1);
+      out.writeString(this.status);
+    }
 
   }
 
@@ -982,7 +990,12 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
 
       this.date = in.readString();
 
-      this.status = in.readString();
+      if (in.readIndex() != 1) {
+        in.readNull();
+        this.status = null;
+      } else {
+        this.status = in.readString();
+      }
 
     } else {
       for (int i = 0; i < 10; i++) {
@@ -1029,7 +1042,12 @@ public class AdminRequest extends org.apache.avro.specific.SpecificRecordBase im
           break;
 
         case 9:
-          this.status = in.readString();
+          if (in.readIndex() != 1) {
+            in.readNull();
+            this.status = null;
+          } else {
+            this.status = in.readString();
+          }
           break;
 
         default:
