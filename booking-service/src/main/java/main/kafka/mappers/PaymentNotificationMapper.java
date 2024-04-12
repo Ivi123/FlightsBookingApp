@@ -2,7 +2,9 @@ package main.kafka.mappers;
 
 import avro.PaymentNotification;
 import main.model.Booking;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PaymentNotificationMapper {
     public PaymentNotification toPaymentNotification(Booking booking, String message) {
         return PaymentNotification.newBuilder()

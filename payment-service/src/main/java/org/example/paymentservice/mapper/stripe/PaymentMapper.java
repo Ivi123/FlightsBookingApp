@@ -6,7 +6,7 @@ import org.example.paymentservice.model.stripe.Payment;
 public class PaymentMapper {
     public static PaymentRequest paymentToPaymentRequest(Payment p) {
         PaymentRequest paymentRequest = new PaymentRequest();
-        //
+        paymentRequest.setId(p.getId());
         paymentRequest.setBookingId(p.getBookingId());
         paymentRequest.setPrice(p.getPrice());
         paymentRequest.setCardHolderName(p.getCardHolderName());
@@ -17,8 +17,6 @@ public class PaymentMapper {
         paymentRequest.setCurrency(p.getCurrency());
         paymentRequest.setStatus(p.getStatus());
         return paymentRequest;
-
-
     }
 
     public static Payment paymentRequestToPayment(PaymentRequest paymentRequest) {

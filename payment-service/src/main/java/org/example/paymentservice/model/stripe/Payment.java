@@ -18,6 +18,7 @@ public class Payment {
     private String currency;
     private String status;
 
+
     public double getPrice() {
         return price;
     }
@@ -74,10 +75,9 @@ public class Payment {
         this.currency = currency;
     }
 
-    public Payment( String bookingId, double price,
+    public Payment(String bookingId, double price,
                    String cardNumber, String cardHolderName, String expirationMonth,
                    String expirationYear, int cvv, String currency, String status) {
-
         this.bookingId = bookingId;
         this.price = price;
         this.cardNumber = cardNumber;

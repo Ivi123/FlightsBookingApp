@@ -36,6 +36,7 @@ public class PaymentRequestConsumer {
         bookingRepository.findById(paymentResponse.getBookingId()).flatMap(booking -> {
             if (paymentResponse.getStatus().equalsIgnoreCase("SUCCEEDED")) {
                 // Update booking status and notify
+                booking.getPaymentDetails().setPaymentId(paymentResponse.getId());
                 booking.setStatus("COMPLETED");
 
                 // Send payment successful notification
@@ -45,6 +46,7 @@ public class PaymentRequestConsumer {
                         .sendPaymentNotificationRequest(booking.getId(), paymentSuccessfulNotification);
             } else {
                 // Update booking status, notify, and inform admin to revert seats
+                booking.getPaymentDetails().setPaymentId(paymentResponse.getId());
                 booking.setStatus("FAILED");
 
                 // Send payment failed notification
