@@ -17,7 +17,6 @@ public class KafkaProducer {
     }
 
     public void send(String key, AdminRequest request){
-        template.send(ADMIN_RESPONSE_TOPIC,request);
         CompletableFuture<SendResult<String, Object>> future = template.send(ADMIN_RESPONSE_TOPIC,key, request);
         future.whenComplete((result,ex)-> {
             if (ex == null) {

@@ -8,6 +8,8 @@ import main.kafka.mappers.PaymentRequestMapper;
 import main.kafka.producer.BookingProducerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,6 +30,8 @@ public class BookingServiceImpl implements BookingService{
     private BookingMapper bookingMapper;
     @Autowired
     private BookingProducerService bookingProducerService;
+    @Autowired
+    private ReactiveMongoTemplate mongoTemplate;
 
     /**
      *
@@ -65,7 +69,7 @@ public class BookingServiceImpl implements BookingService{
                     // Preparing admin request based on the booking details
                     AdminRequest adminRequest = adminRequestMapper.toAdminRequest(bookingMapper.toEntity(bookingDTO));
                     // Sending to admin topic for initial processing
-                    bookingProducerService.sendAdminRequest(bookingDTO.getBookingId(), adminRequest);
+                    bookingProducerService.sendAdminRequest(bookingDTO.getId(), adminRequest);
                 });
     }
 

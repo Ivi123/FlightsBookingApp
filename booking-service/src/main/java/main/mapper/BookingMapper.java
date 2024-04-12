@@ -19,7 +19,7 @@ public class BookingMapper {
 
     public Booking toEntity(BookingDTO bookingDTO) {
         Booking booking = new Booking();
-        booking.setBookingId(bookingDTO.getBookingId());
+        booking.setId(bookingDTO.getId());
         booking.setUserId(bookingDTO.getUserId());
         booking.setCreatedAt(bookingDTO.getCreatedAt());
 
@@ -42,7 +42,7 @@ public class BookingMapper {
 
     public BookingDTO toDTO(Booking booking) {
         BookingDTO bookingDTO = new BookingDTO();
-        bookingDTO.setBookingId(booking.getBookingId());
+        bookingDTO.setId(booking.getId());
         bookingDTO.setUserId(booking.getUserId());
         bookingDTO.setCreatedAt(booking.getCreatedAt());
 

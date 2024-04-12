@@ -1,29 +1,29 @@
 package main.kafka.mappers;
 
 import avro.PaymentRequest;
-import main.dto.BookingDTO;
-import main.dto.FlightDetailsDTO;
-import main.dto.PaymentDetailsDTO;
+import main.model.Booking;
+import main.model.FlightDetails;
+import main.model.PaymentDetails;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class PaymentRequestMapper {
 
-    public PaymentRequest toPaymentRequest(BookingDTO bookingDto) {
-        FlightDetailsDTO flightDetailsDto = bookingDto.getFlightDetails();
-        PaymentDetailsDTO paymentDetailsDto = bookingDto.getPaymentDetails();
+    public PaymentRequest toPaymentRequest(Booking booking) {
+        FlightDetails flightDetails = booking.getFlightDetails();
+        PaymentDetails paymentDetails = booking.getPaymentDetails();
         return PaymentRequest.newBuilder()
                 .setId(null)
-                .setBookingId(bookingDto.getBookingId())
-                .setPrice(flightDetailsDto.getStandardPrice())
-                .setCardNumber(paymentDetailsDto.getCardNumber())
-                .setCardHolderName(paymentDetailsDto.getCardHolderName())
-                .setExpirationMonth(paymentDetailsDto.getExpirationMonth())
-                .setExpirationYear(paymentDetailsDto.getExpirationYear())
-                .setCvv(paymentDetailsDto.getCvv())
-                .setCurrency(paymentDetailsDto.getCurrency())
-                .setStatus(paymentDetailsDto.getStatus())
+                .setBookingId(booking.getId())
+                .setPrice(flightDetails.getStandardPrice())
+                .setCardNumber(paymentDetails.getCardNumber())
+                .setCardHolderName(paymentDetails.getCardHolderName())
+                .setExpirationMonth(paymentDetails.getExpirationMonth())
+                .setExpirationYear(paymentDetails.getExpirationYear())
+                .setCvv(paymentDetails.getCvv())
+                .setCurrency(paymentDetails.getCurrency())
+                .setStatus(paymentDetails.getStatus())
                 .build();
 
     }

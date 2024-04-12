@@ -9,7 +9,7 @@ import java.util.List;
 public class Booking {
 
     @Id
-    private String bookingId;
+    private String id;
     private String userId;
     private FlightDetails flightDetails;
     private List<PassengerDetails> passengerDetails;
@@ -19,12 +19,12 @@ public class Booking {
     private LocalDateTime expiresAt;
     private LocalDateTime updatedAt;
 
-    public String getBookingId() {
-        return bookingId;
+    public String getId() {
+        return id;
     }
 
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
