@@ -51,7 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
                             .setAmount(request.getAmount() * 100L)
                             .putMetadata(BOOKING_ID, request.getBookingId())
                             .putMetadata("paymentId", request.getPaymentId())
-                            .setCurrency("ron")
+                            .setCurrency("eur")
                             .setAutomaticPaymentMethods(
                                     PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
                                             .setEnabled(true)

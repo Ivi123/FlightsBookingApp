@@ -74,10 +74,10 @@ public class Payment {
         this.currency = currency;
     }
 
-    public Payment(String id, String bookingId, double price,
+    public Payment( String bookingId, double price,
                    String cardNumber, String cardHolderName, String expirationMonth,
                    String expirationYear, int cvv, String currency, String status) {
-        this.id = id;
+
         this.bookingId = bookingId;
         this.price = price;
         this.cardNumber = cardNumber;
