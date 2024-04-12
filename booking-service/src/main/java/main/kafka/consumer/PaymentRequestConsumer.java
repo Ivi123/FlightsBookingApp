@@ -34,7 +34,7 @@ public class PaymentRequestConsumer {
     @KafkaListener(topics = "payment-response-topic", groupId = "payment-response-group", containerFactory = "paymentRequestKafkaListenerContainerFactory")
     public void handlePaymentDetailsResponse(PaymentRequest paymentResponse) {
         bookingRepository.findById(paymentResponse.getBookingId()).flatMap(booking -> {
-            if (paymentResponse.getStatus().equals("SUCCEEDED")) {
+            if (paymentResponse.getStatus().equalsIgnoreCase("SUCCEEDED")) {
                 // Update booking status and notify
                 booking.setStatus("COMPLETED");
 

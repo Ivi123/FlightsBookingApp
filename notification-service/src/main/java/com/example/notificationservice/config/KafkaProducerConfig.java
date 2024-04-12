@@ -1,7 +1,7 @@
 package com.example.notificationservice.config;
 
-import com.example.notificationservice.dto.BookingNotification;
-import com.example.notificationservice.dto.PaymentNotification;
+import avro.BookingNotification;
+import avro.PaymentNotification;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

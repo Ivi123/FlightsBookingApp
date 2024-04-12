@@ -1,7 +1,8 @@
 package com.example.notificationservice.consumer;
 
-import com.example.notificationservice.dto.BookingNotification;
-import com.example.notificationservice.dto.PaymentNotification;
+
+import avro.BookingNotification;
+import avro.PaymentNotification;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
