@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package com.example.notificationservice.dto;
+package avro;
 
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class PaymentNotification extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 7067519238497712057L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentNotification\",\"namespace\":\"com.example.notificationservice.dto\",\"fields\":[{\"name\":\"message\",\"type\":\"string\"},{\"name\":\"userEmail\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"paymentId\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = -1087778522763356678L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentNotification\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"message\",\"type\":\"string\"},{\"name\":\"userEmail\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"paymentId\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -211,8 +211,8 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
    * Creates a new PaymentNotification RecordBuilder.
    * @return A new PaymentNotification RecordBuilder
    */
-  public static com.example.notificationservice.dto.PaymentNotification.Builder newBuilder() {
-    return new com.example.notificationservice.dto.PaymentNotification.Builder();
+  public static avro.PaymentNotification.Builder newBuilder() {
+    return new avro.PaymentNotification.Builder();
   }
 
   /**
@@ -220,8 +220,8 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
    * @param other The existing builder to copy.
    * @return A new PaymentNotification RecordBuilder
    */
-  public static com.example.notificationservice.dto.PaymentNotification.Builder newBuilder(com.example.notificationservice.dto.PaymentNotification.Builder other) {
-    return new com.example.notificationservice.dto.PaymentNotification.Builder(other);
+  public static avro.PaymentNotification.Builder newBuilder(avro.PaymentNotification.Builder other) {
+    return new avro.PaymentNotification.Builder(other);
   }
 
   /**
@@ -229,8 +229,8 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
    * @param other The existing instance to copy.
    * @return A new PaymentNotification RecordBuilder
    */
-  public static com.example.notificationservice.dto.PaymentNotification.Builder newBuilder(com.example.notificationservice.dto.PaymentNotification other) {
-    return new com.example.notificationservice.dto.PaymentNotification.Builder(other);
+  public static avro.PaymentNotification.Builder newBuilder(avro.PaymentNotification other) {
+    return new avro.PaymentNotification.Builder(other);
   }
 
   /**
@@ -255,7 +255,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.example.notificationservice.dto.PaymentNotification.Builder other) {
+    private Builder(avro.PaymentNotification.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.message)) {
         this.message = data().deepCopy(fields()[0].schema(), other.message);
@@ -287,7 +287,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
      * Creates a Builder by copying an existing PaymentNotification instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.example.notificationservice.dto.PaymentNotification other) {
+    private Builder(avro.PaymentNotification other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.message)) {
         this.message = data().deepCopy(fields()[0].schema(), other.message);
@@ -328,7 +328,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'message'.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder setMessage(java.lang.CharSequence value) {
+    public avro.PaymentNotification.Builder setMessage(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.message = value;
       fieldSetFlags()[0] = true;
@@ -348,7 +348,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'message' field.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder clearMessage() {
+    public avro.PaymentNotification.Builder clearMessage() {
       message = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -367,7 +367,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'userEmail'.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder setUserEmail(java.lang.CharSequence value) {
+    public avro.PaymentNotification.Builder setUserEmail(java.lang.CharSequence value) {
       validate(fields()[1], value);
       this.userEmail = value;
       fieldSetFlags()[1] = true;
@@ -387,7 +387,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'userEmail' field.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder clearUserEmail() {
+    public avro.PaymentNotification.Builder clearUserEmail() {
       userEmail = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -406,7 +406,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'price'.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder setPrice(double value) {
+    public avro.PaymentNotification.Builder setPrice(double value) {
       validate(fields()[2], value);
       this.price = value;
       fieldSetFlags()[2] = true;
@@ -426,7 +426,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'price' field.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder clearPrice() {
+    public avro.PaymentNotification.Builder clearPrice() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -444,7 +444,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'currency'.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder setCurrency(java.lang.CharSequence value) {
+    public avro.PaymentNotification.Builder setCurrency(java.lang.CharSequence value) {
       validate(fields()[3], value);
       this.currency = value;
       fieldSetFlags()[3] = true;
@@ -464,7 +464,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'currency' field.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder clearCurrency() {
+    public avro.PaymentNotification.Builder clearCurrency() {
       currency = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -483,7 +483,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'bookingId'.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder setBookingId(java.lang.CharSequence value) {
+    public avro.PaymentNotification.Builder setBookingId(java.lang.CharSequence value) {
       validate(fields()[4], value);
       this.bookingId = value;
       fieldSetFlags()[4] = true;
@@ -503,7 +503,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'bookingId' field.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder clearBookingId() {
+    public avro.PaymentNotification.Builder clearBookingId() {
       bookingId = null;
       fieldSetFlags()[4] = false;
       return this;
@@ -522,7 +522,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * @param value The value of 'paymentId'.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder setPaymentId(java.lang.CharSequence value) {
+    public avro.PaymentNotification.Builder setPaymentId(java.lang.CharSequence value) {
       validate(fields()[5], value);
       this.paymentId = value;
       fieldSetFlags()[5] = true;
@@ -542,7 +542,7 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       * Clears the value of the 'paymentId' field.
       * @return This builder.
       */
-    public com.example.notificationservice.dto.PaymentNotification.Builder clearPaymentId() {
+    public avro.PaymentNotification.Builder clearPaymentId() {
       paymentId = null;
       fieldSetFlags()[5] = false;
       return this;

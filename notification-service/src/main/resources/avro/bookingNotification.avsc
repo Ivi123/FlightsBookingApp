@@ -1,5 +1,5 @@
 {
-  "namespace": "com.example.notificationservice.dto",
+  "namespace": "avro",
   "type": "record",
   "name": "BookingNotification",
   "fields": [

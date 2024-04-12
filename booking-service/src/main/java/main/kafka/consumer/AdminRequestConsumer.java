@@ -46,7 +46,7 @@ public class AdminRequestConsumer {
 
         bookingMono.doOnSubscribe(sub -> System.out.println("Subscribed to fetch booking with ID: " + adminResponse.getBookingId()))
                 .flatMap(booking -> {
-                    if (adminResponse.getStatus().equals("SUCCEEDED")) {
+                    if (adminResponse.getStatus().equalsIgnoreCase("SUCCEEDED")) {
                         booking.setStatus(adminResponse.getStatus());
                         // Send successful booking notification
                         BookingNotification bookingSuccessfulNotification = notificationRequestMapper
