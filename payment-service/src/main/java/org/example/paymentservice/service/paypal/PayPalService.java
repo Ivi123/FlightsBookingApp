@@ -1,10 +1,14 @@
 package org.example.paymentservice.service.paypal;
 
+import avro.PaymentRequest;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
+import org.example.paymentservice.mapper.stripe.PaymentMapper;
 import org.example.paymentservice.model.paypal.CompletedOrder;
 import org.example.paymentservice.model.paypal.PaymentOrder;
+import org.example.paymentservice.producer.KafkaProducer;
+import org.example.paymentservice.service.stripe.PaymentServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +24,8 @@ public class PayPalService {
     private final static Logger log = LoggerFactory.getLogger(PayPalService.class);
 
     private final PayPalHttpClient payPalHttpClient;
+   private final PaymentServiceImpl paymentService;
+   private final KafkaProducer kafkaProducer;
 
     @Value("${paypal.returnUrl}")
     private String returnUrl;
@@ -27,12 +33,14 @@ public class PayPalService {
     @Value("${paypal.cancelUrl}")
     private String cancelUrl;
 
-    public PayPalService(PayPalHttpClient payPalHttpClient) {
+    public PayPalService(PayPalHttpClient payPalHttpClient, PaymentServiceImpl paymentService, KafkaProducer kafkaProducer) {
         this.payPalHttpClient = payPalHttpClient;
+        this.paymentService = paymentService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     // Method to create a payment order
-    public Mono<PaymentOrder> createPayment(Double totalAmount) {
+    public Mono<PaymentOrder> createPayment(Double totalAmount, String paymentId, String bookingId, String email) {
         return Mono.create(fluxSink -> {
             // Creating an order request
             OrderRequest orderRequest = new OrderRequest();
@@ -55,8 +63,8 @@ public class PayPalService {
             amountWithBreakdown.amountBreakdown(amountBreakdown);
 
             // Creating an item object for the payment
-            Item item = new Item().category("DIGITAL_GOODS").quantity("1").name("Flight")
-                    .description("Flight_id")
+            Item item = new Item().category("DIGITAL_GOODS").quantity("1").name(paymentId)
+                    .description(bookingId)
                     .unitAmount(money);
 
             // Adding item to the purchase unit request
@@ -128,10 +136,35 @@ public class PayPalService {
         try {
             HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersGetRequest);
             Order order = httpResponse.result();
-            log.info("*** Order created at:"+ order.createTime());
-            log.info("*** Order made by: "+order.payer().email());
+            //update payment in bd
+            String paymentId = order.purchaseUnits().get(0).items().get(0).name();
+            String bookingId = order.purchaseUnits().get(0).items().get(0).description();
+            // Update status in the database
+            Mono<Void> updateStatusMono;
+            if (!order.status().equalsIgnoreCase("COMPLETED")) {
+                updateStatusMono = paymentService.updatePaymentStatus(paymentId, "failed");
+            } else {
+                updateStatusMono = paymentService.updatePaymentStatus(paymentId, "succeeded");
+            }
+
+            updateStatusMono
+                    .then(paymentService.findById(paymentId))
+                    .flatMap(payment -> {
+                        PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                        return Mono.fromRunnable(() -> kafkaProducer.sendMessage(bookingId, paymentRequest))
+                                .thenReturn(payment); // Return the payment after sending the message
+                    })
+                    .subscribe(
+
+                    );
+
+
+            log.info("*** Payment id: {}",paymentId);
             log.info("*** BookingId:"+order.purchaseUnits().get(0).items().get(0).description());
             log.info("*** Amount:"+order.purchaseUnits().get(0).amountWithBreakdown().value());
+            log.info("****"+ order.status());
+
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);

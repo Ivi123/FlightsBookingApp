@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Mono;
 
 @Controller
-public class AppController {
-    private static Logger log = LoggerFactory.getLogger(AppController.class);
+public class StripeController {
+    private static Logger log = LoggerFactory.getLogger(StripeController.class);
 
     @Value("${stripe.api.publicKey}")
     private String publicKey;
 
     private final PaymentProcessingService paymentService;
 
-    public AppController(PaymentProcessingService paymentService) {
+    public StripeController(PaymentProcessingService paymentService) {
         this.paymentService = paymentService;
     }
 

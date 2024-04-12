@@ -18,8 +18,14 @@ public class PayPalController {
     }
 
     @PostMapping("/init")
-    public Mono<PaymentOrder> createPayment(@RequestParam(name = "totalAmount") Double totalAmount) {
-        return payPalService.createPayment(totalAmount);
+    public Mono<PaymentOrder> createPayment(@RequestParam(name = "totalAmount") Double totalAmount,
+                                            @RequestParam(value = "paymentId", required = false, defaultValue = "") String paymentId,
+                                            @RequestParam(value = "bookingId", required = false, defaultValue = "") String bookingId,
+                                            @RequestParam(value = "email", required = false, defaultValue = "") String email) {
+        System.out.println(paymentId);
+        System.out.println(bookingId);
+        System.out.println(totalAmount);
+        return payPalService.createPayment(totalAmount,paymentId,bookingId,email);
     }
 
     @PostMapping("/capture")
