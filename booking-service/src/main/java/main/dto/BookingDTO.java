@@ -11,7 +11,7 @@ public class BookingDTO {
      * numberOfPassengers - to be calculated from counting the list of passengers at POST time
      */
 
-    private String bookingId;
+    private String id;
     private String userId;
     private PaymentDetailsDTO paymentDetails;
     private List<PassengerDetailsDTO> passengerDetails;
@@ -50,12 +50,12 @@ public class BookingDTO {
 
     private Integer numberOfPassengers;
 
-    public String getBookingId() {
-        return bookingId;
+    public String getId() {
+        return id;
     }
 
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {

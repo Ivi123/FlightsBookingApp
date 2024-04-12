@@ -9,7 +9,7 @@ public class NotificationRequestMapper {
 
     public BookingNotification toBookingNotification(Booking booking, String message) {
         return BookingNotification.newBuilder()
-                .setBookingId(booking.getBookingId())
+                .setBookingId(booking.getId())
                 .setUserEmail("test-email" + Math.random() + "@gmail.com")
                 .setMessage(message)
                 .build();

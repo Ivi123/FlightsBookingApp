@@ -10,7 +10,7 @@ public class AdminRequestMapper {
     public AdminRequest toAdminRequest(Booking booking) {
         AdminRequest adminRequest = new AdminRequest();
         adminRequest.setId(null);
-        adminRequest.setBookingId(booking.getBookingId());
+        adminRequest.setBookingId(booking.getId());
 
         adminRequest.setOperatorId(booking.getFlightDetails().getOperatorId());
 

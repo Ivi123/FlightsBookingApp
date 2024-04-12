@@ -70,7 +70,7 @@ public class BookingProducerService {
                 throw new RuntimeException(e);
             }
             log.info("Sending message to booking-notification-topic:: {}, {}", key, notificationRequest);
-            avroKafkaTemplate.send("pooking-notification-topic", key, notificationRequest);
+            avroKafkaTemplate.send("booking-notification-topic", key, notificationRequest);
             return null;
         }).whenComplete((r, e) -> {
             if (e == null) {

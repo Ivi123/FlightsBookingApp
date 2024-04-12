@@ -39,7 +39,7 @@ public class PaymentRequestConsumer {
                 BookingNotification paymentSuccessfulNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.PAYMEMT_SUCCESSFUL_MESSAGE);
                 bookingProducerService
-                        .sendPaymentNotificationRequest(booking.getBookingId(), paymentSuccessfulNotification);
+                        .sendPaymentNotificationRequest(booking.getId(), paymentSuccessfulNotification);
             } else {
                 // Update booking status, notify, and inform admin to revert seats
                 booking.setStatus("FAILED");
@@ -48,12 +48,12 @@ public class PaymentRequestConsumer {
                 BookingNotification paymentFailedNotification = notificationRequestMapper
                         .toBookingNotification(booking, NotificationMessagesConstants.PAYMENT_UNSUCCESSFUL_MESSAGE);
                 bookingProducerService
-                        .sendPaymentNotificationRequest(booking.getBookingId(), paymentFailedNotification);
+                        .sendPaymentNotificationRequest(booking.getId(), paymentFailedNotification);
 
                 // Send message to admin to revert the request
                 AdminRequest revertRequest = adminRequestMapper.toAdminRequest(booking);
                 revertRequest.setStatus("FAILED");
-                bookingProducerService.sendAdminRequest(booking.getBookingId(), revertRequest);
+                bookingProducerService.sendAdminRequest(booking.getId(), revertRequest);
             }
             return bookingRepository.save(booking);
         }).subscribe();
