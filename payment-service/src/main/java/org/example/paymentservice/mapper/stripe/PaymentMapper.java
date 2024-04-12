@@ -5,23 +5,25 @@ import org.example.paymentservice.model.stripe.Payment;
 
 public class PaymentMapper {
     public static PaymentRequest paymentToPaymentRequest(Payment p) {
-     return new PaymentRequest(
-                p.getId(),
-                p.getBookingId(),
-                p.getPrice(),
-                p.getCardNumber(),
-                p.getCardHolderName(),
-                p.getExpirationMonth(),
-                p.getExpirationYear(),
-                p.getCvv(),
-                p.getCurrency(),
-                p.getStatus()
-        );
+        PaymentRequest paymentRequest = new PaymentRequest();
+        //
+        paymentRequest.setBookingId(p.getBookingId());
+        paymentRequest.setPrice(p.getPrice());
+        paymentRequest.setCardHolderName(p.getCardHolderName());
+        paymentRequest.setCardNumber(p.getCardNumber());
+        paymentRequest.setExpirationMonth(p.getExpirationMonth());
+        paymentRequest.setExpirationYear(p.getExpirationYear());
+        paymentRequest.setCvv(p.getCvv());
+        paymentRequest.setCurrency(p.getCurrency());
+        paymentRequest.setStatus(p.getStatus());
+        return paymentRequest;
+
 
     }
+
     public static Payment paymentRequestToPayment(PaymentRequest paymentRequest) {
         return new Payment(
-                paymentRequest.getId().toString(),
+                //paymentRequest.getId().toString(),
                 paymentRequest.getBookingId().toString(),
                 paymentRequest.getPrice(),
                 paymentRequest.getCardNumber().toString(),

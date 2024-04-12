@@ -2,7 +2,6 @@ package org.example.adminservice.consumer;
 
 import avro.AdminRequest;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.example.adminservice.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
