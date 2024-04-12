@@ -23,7 +23,7 @@ public class PaymentRequestMapper {
                 .setExpirationYear(paymentDetails.getExpirationYear())
                 .setCvv(paymentDetails.getCvv())
                 .setCurrency(paymentDetails.getCurrency())
-                .setStatus(paymentDetails.getStatus())
+                .setStatus(booking.getStatus())
                 .build();
 
     }

@@ -1,13 +1,14 @@
 package main.kafka.consumer;
 
 import avro.AdminRequest;
-import avro.BookingNotification;
+import avro.PaymentNotification;
 import avro.PaymentRequest;
 import main.constants.notifications.NotificationMessagesConstants;
+import main.kafka.mappers.PaymentNotificationMapper;
 import main.kafka.producer.BookingProducerService;
 import main.mapper.PaymentDetailsMapper;
 import main.kafka.mappers.AdminRequestMapper;
-import main.kafka.mappers.NotificationRequestMapper;
+import main.kafka.mappers.BookingNotificationMapper;
 import main.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,7 +25,9 @@ public class PaymentRequestConsumer {
     @Autowired
     private AdminRequestMapper adminRequestMapper;
     @Autowired
-    private NotificationRequestMapper notificationRequestMapper;
+    private BookingNotificationMapper bookingNotificationMapper;
+    @Autowired
+    private PaymentNotificationMapper paymentNotificationMapper;
     @Autowired
     private BookingProducerService bookingProducerService;
 
@@ -36,8 +39,8 @@ public class PaymentRequestConsumer {
                 booking.setStatus("COMPLETED");
 
                 // Send payment successful notification
-                BookingNotification paymentSuccessfulNotification = notificationRequestMapper
-                        .toBookingNotification(booking, NotificationMessagesConstants.PAYMEMT_SUCCESSFUL_MESSAGE);
+                PaymentNotification paymentSuccessfulNotification = paymentNotificationMapper
+                        .toPaymentNotification(booking, NotificationMessagesConstants.PAYMEMT_SUCCESSFUL_MESSAGE);
                 bookingProducerService
                         .sendPaymentNotificationRequest(booking.getId(), paymentSuccessfulNotification);
             } else {
@@ -45,8 +48,8 @@ public class PaymentRequestConsumer {
                 booking.setStatus("FAILED");
 
                 // Send payment failed notification
-                BookingNotification paymentFailedNotification = notificationRequestMapper
-                        .toBookingNotification(booking, NotificationMessagesConstants.PAYMENT_UNSUCCESSFUL_MESSAGE);
+                PaymentNotification paymentFailedNotification = paymentNotificationMapper
+                        .toPaymentNotification(booking, NotificationMessagesConstants.PAYMENT_UNSUCCESSFUL_MESSAGE);
                 bookingProducerService
                         .sendPaymentNotificationRequest(booking.getId(), paymentFailedNotification);
 

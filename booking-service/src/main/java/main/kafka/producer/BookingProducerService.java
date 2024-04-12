@@ -3,6 +3,7 @@ package main.kafka.producer;
 
 import avro.AdminRequest;
 import avro.BookingNotification;
+import avro.PaymentNotification;
 import avro.PaymentRequest;
 import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
@@ -81,7 +82,7 @@ public class BookingProducerService {
         });
     }
 
-    public void sendPaymentNotificationRequest(String key, BookingNotification notificationRequest) {
+    public void sendPaymentNotificationRequest(String key, PaymentNotification notificationRequest) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 Thread.sleep(1000L);
@@ -93,7 +94,9 @@ public class BookingProducerService {
             return null;
         }).whenComplete((r, e) -> {
             if (e == null) {
-                log.info("Sent message to notification service for payment for booking with id " + notificationRequest.getBookingId());
+                log.info("Sent message to notification service for payment for booking with id "
+                        + notificationRequest.getBookingId() + " and payment with id "
+                        + notificationRequest.getPaymentId());
             } else {
                 log.error(e.getMessage());
             }

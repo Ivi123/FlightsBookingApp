@@ -3,7 +3,7 @@ import avro.AdminRequest;
 import avro.BookingNotification;
 import avro.PaymentRequest;
 import main.constants.notifications.NotificationMessagesConstants;
-import main.kafka.mappers.NotificationRequestMapper;
+import main.kafka.mappers.BookingNotificationMapper;
 import main.kafka.producer.BookingProducerService;
 import main.mapper.BookingMapper;
 import main.kafka.mappers.AdminRequestMapper;
@@ -34,7 +34,7 @@ public class AdminRequestConsumer {
     private BookingMapper bookingMapper;
 
     @Autowired
-    private NotificationRequestMapper notificationRequestMapper;
+    private BookingNotificationMapper bookingNotificationMapper;
 
     @Autowired
     private BookingProducerService bookingProducerService;
@@ -49,7 +49,7 @@ public class AdminRequestConsumer {
                     if (adminResponse.getStatus().equals("SUCCEEDED")) {
                         booking.setStatus(adminResponse.getStatus());
                         // Send successful booking notification
-                        BookingNotification bookingSuccessfulNotification = notificationRequestMapper
+                        BookingNotification bookingSuccessfulNotification = bookingNotificationMapper
                                 .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_SUCCESSFUL_MESSAGE);
                         bookingProducerService
                                 .sendBookingNotificationRequest(booking.getId(), bookingSuccessfulNotification);
@@ -68,7 +68,7 @@ public class AdminRequestConsumer {
                                     .sendAdminRequest(booking.getId(), adminRequest);
 
                             // Send expired booking notification
-                            BookingNotification bookingExpiredNotification = notificationRequestMapper
+                            BookingNotification bookingExpiredNotification = bookingNotificationMapper
                                     .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_EXPIRED_MESSAGE);
 
                             bookingProducerService
@@ -81,7 +81,7 @@ public class AdminRequestConsumer {
                         // Handle admin rejection
                         // Send rejected booking notification
                         booking.setStatus(adminResponse.getStatus());
-                        BookingNotification bookingRejectedNotification = notificationRequestMapper
+                        BookingNotification bookingRejectedNotification = bookingNotificationMapper
                                 .toBookingNotification(booking, NotificationMessagesConstants.BOOKING_REJECTED_MESSAGE);
                         bookingProducerService
                                 .sendBookingNotificationRequest(booking.getId(), bookingRejectedNotification);
