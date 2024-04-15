@@ -10,8 +10,6 @@ public class Booking {
 
     @Id
     private String id;
-
-    private String bookingId;
     private String userId;
     private FlightDetails flightDetails;
     private List<PassengerDetails> passengerDetails;
@@ -27,14 +25,6 @@ public class Booking {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getBookingId() {
-        return bookingId;
-    }
-
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
     }
 
     public String getUserId() {

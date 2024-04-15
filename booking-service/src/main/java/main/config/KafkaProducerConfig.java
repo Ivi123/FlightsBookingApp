@@ -1,4 +1,4 @@
-package config;
+package main.config;
 
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
@@ -18,10 +18,10 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.producer.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${spring.kafka.properties.schema.registry.url}")
+    @Value("${spring.kafka.producer.properties.schema.registry.url}")
     private String schemaRegistryUrl;
 
     private Map<String, Object> producerConfigs() {

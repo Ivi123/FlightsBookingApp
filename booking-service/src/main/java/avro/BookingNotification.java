@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class BookingNotification extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 4766078051161832103L;
+  private static final long serialVersionUID = -5978910146503237996L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BookingNotification\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"message\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"userEmail\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"paymentId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BookingNotification\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"message\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"userEmail\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -76,7 +76,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
   private java.lang.String message;
   private java.lang.String userEmail;
   private java.lang.String bookingId;
-  private java.lang.String paymentId;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -90,13 +89,11 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
    * @param message The new value for message
    * @param userEmail The new value for userEmail
    * @param bookingId The new value for bookingId
-   * @param paymentId The new value for paymentId
    */
-  public BookingNotification(java.lang.String message, java.lang.String userEmail, java.lang.String bookingId, java.lang.String paymentId) {
+  public BookingNotification(java.lang.String message, java.lang.String userEmail, java.lang.String bookingId) {
     this.message = message;
     this.userEmail = userEmail;
     this.bookingId = bookingId;
-    this.paymentId = paymentId;
   }
 
   @Override
@@ -112,7 +109,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
     case 0: return message;
     case 1: return userEmail;
     case 2: return bookingId;
-    case 3: return paymentId;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -125,7 +121,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
     case 0: message = value$ != null ? value$.toString() : null; break;
     case 1: userEmail = value$ != null ? value$.toString() : null; break;
     case 2: bookingId = value$ != null ? value$.toString() : null; break;
-    case 3: paymentId = value$ != null ? value$.toString() : null; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -182,23 +177,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
-   * Gets the value of the 'paymentId' field.
-   * @return The value of the 'paymentId' field.
-   */
-  public java.lang.String getPaymentId() {
-    return paymentId;
-  }
-
-
-  /**
-   * Sets the value of the 'paymentId' field.
-   * @param value the value to set.
-   */
-  public void setPaymentId(java.lang.String value) {
-    this.paymentId = value;
-  }
-
-  /**
    * Creates a new BookingNotification RecordBuilder.
    * @return A new BookingNotification RecordBuilder
    */
@@ -242,7 +220,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
     private java.lang.String message;
     private java.lang.String userEmail;
     private java.lang.String bookingId;
-    private java.lang.String paymentId;
 
     /** Creates a new Builder */
     private Builder() {
@@ -267,10 +244,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
         this.bookingId = data().deepCopy(fields()[2].schema(), other.bookingId);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
-      if (isValidValue(fields()[3], other.paymentId)) {
-        this.paymentId = data().deepCopy(fields()[3].schema(), other.paymentId);
-        fieldSetFlags()[3] = other.fieldSetFlags()[3];
-      }
     }
 
     /**
@@ -290,10 +263,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
       if (isValidValue(fields()[2], other.bookingId)) {
         this.bookingId = data().deepCopy(fields()[2].schema(), other.bookingId);
         fieldSetFlags()[2] = true;
-      }
-      if (isValidValue(fields()[3], other.paymentId)) {
-        this.paymentId = data().deepCopy(fields()[3].schema(), other.paymentId);
-        fieldSetFlags()[3] = true;
       }
     }
 
@@ -417,46 +386,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
       return this;
     }
 
-    /**
-      * Gets the value of the 'paymentId' field.
-      * @return The value.
-      */
-    public java.lang.String getPaymentId() {
-      return paymentId;
-    }
-
-
-    /**
-      * Sets the value of the 'paymentId' field.
-      * @param value The value of 'paymentId'.
-      * @return This builder.
-      */
-    public avro.BookingNotification.Builder setPaymentId(java.lang.String value) {
-      validate(fields()[3], value);
-      this.paymentId = value;
-      fieldSetFlags()[3] = true;
-      return this;
-    }
-
-    /**
-      * Checks whether the 'paymentId' field has been set.
-      * @return True if the 'paymentId' field has been set, false otherwise.
-      */
-    public boolean hasPaymentId() {
-      return fieldSetFlags()[3];
-    }
-
-
-    /**
-      * Clears the value of the 'paymentId' field.
-      * @return This builder.
-      */
-    public avro.BookingNotification.Builder clearPaymentId() {
-      paymentId = null;
-      fieldSetFlags()[3] = false;
-      return this;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public BookingNotification build() {
@@ -465,7 +394,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
         record.message = fieldSetFlags()[0] ? this.message : (java.lang.String) defaultValue(fields()[0]);
         record.userEmail = fieldSetFlags()[1] ? this.userEmail : (java.lang.String) defaultValue(fields()[1]);
         record.bookingId = fieldSetFlags()[2] ? this.bookingId : (java.lang.String) defaultValue(fields()[2]);
-        record.paymentId = fieldSetFlags()[3] ? this.paymentId : (java.lang.String) defaultValue(fields()[3]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -504,8 +432,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
 
     out.writeString(this.bookingId);
 
-    out.writeString(this.paymentId);
-
   }
 
   @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
@@ -519,10 +445,8 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
 
       this.bookingId = in.readString();
 
-      this.paymentId = in.readString();
-
     } else {
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.message = in.readString();
@@ -534,10 +458,6 @@ public class BookingNotification extends org.apache.avro.specific.SpecificRecord
 
         case 2:
           this.bookingId = in.readString();
-          break;
-
-        case 3:
-          this.paymentId = in.readString();
           break;
 
         default:

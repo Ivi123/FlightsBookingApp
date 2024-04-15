@@ -19,7 +19,7 @@ public class BookingMapper {
 
     public Booking toEntity(BookingDTO bookingDTO) {
         Booking booking = new Booking();
-        booking.setBookingId(bookingDTO.getBookingId());
+        booking.setId(bookingDTO.getId());
         booking.setUserId(bookingDTO.getUserId());
         booking.setCreatedAt(bookingDTO.getCreatedAt());
 
@@ -35,12 +35,14 @@ public class BookingMapper {
             booking.setFlightDetails(flightDetailsMapper.toEntity(bookingDTO.getFlightDetails()));
         }
 
+        booking.setStatus(bookingDTO.getStatus());
+
         return booking;
     }
 
     public BookingDTO toDTO(Booking booking) {
         BookingDTO bookingDTO = new BookingDTO();
-        bookingDTO.setBookingId(booking.getBookingId());
+        bookingDTO.setId(booking.getId());
         bookingDTO.setUserId(booking.getUserId());
         bookingDTO.setCreatedAt(booking.getCreatedAt());
 
@@ -55,6 +57,8 @@ public class BookingMapper {
         if (booking.getFlightDetails() != null) {
             bookingDTO.setFlightDetails(flightDetailsMapper.toDTO(booking.getFlightDetails()));
         }
+
+        bookingDTO.setStatus(booking.getStatus());
 
         return bookingDTO;
     }

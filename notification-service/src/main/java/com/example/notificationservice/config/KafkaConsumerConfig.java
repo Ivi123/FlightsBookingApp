@@ -1,5 +1,7 @@
 package com.example.notificationservice.config;
 
+import avro.BookingNotification;
+import avro.PaymentNotification;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -23,7 +25,7 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
-    public ConsumerFactory<String, String> consumerFactory() {
+    public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -33,16 +35,38 @@ public class KafkaConsumerConfig {
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
         props.put("schema.registry.url", "http://localhost:8081");
 
-        return new DefaultKafkaConsumerFactory<>(props);
+        return props;
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String>
-    kafkaListenerContainerFactory() {
+    public ConsumerFactory<String, PaymentNotification> paymentConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    }
 
-        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, PaymentNotification>
+    kafkaListenerContainerFactoryPayment() {
+
+        ConcurrentKafkaListenerContainerFactory<String, PaymentNotification> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(paymentConsumerFactory());
         return factory;
     }
+
+    @Bean
+    public ConsumerFactory<String, BookingNotification> bookingConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    }
+
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BookingNotification>
+    kafkaListenerContainerFactoryBooking() {
+
+        ConcurrentKafkaListenerContainerFactory<String, BookingNotification> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(bookingConsumerFactory());
+        return factory;
+    }
+
 }

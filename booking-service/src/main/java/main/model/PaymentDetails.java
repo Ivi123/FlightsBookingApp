@@ -2,6 +2,7 @@ package main.model;
 
 public class PaymentDetails {
 
+    private String paymentId;
     private String cardNumber;
     private String cardHolderName;
     private String expirationMonth;
@@ -9,6 +10,14 @@ public class PaymentDetails {
     private Integer cvv;
     private String currency;
     private String status;
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
 
     public String getCardNumber() {
         return cardNumber;

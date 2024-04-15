@@ -1,4 +1,4 @@
-package config;
+package main.config;
 
 import avro.AdminRequest;
 import avro.PaymentRequest;
@@ -18,7 +18,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
     private String bootstrapServers;
 
     @Value("${spring.kafka.consumer.properties.schema.registry.url}")
@@ -29,9 +29,9 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
-        props.put("schema.registry.url", schemaRegistryUrl); // Set the schema registry URL
+        props.put("schema.registry.url", schemaRegistryUrl);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true); // Use specific Avro reader
+        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
         return props;
     }
 

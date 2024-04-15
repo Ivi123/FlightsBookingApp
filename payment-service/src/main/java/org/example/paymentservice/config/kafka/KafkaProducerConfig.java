@@ -61,20 +61,6 @@ public class KafkaProducerConfig {
     KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-//    @Bean
-//    NewTopic createTopicBooking() {
-//        return TopicBuilder.name("payment-response-topic").partitions(3).replicas(1)
-//                .configs(Map.of("min.insync.replicas", "2"))
-//                .build();
-//    }
-//
-//    // Bean for creating the notification topic
-//    @Bean
-//    NewTopic createTopicNotification() {
-//        return TopicBuilder.name("notification-topic").partitions(3).replicas(1)
-//                .configs(Map.of("min.insync.replicas", "2"))
-//                .build();
-//    }
 
 
 }

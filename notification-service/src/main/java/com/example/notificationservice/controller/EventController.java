@@ -1,7 +1,7 @@
 package com.example.notificationservice.controller;
 
-import com.example.notificationservice.dto.BookingNotification;
-import com.example.notificationservice.dto.PaymentNotification;
+import avro.BookingNotification;
+import avro.PaymentNotification;
 import com.example.notificationservice.producer.NotificationProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -24,7 +24,8 @@ public class ConsumerService {
         Flight flight = flightService.findByDepartureDestinationDateAndOperatorId(adminRequest.getDeparture(),
                 adminRequest.getDestination(), adminRequest.getDate(),
                 adminRequest.getOperatorId());
-        if(!adminRequest.getStatus().equals("EXPIRED")){
+        if(!(adminRequest.getStatus().equalsIgnoreCase("EXPIRED") ||
+                adminRequest.getStatus().equalsIgnoreCase("FAILED"))){
             if(flight.getNumberOfSeats()< adminRequest.getNumberOfSeats()){
                 adminRequest.setStatus("FAILED");
                 //send to topic
@@ -33,8 +34,12 @@ public class ConsumerService {
             }
             flight.setNumberOfSeats(flight.getNumberOfSeats()-adminRequest.getNumberOfSeats());
             adminRequest.setStatus("SUCCEEDED");
-        }else{
+        }else {
             flight.setNumberOfSeats(flight.getNumberOfSeats()+adminRequest.getNumberOfSeats());
+            FlightDto dto = flightMapper.entityToDto(flight);
+            System.out.println(flight.getNumberOfSeats());
+            flightService.updateFlight(dto);
+            return;
         }
         //update number of seats in bd
         FlightDto dto = flightMapper.entityToDto(flight);

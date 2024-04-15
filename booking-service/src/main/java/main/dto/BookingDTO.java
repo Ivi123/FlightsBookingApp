@@ -11,13 +11,14 @@ public class BookingDTO {
      * numberOfPassengers - to be calculated from counting the list of passengers at POST time
      */
 
-    private String bookingId;
+    private String id;
     private String userId;
     private PaymentDetailsDTO paymentDetails;
     private List<PassengerDetailsDTO> passengerDetails;
     private FlightDetailsDTO flightDetails;
-
     private LocalDateTime createdAt;
+
+    private String status;
 
     public LocalDateTime getExpiresAt() {
         return expiresAt;
@@ -49,12 +50,12 @@ public class BookingDTO {
 
     private Integer numberOfPassengers;
 
-    public String getBookingId() {
-        return bookingId;
+    public String getId() {
+        return id;
     }
 
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
@@ -95,5 +96,13 @@ public class BookingDTO {
 
     public void setFlightDetails(FlightDetailsDTO flightDetails) {
         this.flightDetails = flightDetails;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
