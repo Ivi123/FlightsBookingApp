@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -52,13 +53,14 @@ public class PayPalServiceImpl implements PayPalService {
     @Override
     public Mono<PaymentOrder> createPayment(Double totalAmount, String paymentId, String bookingId) {
         return paymentService.findById(paymentId)
+                .publishOn(Schedulers.boundedElastic())
                 .flatMap(payment -> {
                     LocalDateTime expirationTime = payment.getExpirationTime();
                     LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
 
                     if (currentDateTime.isAfter(expirationTime)) {
-                        LOG.error("Payment expiration time has passed. Payment cannot be processed.");
-                        paymentService.updatePaymentStatus(paymentId, STATUS_FAILED);
+                        updatePaymentStatusAndSendToKafkaAndDLT(paymentId, bookingId, STATUS_FAILED)
+                                .subscribe();
                         return Mono.just(new PaymentOrder(ERROR, "", ""));
                     } else {
 
@@ -191,5 +193,27 @@ public class PayPalServiceImpl implements PayPalService {
             throw new RuntimeException(e);
         }
     }
+
+    public Mono<Payment> updatePaymentStatusAndSendToKafkaAndDLT(String paymentId, String bookingId, String status) {
+        Mono<Void> updateStatusMono;
+        updateStatusMono = paymentService.updatePaymentStatus(paymentId, status);
+
+        return updateStatusMono
+                .then(paymentService.findById(paymentId))
+                .flatMap(payment -> {
+                    PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                    return Mono.fromRunnable(() -> kafkaProducer.sendMessage(bookingId, paymentRequest))
+                            .thenReturn(payment); // Return the payment after sending the message
+                })
+                .doOnNext(payment -> {
+                    // Handle successful processing
+                    if (payment.getStatus().equalsIgnoreCase(STATUS_FAILED)) {
+                        // Send to DLT
+                        PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                        dltConsumerService.sendPaymentToDLT(paymentRequest);
+                    }
+                });
+    }
+
 
 }
