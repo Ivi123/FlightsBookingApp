@@ -48,9 +48,6 @@ public class StripePaymentProcessingService {
                 Map<String, String> metadata = intent.getMetadata();
                 String bookingId = metadata.get("bookingId");
                 String paymentId = metadata.get("paymentId");
-                log.info("*** Payment : {}", paymentId);
-                log.info("*** for booking: {} ", bookingId);
-                log.info("*** status: {}", intent.getStatus());
 
                 // Update status in the database
                 Mono<Void> updateStatusMono;
@@ -75,11 +72,7 @@ public class StripePaymentProcessingService {
                                         PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
                                         dltConsumerService.sendPaymentToDLT(paymentRequest);
 
-
                                     }
-                                },
-                                error -> {
-                                    // Handle errors
                                 }
                         );
             }

@@ -20,7 +20,7 @@ public class PaymentController {
     public Mono<String> paymentSuccess(Model model,
                                        @RequestParam(value = "token", required = false, defaultValue = "") String token) {
         return payPalService.completePayment(token)
-                .flatMap(completedOrder -> Mono.just("successPayPal"))
+                .flatMap(completedOrder -> Mono.just("Congratulations! Your payment was successful."))
                 .doOnError(throwable -> {
                     throw new RuntimeException("Error processing payment: " + throwable.getMessage());
                 });

@@ -6,6 +6,13 @@ public class PaymentOrder {
     private String payId;
     private String redirectUrl;
 
+
+    public PaymentOrder(String status, String payId, String redirectUrl) {
+        this.status = status;
+        this.payId = payId;
+        this.redirectUrl = redirectUrl;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -27,14 +34,6 @@ public class PaymentOrder {
     }
 
     public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
-    }
-
-    public PaymentOrder() {}
-
-    public PaymentOrder(String status, String payId, String redirectUrl) {
-        this.status = status;
-        this.payId = payId;
         this.redirectUrl = redirectUrl;
     }
 }

@@ -20,9 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
 
-/**
- * Service class for managing payment operations.
- */
+
 @Service
 public class StripeServiceImpl implements StripeService {
     private final ReactiveMongoTemplate mongoTemplate;
@@ -31,24 +29,12 @@ public class StripeServiceImpl implements StripeService {
     private final DltConsumerService dltConsumerService;
     private final KafkaProducer kafkaProducer;
 
-
-    /**
-     * Constructor for PaymentService.
-     *
-     * @param mongoTemplate The MongoDB template used for interacting with the database.
-     */
     public StripeServiceImpl(ReactiveMongoTemplate mongoTemplate, DltConsumerService dltConsumerService, KafkaProducer kafkaProducer) {
         this.mongoTemplate = mongoTemplate;
         this.dltConsumerService = dltConsumerService;
         this.kafkaProducer = kafkaProducer;
     }
 
-    /**
-     * Process a payment request.
-     *
-     * @param request The payment request object containing payment details.
-     * @return A Mono containing the response to the payment request.
-     */
     @Override
     public Mono<WebResponse> processPaymentRequest(WebRequest request) {
         try {
@@ -76,7 +62,6 @@ public class StripeServiceImpl implements StripeService {
             response.setBookingId(bookingId);
             response.setPaymentId(paymentId);
             response.setStatus(paymentStatus); // Set the payment status in the response
-            log.info("Payment:" + paymentId + " for booking id: " + bookingId + " initial status: " + paymentStatus);
             // Verifică dacă a expirat plata
             return findById(paymentId)
                     .flatMap(payment -> {
@@ -85,7 +70,7 @@ public class StripeServiceImpl implements StripeService {
 
                         if (currentDateTime.isAfter(expirationTime)) {
                             log.error("Payment has expired: {}", paymentId);
-                            WebResponse errorResponse = new WebResponse("error", "Plata a expirat");
+                            WebResponse errorResponse = new WebResponse("error", "Payment Payment expiration time has passed. Payment cannot be processed.");
                             payment.setStatus("failed");
                             PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
                             //send to dlt
@@ -107,12 +92,7 @@ public class StripeServiceImpl implements StripeService {
     }
 
 
-    /**
-     * Find a payment by its ID.
-     *
-     * @param id The ID of the payment.
-     * @return The Payment object if found, otherwise null.
-     */
+
     public Mono<Payment> findById(String id) {
         return mongoTemplate.findById(id, Payment.class);
     }

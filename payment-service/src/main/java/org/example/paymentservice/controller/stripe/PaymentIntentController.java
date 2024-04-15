@@ -16,21 +16,10 @@ public class PaymentIntentController {
 
     private final StripeServiceImpl paymentService;
 
-    /**
-     * Constructor for PaymentIntentController.
-     *
-     * @param paymentService An instance of PaymentServiceImpl for processing payment requests.
-     */
     public PaymentIntentController(StripeServiceImpl paymentService) {
         this.paymentService = paymentService;
     }
 
-    /**
-     * Endpoint for creating a payment intent.
-     *
-     * @param request The WebRequest object containing payment details.
-     * @return A Mono containing the WebResponse to the payment request.
-     */
     @PostMapping("/create-payment-intent")
     public Mono<WebResponse> createPaymentIntent(@RequestBody WebRequest request) {
         return paymentService.processPaymentRequest(request);

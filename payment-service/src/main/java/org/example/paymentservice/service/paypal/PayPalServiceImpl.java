@@ -25,7 +25,9 @@ import java.util.NoSuchElementException;
 
 @Service
 public class PayPalServiceImpl implements PayPalService {
-    private static final Logger log = LoggerFactory.getLogger(PayPalServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PayPalServiceImpl.class);
+    private static final String ERROR = "error";
+    private static final String STATUS_FAILED = "failed";
 
     private final PayPalHttpClient payPalHttpClient;
     private final StripeServiceImpl paymentService;
@@ -38,7 +40,8 @@ public class PayPalServiceImpl implements PayPalService {
     @Value("${paypal.cancelUrl}")
     private String cancelUrl;
 
-    public PayPalServiceImpl(PayPalHttpClient payPalHttpClient, StripeServiceImpl paymentService, KafkaProducer kafkaProducer, DltConsumerService dltConsumerService) {
+    public PayPalServiceImpl(PayPalHttpClient payPalHttpClient, StripeServiceImpl paymentService,
+                             KafkaProducer kafkaProducer, DltConsumerService dltConsumerService) {
         this.payPalHttpClient = payPalHttpClient;
         this.paymentService = paymentService;
         this.kafkaProducer = kafkaProducer;
@@ -48,18 +51,16 @@ public class PayPalServiceImpl implements PayPalService {
     // Method to create a payment order
     @Override
     public Mono<PaymentOrder> createPayment(Double totalAmount, String paymentId, String bookingId) {
-
-
         return paymentService.findById(paymentId)
                 .flatMap(payment -> {
                     LocalDateTime expirationTime = payment.getExpirationTime();
                     LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
 
                     if (currentDateTime.isAfter(expirationTime)) {
-                        log.error("Payment expiration time has passed. Payment cannot be processed.");
-                        return Mono.just(new PaymentOrder("error", "", ""));
+                        LOG.error("Payment expiration time has passed. Payment cannot be processed.");
+                        paymentService.updatePaymentStatus(paymentId, STATUS_FAILED);
+                        return Mono.just(new PaymentOrder(ERROR, "", ""));
                     } else {
-
 
                         // Create an OrderRequest object with payment details
                         OrderRequest orderRequest = new OrderRequest();
@@ -122,9 +123,9 @@ public class PayPalServiceImpl implements PayPalService {
                                         return new PaymentOrder("success", order.id(), redirectUrl);
                                     } catch (IOException e) {
                                         // Handle error if order creation fails
-                                        log.error(e.getMessage());
+                                        LOG.error(e.getMessage());
                                         // Return a PaymentOrder object with error status
-                                        return new PaymentOrder("error", "", "");
+                                        return new PaymentOrder(ERROR, "", "");
                                     }
                                 });
                     }
@@ -132,73 +133,63 @@ public class PayPalServiceImpl implements PayPalService {
     }
 
 
+    @Override
+    public Mono<CompletedOrder> completePayment(String token) {
+        OrdersCaptureRequest ordersCaptureRequest = new OrdersCaptureRequest(token);
 
-        @Override
-        public Mono<CompletedOrder> completePayment (String token){
-            OrdersCaptureRequest ordersCaptureRequest = new OrdersCaptureRequest(token);
-
-            return Mono.fromCallable(() -> {
-                try {
-                    HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersCaptureRequest);
-                    Order order = httpResponse.result();
-                    return getOrderDetailsAndUpdatePayment(order.id())
-                            .flatMap(payment -> {
-                                if (payment == null) {
-                                    log.error("Payment not found for order ID: {}", order.id());
-                                    return Mono.just(new CompletedOrder("error"));
-                                }
-                                LocalDateTime expirationTime = payment.getExpirationTime();
-                                LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
-                                if (currentDateTime.isAfter(expirationTime)) {
-                                    log.error("Payment has expired: {}", order.id());
-                                    payment.setStatus("canceled");
-                                    PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
-                                    dltConsumerService.sendPaymentToDLT(paymentRequest);
-                                    kafkaProducer.sendMessage(payment.getBookingId(), paymentRequest);
-                                    return Mono.just(new CompletedOrder("error", token));
-                                } else {
-                                    PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
-                                    kafkaProducer.sendMessage(payment.getBookingId(), paymentRequest);
-                                    return Mono.just(new CompletedOrder("success", token));
-
-                                }
-                            });
-                } catch (IOException e) {
-                    log.error("Error capturing order: {}", e.getMessage());
-                    return Mono.just(new CompletedOrder("error"));
-                }
-            }).flatMap(mono -> mono);
-        }
-
-
-        public Mono<Payment> getOrderDetailsAndUpdatePayment (String orderId){
-            OrdersGetRequest ordersGetRequest = new OrdersGetRequest(orderId);
+        return Mono.fromCallable(() -> {
             try {
-                HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersGetRequest);
+                HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersCaptureRequest);
                 Order order = httpResponse.result();
-                String paymentId = order.purchaseUnits().get(0).items().get(0).name();
-                String bookingId = order.purchaseUnits().get(0).items().get(0).description();
-                String paymentStatus = order.status();
-                Mono<Void> updateStatusMono;
-                if (!paymentStatus.equalsIgnoreCase("COMPLETED")) {
-                    updateStatusMono = paymentService.updatePaymentStatus(paymentId, "failed");
-                } else {
-                    updateStatusMono = paymentService.updatePaymentStatus(paymentId, "succeeded");
-                }
-                return updateStatusMono
-                        .then(paymentService.findById(paymentId))
+                return getOrderDetailsAndUpdatePayment(order.id())
                         .flatMap(payment -> {
-                            return Mono.just(payment);
-                        })
-                        .doOnNext(payment -> {
-                            log.info("*** Payment id: {}", paymentId);
-                            log.info("*** BookingId: {}", bookingId);
-                            log.info("*** Amount: {}", order.purchaseUnits().get(0).amountWithBreakdown().value());
-                            log.info("**** {}", paymentStatus);
+                            if (payment == null) {
+                                LOG.error("Payment not found for order ID: {}", order.id());
+                                return Mono.just(new CompletedOrder(ERROR));
+                            }
+                            LocalDateTime expirationTime = payment.getExpirationTime();
+                            LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+                            if (currentDateTime.isAfter(expirationTime)) {
+                                LOG.error("Payment has expired: {}", order.id());
+                                payment.setStatus(STATUS_FAILED);
+                                PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                                dltConsumerService.sendPaymentToDLT(paymentRequest);
+                                kafkaProducer.sendMessage(payment.getBookingId(), paymentRequest);
+                                return Mono.just(new CompletedOrder(ERROR, token));
+                            } else {
+                                PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                                kafkaProducer.sendMessage(payment.getBookingId(), paymentRequest);
+                                return Mono.just(new CompletedOrder("success", token));
+
+                            }
                         });
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                LOG.error("Error capturing order: {}", e.getMessage());
+                return Mono.just(new CompletedOrder(ERROR));
             }
-        }
-
+        }).flatMap(mono -> mono);
     }
+
+
+    public Mono<Payment> getOrderDetailsAndUpdatePayment(String orderId) {
+        OrdersGetRequest ordersGetRequest = new OrdersGetRequest(orderId);
+        try {
+            HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersGetRequest);
+            Order order = httpResponse.result();
+            String paymentId = order.purchaseUnits().get(0).items().get(0).name();
+            String paymentStatus = order.status();
+            Mono<Void> updateStatusMono;
+            if (!paymentStatus.equalsIgnoreCase("COMPLETED")) {
+                updateStatusMono = paymentService.updatePaymentStatus(paymentId, STATUS_FAILED);
+            } else {
+                updateStatusMono = paymentService.updatePaymentStatus(paymentId, "succeeded");
+            }
+            return updateStatusMono
+                    .then(paymentService.findById(paymentId))
+                    .flatMap(Mono::just);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}
