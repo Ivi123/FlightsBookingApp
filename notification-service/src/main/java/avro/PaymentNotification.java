@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class PaymentNotification extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -1087778522763356678L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentNotification\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"message\",\"type\":\"string\"},{\"name\":\"userEmail\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"paymentId\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = 2396676229010208223L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentNotification\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"message\",\"type\":\"string\"},{\"name\":\"userEmail\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"paymentId\",\"type\":\"string\"},{\"name\":\"operatorId\",\"type\":\"string\"},{\"name\":\"flightId\",\"type\":\"string\"},{\"name\":\"departure\",\"type\":\"string\"},{\"name\":\"destination\",\"type\":\"string\"},{\"name\":\"numberOfSeats\",\"type\":\"int\"},{\"name\":\"standardPrice\",\"type\":\"double\"},{\"name\":\"date\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -57,6 +57,13 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
   @Deprecated public java.lang.CharSequence currency;
   @Deprecated public java.lang.CharSequence bookingId;
   @Deprecated public java.lang.CharSequence paymentId;
+  @Deprecated public java.lang.CharSequence operatorId;
+  @Deprecated public java.lang.CharSequence flightId;
+  @Deprecated public java.lang.CharSequence departure;
+  @Deprecated public java.lang.CharSequence destination;
+  @Deprecated public int numberOfSeats;
+  @Deprecated public double standardPrice;
+  @Deprecated public java.lang.CharSequence date;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -73,14 +80,28 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
    * @param currency The new value for currency
    * @param bookingId The new value for bookingId
    * @param paymentId The new value for paymentId
+   * @param operatorId The new value for operatorId
+   * @param flightId The new value for flightId
+   * @param departure The new value for departure
+   * @param destination The new value for destination
+   * @param numberOfSeats The new value for numberOfSeats
+   * @param standardPrice The new value for standardPrice
+   * @param date The new value for date
    */
-  public PaymentNotification(java.lang.CharSequence message, java.lang.CharSequence userEmail, java.lang.Double price, java.lang.CharSequence currency, java.lang.CharSequence bookingId, java.lang.CharSequence paymentId) {
+  public PaymentNotification(java.lang.CharSequence message, java.lang.CharSequence userEmail, java.lang.Double price, java.lang.CharSequence currency, java.lang.CharSequence bookingId, java.lang.CharSequence paymentId, java.lang.CharSequence operatorId, java.lang.CharSequence flightId, java.lang.CharSequence departure, java.lang.CharSequence destination, java.lang.Integer numberOfSeats, java.lang.Double standardPrice, java.lang.CharSequence date) {
     this.message = message;
     this.userEmail = userEmail;
     this.price = price;
     this.currency = currency;
     this.bookingId = bookingId;
     this.paymentId = paymentId;
+    this.operatorId = operatorId;
+    this.flightId = flightId;
+    this.departure = departure;
+    this.destination = destination;
+    this.numberOfSeats = numberOfSeats;
+    this.standardPrice = standardPrice;
+    this.date = date;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -93,6 +114,13 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
     case 3: return currency;
     case 4: return bookingId;
     case 5: return paymentId;
+    case 6: return operatorId;
+    case 7: return flightId;
+    case 8: return departure;
+    case 9: return destination;
+    case 10: return numberOfSeats;
+    case 11: return standardPrice;
+    case 12: return date;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -107,6 +135,13 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
     case 3: currency = (java.lang.CharSequence)value$; break;
     case 4: bookingId = (java.lang.CharSequence)value$; break;
     case 5: paymentId = (java.lang.CharSequence)value$; break;
+    case 6: operatorId = (java.lang.CharSequence)value$; break;
+    case 7: flightId = (java.lang.CharSequence)value$; break;
+    case 8: departure = (java.lang.CharSequence)value$; break;
+    case 9: destination = (java.lang.CharSequence)value$; break;
+    case 10: numberOfSeats = (java.lang.Integer)value$; break;
+    case 11: standardPrice = (java.lang.Double)value$; break;
+    case 12: date = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -208,6 +243,118 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
   }
 
   /**
+   * Gets the value of the 'operatorId' field.
+   * @return The value of the 'operatorId' field.
+   */
+  public java.lang.CharSequence getOperatorId() {
+    return operatorId;
+  }
+
+  /**
+   * Sets the value of the 'operatorId' field.
+   * @param value the value to set.
+   */
+  public void setOperatorId(java.lang.CharSequence value) {
+    this.operatorId = value;
+  }
+
+  /**
+   * Gets the value of the 'flightId' field.
+   * @return The value of the 'flightId' field.
+   */
+  public java.lang.CharSequence getFlightId() {
+    return flightId;
+  }
+
+  /**
+   * Sets the value of the 'flightId' field.
+   * @param value the value to set.
+   */
+  public void setFlightId(java.lang.CharSequence value) {
+    this.flightId = value;
+  }
+
+  /**
+   * Gets the value of the 'departure' field.
+   * @return The value of the 'departure' field.
+   */
+  public java.lang.CharSequence getDeparture() {
+    return departure;
+  }
+
+  /**
+   * Sets the value of the 'departure' field.
+   * @param value the value to set.
+   */
+  public void setDeparture(java.lang.CharSequence value) {
+    this.departure = value;
+  }
+
+  /**
+   * Gets the value of the 'destination' field.
+   * @return The value of the 'destination' field.
+   */
+  public java.lang.CharSequence getDestination() {
+    return destination;
+  }
+
+  /**
+   * Sets the value of the 'destination' field.
+   * @param value the value to set.
+   */
+  public void setDestination(java.lang.CharSequence value) {
+    this.destination = value;
+  }
+
+  /**
+   * Gets the value of the 'numberOfSeats' field.
+   * @return The value of the 'numberOfSeats' field.
+   */
+  public java.lang.Integer getNumberOfSeats() {
+    return numberOfSeats;
+  }
+
+  /**
+   * Sets the value of the 'numberOfSeats' field.
+   * @param value the value to set.
+   */
+  public void setNumberOfSeats(java.lang.Integer value) {
+    this.numberOfSeats = value;
+  }
+
+  /**
+   * Gets the value of the 'standardPrice' field.
+   * @return The value of the 'standardPrice' field.
+   */
+  public java.lang.Double getStandardPrice() {
+    return standardPrice;
+  }
+
+  /**
+   * Sets the value of the 'standardPrice' field.
+   * @param value the value to set.
+   */
+  public void setStandardPrice(java.lang.Double value) {
+    this.standardPrice = value;
+  }
+
+  /**
+   * Gets the value of the 'date' field.
+   * @return The value of the 'date' field.
+   */
+  public java.lang.CharSequence getDate() {
+    return date;
+  }
+
+  /**
+   * Sets the value of the 'date' field.
+   * @param value the value to set.
+   */
+  public void setDate(java.lang.CharSequence value) {
+    this.date = value;
+  }
+
+  /**
    * Creates a new PaymentNotification RecordBuilder.
    * @return A new PaymentNotification RecordBuilder
    */
@@ -245,6 +392,13 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
     private java.lang.CharSequence currency;
     private java.lang.CharSequence bookingId;
     private java.lang.CharSequence paymentId;
+    private java.lang.CharSequence operatorId;
+    private java.lang.CharSequence flightId;
+    private java.lang.CharSequence departure;
+    private java.lang.CharSequence destination;
+    private int numberOfSeats;
+    private double standardPrice;
+    private java.lang.CharSequence date;
 
     /** Creates a new Builder */
     private Builder() {
@@ -281,6 +435,34 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
         this.paymentId = data().deepCopy(fields()[5].schema(), other.paymentId);
         fieldSetFlags()[5] = true;
       }
+      if (isValidValue(fields()[6], other.operatorId)) {
+        this.operatorId = data().deepCopy(fields()[6].schema(), other.operatorId);
+        fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.flightId)) {
+        this.flightId = data().deepCopy(fields()[7].schema(), other.flightId);
+        fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.departure)) {
+        this.departure = data().deepCopy(fields()[8].schema(), other.departure);
+        fieldSetFlags()[8] = true;
+      }
+      if (isValidValue(fields()[9], other.destination)) {
+        this.destination = data().deepCopy(fields()[9].schema(), other.destination);
+        fieldSetFlags()[9] = true;
+      }
+      if (isValidValue(fields()[10], other.numberOfSeats)) {
+        this.numberOfSeats = data().deepCopy(fields()[10].schema(), other.numberOfSeats);
+        fieldSetFlags()[10] = true;
+      }
+      if (isValidValue(fields()[11], other.standardPrice)) {
+        this.standardPrice = data().deepCopy(fields()[11].schema(), other.standardPrice);
+        fieldSetFlags()[11] = true;
+      }
+      if (isValidValue(fields()[12], other.date)) {
+        this.date = data().deepCopy(fields()[12].schema(), other.date);
+        fieldSetFlags()[12] = true;
+      }
     }
 
     /**
@@ -312,6 +494,34 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       if (isValidValue(fields()[5], other.paymentId)) {
         this.paymentId = data().deepCopy(fields()[5].schema(), other.paymentId);
         fieldSetFlags()[5] = true;
+      }
+      if (isValidValue(fields()[6], other.operatorId)) {
+        this.operatorId = data().deepCopy(fields()[6].schema(), other.operatorId);
+        fieldSetFlags()[6] = true;
+      }
+      if (isValidValue(fields()[7], other.flightId)) {
+        this.flightId = data().deepCopy(fields()[7].schema(), other.flightId);
+        fieldSetFlags()[7] = true;
+      }
+      if (isValidValue(fields()[8], other.departure)) {
+        this.departure = data().deepCopy(fields()[8].schema(), other.departure);
+        fieldSetFlags()[8] = true;
+      }
+      if (isValidValue(fields()[9], other.destination)) {
+        this.destination = data().deepCopy(fields()[9].schema(), other.destination);
+        fieldSetFlags()[9] = true;
+      }
+      if (isValidValue(fields()[10], other.numberOfSeats)) {
+        this.numberOfSeats = data().deepCopy(fields()[10].schema(), other.numberOfSeats);
+        fieldSetFlags()[10] = true;
+      }
+      if (isValidValue(fields()[11], other.standardPrice)) {
+        this.standardPrice = data().deepCopy(fields()[11].schema(), other.standardPrice);
+        fieldSetFlags()[11] = true;
+      }
+      if (isValidValue(fields()[12], other.date)) {
+        this.date = data().deepCopy(fields()[12].schema(), other.date);
+        fieldSetFlags()[12] = true;
       }
     }
 
@@ -548,6 +758,277 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
       return this;
     }
 
+    /**
+      * Gets the value of the 'operatorId' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getOperatorId() {
+      return operatorId;
+    }
+
+    /**
+      * Sets the value of the 'operatorId' field.
+      * @param value The value of 'operatorId'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setOperatorId(java.lang.CharSequence value) {
+      validate(fields()[6], value);
+      this.operatorId = value;
+      fieldSetFlags()[6] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'operatorId' field has been set.
+      * @return True if the 'operatorId' field has been set, false otherwise.
+      */
+    public boolean hasOperatorId() {
+      return fieldSetFlags()[6];
+    }
+
+
+    /**
+      * Clears the value of the 'operatorId' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearOperatorId() {
+      operatorId = null;
+      fieldSetFlags()[6] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'flightId' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getFlightId() {
+      return flightId;
+    }
+
+    /**
+      * Sets the value of the 'flightId' field.
+      * @param value The value of 'flightId'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setFlightId(java.lang.CharSequence value) {
+      validate(fields()[7], value);
+      this.flightId = value;
+      fieldSetFlags()[7] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'flightId' field has been set.
+      * @return True if the 'flightId' field has been set, false otherwise.
+      */
+    public boolean hasFlightId() {
+      return fieldSetFlags()[7];
+    }
+
+
+    /**
+      * Clears the value of the 'flightId' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearFlightId() {
+      flightId = null;
+      fieldSetFlags()[7] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'departure' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getDeparture() {
+      return departure;
+    }
+
+    /**
+      * Sets the value of the 'departure' field.
+      * @param value The value of 'departure'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setDeparture(java.lang.CharSequence value) {
+      validate(fields()[8], value);
+      this.departure = value;
+      fieldSetFlags()[8] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'departure' field has been set.
+      * @return True if the 'departure' field has been set, false otherwise.
+      */
+    public boolean hasDeparture() {
+      return fieldSetFlags()[8];
+    }
+
+
+    /**
+      * Clears the value of the 'departure' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearDeparture() {
+      departure = null;
+      fieldSetFlags()[8] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'destination' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getDestination() {
+      return destination;
+    }
+
+    /**
+      * Sets the value of the 'destination' field.
+      * @param value The value of 'destination'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setDestination(java.lang.CharSequence value) {
+      validate(fields()[9], value);
+      this.destination = value;
+      fieldSetFlags()[9] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'destination' field has been set.
+      * @return True if the 'destination' field has been set, false otherwise.
+      */
+    public boolean hasDestination() {
+      return fieldSetFlags()[9];
+    }
+
+
+    /**
+      * Clears the value of the 'destination' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearDestination() {
+      destination = null;
+      fieldSetFlags()[9] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'numberOfSeats' field.
+      * @return The value.
+      */
+    public java.lang.Integer getNumberOfSeats() {
+      return numberOfSeats;
+    }
+
+    /**
+      * Sets the value of the 'numberOfSeats' field.
+      * @param value The value of 'numberOfSeats'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setNumberOfSeats(int value) {
+      validate(fields()[10], value);
+      this.numberOfSeats = value;
+      fieldSetFlags()[10] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'numberOfSeats' field has been set.
+      * @return True if the 'numberOfSeats' field has been set, false otherwise.
+      */
+    public boolean hasNumberOfSeats() {
+      return fieldSetFlags()[10];
+    }
+
+
+    /**
+      * Clears the value of the 'numberOfSeats' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearNumberOfSeats() {
+      fieldSetFlags()[10] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'standardPrice' field.
+      * @return The value.
+      */
+    public java.lang.Double getStandardPrice() {
+      return standardPrice;
+    }
+
+    /**
+      * Sets the value of the 'standardPrice' field.
+      * @param value The value of 'standardPrice'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setStandardPrice(double value) {
+      validate(fields()[11], value);
+      this.standardPrice = value;
+      fieldSetFlags()[11] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'standardPrice' field has been set.
+      * @return True if the 'standardPrice' field has been set, false otherwise.
+      */
+    public boolean hasStandardPrice() {
+      return fieldSetFlags()[11];
+    }
+
+
+    /**
+      * Clears the value of the 'standardPrice' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearStandardPrice() {
+      fieldSetFlags()[11] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'date' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getDate() {
+      return date;
+    }
+
+    /**
+      * Sets the value of the 'date' field.
+      * @param value The value of 'date'.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder setDate(java.lang.CharSequence value) {
+      validate(fields()[12], value);
+      this.date = value;
+      fieldSetFlags()[12] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'date' field has been set.
+      * @return True if the 'date' field has been set, false otherwise.
+      */
+    public boolean hasDate() {
+      return fieldSetFlags()[12];
+    }
+
+
+    /**
+      * Clears the value of the 'date' field.
+      * @return This builder.
+      */
+    public avro.PaymentNotification.Builder clearDate() {
+      date = null;
+      fieldSetFlags()[12] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public PaymentNotification build() {
@@ -559,6 +1040,13 @@ public class PaymentNotification extends org.apache.avro.specific.SpecificRecord
         record.currency = fieldSetFlags()[3] ? this.currency : (java.lang.CharSequence) defaultValue(fields()[3]);
         record.bookingId = fieldSetFlags()[4] ? this.bookingId : (java.lang.CharSequence) defaultValue(fields()[4]);
         record.paymentId = fieldSetFlags()[5] ? this.paymentId : (java.lang.CharSequence) defaultValue(fields()[5]);
+        record.operatorId = fieldSetFlags()[6] ? this.operatorId : (java.lang.CharSequence) defaultValue(fields()[6]);
+        record.flightId = fieldSetFlags()[7] ? this.flightId : (java.lang.CharSequence) defaultValue(fields()[7]);
+        record.departure = fieldSetFlags()[8] ? this.departure : (java.lang.CharSequence) defaultValue(fields()[8]);
+        record.destination = fieldSetFlags()[9] ? this.destination : (java.lang.CharSequence) defaultValue(fields()[9]);
+        record.numberOfSeats = fieldSetFlags()[10] ? this.numberOfSeats : (java.lang.Integer) defaultValue(fields()[10]);
+        record.standardPrice = fieldSetFlags()[11] ? this.standardPrice : (java.lang.Double) defaultValue(fields()[11]);
+        record.date = fieldSetFlags()[12] ? this.date : (java.lang.CharSequence) defaultValue(fields()[12]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);
