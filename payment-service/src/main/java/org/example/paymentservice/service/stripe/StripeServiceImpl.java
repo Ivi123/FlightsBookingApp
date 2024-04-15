@@ -1,17 +1,23 @@
 package org.example.paymentservice.service.stripe;
 
+import avro.PaymentRequest;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+import org.example.paymentservice.consumer.dlt.DltConsumerService;
+import org.example.paymentservice.mapper.PaymentMapper;
 import org.example.paymentservice.model.Payment;
 import org.example.paymentservice.model.stripe.WebRequest;
 import org.example.paymentservice.model.stripe.WebResponse;
+import org.example.paymentservice.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 /**
@@ -22,6 +28,8 @@ public class StripeServiceImpl implements StripeService {
     private final ReactiveMongoTemplate mongoTemplate;
     private static final Logger log = LoggerFactory.getLogger(StripeServiceImpl.class);
     private static final String BOOKING_ID = "bookingId";
+    private final DltConsumerService dltConsumerService;
+    private final KafkaProducer kafkaProducer;
 
 
     /**
@@ -29,8 +37,10 @@ public class StripeServiceImpl implements StripeService {
      *
      * @param mongoTemplate The MongoDB template used for interacting with the database.
      */
-    public StripeServiceImpl(ReactiveMongoTemplate mongoTemplate) {
+    public StripeServiceImpl(ReactiveMongoTemplate mongoTemplate, DltConsumerService dltConsumerService, KafkaProducer kafkaProducer) {
         this.mongoTemplate = mongoTemplate;
+        this.dltConsumerService = dltConsumerService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     /**
@@ -67,7 +77,27 @@ public class StripeServiceImpl implements StripeService {
             response.setPaymentId(paymentId);
             response.setStatus(paymentStatus); // Set the payment status in the response
             log.info("Payment:" + paymentId + " for booking id: " + bookingId + " initial status: " + paymentStatus);
-            return Mono.just(response);
+            // Verifică dacă a expirat plata
+            return findById(paymentId)
+                    .flatMap(payment -> {
+                        LocalDateTime expirationTime = payment.getExpirationTime();
+                        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+
+                        if (currentDateTime.isAfter(expirationTime)) {
+                            log.error("Payment has expired: {}", paymentId);
+                            WebResponse errorResponse = new WebResponse("error", "Plata a expirat");
+                            payment.setStatus("failed");
+                            PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                            //send to dlt
+                            dltConsumerService.sendPaymentToDLT(paymentRequest);
+                            //send to Payment-response-topic
+                            kafkaProducer.sendMessage(payment.getBookingId(), paymentRequest);
+
+                            return Mono.just(errorResponse);
+                        }
+
+                        return Mono.just(response);
+                    });
         } catch (StripeException e) {
             e.printStackTrace();
             WebResponse response = new WebResponse("error", "");

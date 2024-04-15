@@ -52,6 +52,7 @@ public class StripeController {
         if (paymentId == null) {
             paymentId = ""; // Default value for paymentId if not provided
         }
+
         // Build the WebRequest object using the provided values
         WebRequest request = new WebRequest();
         request.setPaymentId(paymentId);

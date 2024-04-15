@@ -13,6 +13,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 
 @Service
 public class KafkaConsumer {
@@ -38,13 +39,19 @@ public class KafkaConsumer {
             // Map payment request to Payment entity
             Payment payment = PaymentMapper.paymentRequestToPayment(paymentRequest);
 
+            //set creation time and expiration time for payment
+            payment.setCreationTime(LocalDateTime.now());
+            payment.setExpirationTime(LocalDateTime.now().plusMinutes(15));
+            String email = payment.getCardHolderName().split(" ")[0]+
+                    payment.getCardHolderName().split(" ")[1] + "@gmail.com";
+            payment.setUserEmail(email);
+
             // Save payment details to database
             paymentService.savePayment(payment)
                     .doOnSuccess(savedPayment -> {
                         // Display the online payment link
                         log.info("Payment saved in database : {}", savedPayment);
-                        String email = savedPayment.getCardHolderName().split(" ")[0]+
-                                savedPayment.getCardHolderName().split(" ")[1] + "@gmail.com";
+
                         String paymentLink = "http://localhost:8085/?" +
                                 "paymentId=" + savedPayment.getId() +
                                 "&bookingId=" + savedPayment.getBookingId() +

@@ -16,6 +16,7 @@ public class PaymentMapper {
         paymentRequest.setCvv(p.getCvv());
         paymentRequest.setCurrency(p.getCurrency());
         paymentRequest.setStatus(p.getStatus());
+        paymentRequest.setUserEmail(p.getUserEmail());
         return paymentRequest;
     }
 

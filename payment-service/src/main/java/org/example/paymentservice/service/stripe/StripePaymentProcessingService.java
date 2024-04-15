@@ -74,6 +74,8 @@ public class StripePaymentProcessingService {
                                         //send to dlt
                                         PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
                                         dltConsumerService.sendPaymentToDLT(paymentRequest);
+
+
                                     }
                                 },
                                 error -> {

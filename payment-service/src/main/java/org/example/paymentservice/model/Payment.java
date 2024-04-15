@@ -3,6 +3,8 @@ package org.example.paymentservice.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 
 @Document
 public class Payment {
@@ -17,63 +19,54 @@ public class Payment {
     private int cvv;
     private String currency;
     private String status;
+    private LocalDateTime creationTime;
+    private LocalDateTime expirationTime;
 
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    private String userEmail;
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
 
     public String getCardHolderName() {
         return cardHolderName;
     }
 
-    public void setCardHolderName(String cardHolderName) {
-        this.cardHolderName = cardHolderName;
-    }
 
     public String getExpirationMonth() {
         return expirationMonth;
     }
 
-    public void setExpirationMonth(String expirationMonth) {
-        this.expirationMonth = expirationMonth;
-    }
 
     public String getExpirationYear() {
         return expirationYear;
     }
 
-    public void setExpirationYear(String expirationYear) {
-        this.expirationYear = expirationYear;
-    }
 
     public int getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
-        this.cvv = cvv;
-    }
 
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+
 
     public Payment(String bookingId, double price,
                    String cardNumber, String cardHolderName, String expirationMonth,
@@ -127,5 +120,21 @@ public class Payment {
                 ", currency='" + currency + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public LocalDateTime getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(LocalDateTime expirationTime) {
+        this.expirationTime = expirationTime;
     }
 }
