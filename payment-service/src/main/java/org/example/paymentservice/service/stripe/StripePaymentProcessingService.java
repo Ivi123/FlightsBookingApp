@@ -4,7 +4,6 @@ import avro.PaymentRequest;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentIntentCollection;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.example.paymentservice.consumer.dlt.DltConsumerService;
 import org.example.paymentservice.mapper.PaymentMapper;
 import org.example.paymentservice.producer.KafkaProducer;
@@ -21,7 +20,7 @@ import java.util.Map;
  */
 @Service
 public class StripePaymentProcessingService {
-    private static final Logger log = LoggerFactory.getLogger(StripePaymentProcessingService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StripePaymentProcessingService.class);
     private final StripeServiceImpl paymentService;
     private final KafkaProducer kafkaProducer;
     private final DltConsumerService dltConsumerService;

@@ -71,12 +71,7 @@ public class StripeServiceImpl implements StripeService {
                         if (currentDateTime.isAfter(expirationTime)) {
                             log.error("Payment has expired: {}", paymentId);
                             WebResponse errorResponse = new WebResponse("error", "Payment Payment expiration time has passed. Payment cannot be processed.");
-                            payment.setStatus("failed");
-                            PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
-                            //send to dlt
-                            dltConsumerService.sendPaymentToDLT(paymentRequest);
-                            //send to Payment-response-topic
-                            kafkaProducer.sendMessage(payment.getBookingId(), paymentRequest);
+                            updatePaymentStatusAndSendToKafkaAndDLT(paymentId, payment.getBookingId(), "failed").subscribe();
 
                             return Mono.just(errorResponse);
                         }
@@ -90,7 +85,6 @@ public class StripeServiceImpl implements StripeService {
             return Mono.just(response);
         }
     }
-
 
 
     public Mono<Payment> findById(String id) {
@@ -111,6 +105,28 @@ public class StripeServiceImpl implements StripeService {
                         return mongoTemplate.save(payment).then();
                     } else {
                         return Mono.error(new RuntimeException("Payment with ID " + paymentId + " not found."));
+                    }
+                });
+
+    }
+
+    public Mono<Payment> updatePaymentStatusAndSendToKafkaAndDLT(String paymentId, String bookingId, String status) {
+        Mono<Void> updateStatusMono;
+        updateStatusMono = updatePaymentStatus(paymentId, status);
+
+        return updateStatusMono
+                .then(findById(paymentId))
+                .flatMap(payment -> {
+                    PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                    return Mono.fromRunnable(() -> kafkaProducer.sendMessage(bookingId, paymentRequest))
+                            .thenReturn(payment); // Return the payment after sending the message
+                })
+                .doOnNext(payment -> {
+                    // Handle successful processing
+                    if (payment.getStatus().equalsIgnoreCase("failed")) {
+                        // Send to DLT
+                        PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                        dltConsumerService.sendPaymentToDLT(paymentRequest);
                     }
                 });
     }
