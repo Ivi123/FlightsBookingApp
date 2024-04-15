@@ -58,6 +58,7 @@ public class AdminRequestConsumer {
                             // Prepare and send payment request
                             PaymentRequest paymentRequest = paymentRequestMapper
                                     .toPaymentRequest(booking);
+                            paymentRequest.setStatus("INITIATED");
                             bookingProducerService
                                     .sendPaymentRequest(booking.getId(), paymentRequest);
                         } else {

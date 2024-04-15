@@ -9,6 +9,7 @@ public class FlightDetails {
     private String destination;
     private Integer numberOfSeats;
     private Double standardPrice;
+    private String date;
 
     public String getOperatorId() {
         return operatorId;
@@ -24,6 +25,14 @@ public class FlightDetails {
 
     public void setFlightId(String flightId) {
         this.flightId = flightId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getDeparture() {
