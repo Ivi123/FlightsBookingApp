@@ -3,17 +3,13 @@ package org.example.paymentservice.service.stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-import org.example.paymentservice.model.stripe.Payment;
+import org.example.paymentservice.model.Payment;
 import org.example.paymentservice.model.stripe.WebRequest;
 import org.example.paymentservice.model.stripe.WebResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -22,9 +18,9 @@ import java.util.Map;
  * Service class for managing payment operations.
  */
 @Service
-public class PaymentServiceImpl implements PaymentService {
+public class StripeServiceImpl implements StripeService {
     private final ReactiveMongoTemplate mongoTemplate;
-    private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(StripeServiceImpl.class);
     private static final String BOOKING_ID = "bookingId";
 
 
@@ -33,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
      *
      * @param mongoTemplate The MongoDB template used for interacting with the database.
      */
-    public PaymentServiceImpl(ReactiveMongoTemplate mongoTemplate) {
+    public StripeServiceImpl(ReactiveMongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -80,19 +76,6 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    /**
-     * Find a payment by its custom ID and booking ID.
-     *
-     * @param id        The custom ID of the payment.
-     * @param bookingId The booking ID associated with the payment.
-     * @return The Payment object if found, otherwise null.
-     */
-    public Mono<Payment> findByCustomIdAndBookingId(String id, String bookingId) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(id).and("bookingId").is(bookingId));
-        return mongoTemplate.findOne(query, Payment.class);
-    }
-
 
     /**
      * Find a payment by its ID.
@@ -105,22 +88,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
 
-    /**
-     * Save a payment to the database.
-     *
-     * @param payment The payment object to be saved.
-     */
     public Mono<Payment> savePayment(Payment payment) {
         return mongoTemplate.save(payment)
                 .onErrorMap(e -> new RuntimeException("Failed to save payment: " + e.getMessage(), e));
     }
 
-    /**
-     * Update the status of a payment.
-     *
-     * @param paymentId The ID of the payment.
-     * @param newStatus The new status of the payment.
-     */
     public Mono<Void> updatePaymentStatus(String paymentId, String newStatus) {
         return findById(paymentId)
                 .flatMap(payment -> {
@@ -132,7 +104,6 @@ public class PaymentServiceImpl implements PaymentService {
                     }
                 });
     }
-
 
 
 }

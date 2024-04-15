@@ -26,25 +26,24 @@ public class KafkaErrorHandler implements CommonErrorHandler {
         handle(exception, consumer);
     }
 
-    private void handle(Exception exception, Consumer<?,?> consumer) {
+    private void handle(Exception exception, Consumer<?, ?> consumer) {
         log.error("Exception thrown", exception);
-        if (exception instanceof RecordDeserializationException ex)
-        {
+        if (exception instanceof RecordDeserializationException ex) {
+
             consumer.seek(ex.topicPartition(), ex.offset() + 1L);
             consumer.commitSync();
-        } else
-        {
+        } else {
             log.error("Exception not handled", exception);
         }
     }
 
     @Override
     public boolean handleOne(Exception exception, ConsumerRecord<?, ?> consumerRecord, Consumer<?, ?> consumer, MessageListenerContainer container) {
-        handle(exception,consumer,consumerRecord);
+        handle(exception, consumer, consumerRecord);
         return true;
     }
 
-    private void handle(Exception exception, Consumer<?,?> consumer, ConsumerRecord<?,?> consumerRecord) {
+    private void handle(Exception exception, Consumer<?, ?> consumer, ConsumerRecord<?, ?> consumerRecord) {
         log.error("Exception thrown", exception);
         dltConsumerService.sendToDLT(consumerRecord);
         consumer.seek(new TopicPartition(consumerRecord.topic(), consumerRecord.partition()),consumerRecord.offset() + 1L);

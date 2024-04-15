@@ -1,7 +1,7 @@
 package org.example.paymentservice.controller.stripe;
 
 import org.example.paymentservice.model.stripe.WebRequest;
-import org.example.paymentservice.service.stripe.PaymentProcessingService;
+import org.example.paymentservice.service.stripe.StripePaymentProcessingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +21,9 @@ public class StripeController {
     @Value("${stripe.api.publicKey}")
     private String publicKey;
 
-    private final PaymentProcessingService paymentService;
+    private final StripePaymentProcessingService paymentService;
 
-    public StripeController(PaymentProcessingService paymentService) {
+    public StripeController(StripePaymentProcessingService paymentService) {
         this.paymentService = paymentService;
     }
 

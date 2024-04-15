@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * KafkaProducer class responsible for sending messages to Kafka topics.
- */
 @Service
 public class KafkaProducer {
     private static final Logger log = LoggerFactory.getLogger(KafkaProducer.class);
@@ -42,12 +39,10 @@ public class KafkaProducer {
             }
             log.info("Sending message to payment-response-topic:: {}, {}", key, paymentRequest);
             kafkaTemplate.send("payment-response-topic", key, paymentRequest);
-            log.info("Sending message to notification-topic:: {}, {}", key, paymentRequest);
-            kafkaTemplate.send("notification-topic", key, paymentRequest);
             return null;
         }).whenComplete((r, e) -> {
             if (e == null) {
-                log.info("Payment for booking: " + paymentRequest.getBookingId() + " processed! Please check the status.");
+                log.info("Payment for booking: {} processed! Please check the status.",paymentRequest.getBookingId());
             } else {
                 log.error(e.getMessage());
             }
