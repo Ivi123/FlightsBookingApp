@@ -41,13 +41,13 @@ public class ConsumerService {
         } else {
             flight.setNumberOfSeats(flight.getNumberOfSeats() + adminRequest.getNumberOfSeats());
             FlightDto dto = flightMapper.entityToDto(flight);
-            LOG.info("Number of seats: {}", flight.getNumberOfSeats());
+            LOG.info("Number of seats after this failed booking: {}", flight.getNumberOfSeats());
             flightService.updateFlight(dto);
             return;
         }
         //update number of seats in bd
         FlightDto dto = flightMapper.entityToDto(flight);
-        LOG.info("Number of seats: {}", flight.getNumberOfSeats());
+        LOG.info("Number of seats after this booking: {}", flight.getNumberOfSeats());
         flightService.updateFlight(dto);
         //send message to kafka
         producer.send(adminRequest.getBookingId(), adminRequest);

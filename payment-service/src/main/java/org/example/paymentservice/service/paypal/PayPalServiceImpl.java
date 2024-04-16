@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -53,10 +52,9 @@ public class PayPalServiceImpl implements PayPalService {
     @Override
     public Mono<PaymentOrder> createPayment(Double totalAmount, String paymentId, String bookingId) {
         return paymentService.findById(paymentId)
-                .publishOn(Schedulers.boundedElastic())
                 .flatMap(payment -> {
                     LocalDateTime expirationTime = payment.getExpirationTime();
-                    LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+                    LocalDateTime currentDateTime = LocalDateTime.now();
 
                     if (currentDateTime.isAfter(expirationTime)) {
                         updatePaymentStatusAndSendToKafkaAndDLT(paymentId, bookingId, STATUS_FAILED)
