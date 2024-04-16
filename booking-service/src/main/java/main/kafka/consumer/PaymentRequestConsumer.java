@@ -41,7 +41,7 @@ public class PaymentRequestConsumer {
 
                 // Send payment successful notification
                 PaymentNotification paymentSuccessfulNotification = paymentNotificationMapper
-                        .toPaymentNotification(booking, NotificationMessagesConstants.PAYMEMT_SUCCESSFUL_MESSAGE);
+                        .toPaymentNotification(booking, NotificationMessagesConstants.PAYMENT_SUCCESSFUL_MESSAGE);
                 bookingProducerService
                         .sendPaymentNotificationRequest(booking.getId(), paymentSuccessfulNotification);
             } else {

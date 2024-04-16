@@ -1,7 +1,7 @@
-package org.example.paymentservice.mapper.stripe;
+package org.example.paymentservice.mapper;
 
 import avro.PaymentRequest;
-import org.example.paymentservice.model.stripe.Payment;
+import org.example.paymentservice.model.Payment;
 
 public class PaymentMapper {
     public static PaymentRequest paymentToPaymentRequest(Payment p) {
@@ -16,12 +16,12 @@ public class PaymentMapper {
         paymentRequest.setCvv(p.getCvv());
         paymentRequest.setCurrency(p.getCurrency());
         paymentRequest.setStatus(p.getStatus());
+        paymentRequest.setUserEmail(p.getUserEmail());
         return paymentRequest;
     }
 
     public static Payment paymentRequestToPayment(PaymentRequest paymentRequest) {
         return new Payment(
-                //paymentRequest.getId().toString(),
                 paymentRequest.getBookingId().toString(),
                 paymentRequest.getPrice(),
                 paymentRequest.getCardNumber().toString(),

@@ -13,7 +13,7 @@ import java.text.MessageFormat;
 @Service
 public class KafkaConsumer {
     private static final String ADMIN_REQUEST_TOPIC = "admin-request-topic";
-    private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KafkaConsumer.class);
 
     private final ConsumerService consumerService;
 
@@ -27,15 +27,15 @@ public class KafkaConsumer {
 
         try {
             // Log message receipt
-            log.info(MessageFormat.format("Admin request received: value: {0} key: {1}", consumerRecord.value(), consumerRecord.key()));
+            LOG.info("** Admin request received: key: {}",consumerRecord.key());
+            LOG.info("** value: {}",consumerRecord.value());
             //made modifications in bd
             consumerService.updateNumberOfSeatsInDatabase(consumerRecord.value());
             // Acknowledge the message
             ak.acknowledge();
 
-
         } catch (Exception e) {
-            log.error("Error processing admin request: {}", e.getMessage(), e);
+            LOG.error("Error processing admin request: {}", e.getMessage(), e);
             // Acknowledge message in case of error
             ak.acknowledge();
         }

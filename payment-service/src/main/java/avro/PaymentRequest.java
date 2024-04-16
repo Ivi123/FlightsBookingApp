@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 8676384663334068845L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"cardNumber\",\"type\":\"string\"},{\"name\":\"cardHolderName\",\"type\":\"string\"},{\"name\":\"expirationMonth\",\"type\":\"string\"},{\"name\":\"expirationYear\",\"type\":\"string\"},{\"name\":\"cvv\",\"type\":\"int\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = 8286492638223015454L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PaymentRequest\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"bookingId\",\"type\":\"string\"},{\"name\":\"price\",\"type\":\"double\"},{\"name\":\"cardNumber\",\"type\":\"string\"},{\"name\":\"cardHolderName\",\"type\":\"string\"},{\"name\":\"expirationMonth\",\"type\":\"string\"},{\"name\":\"expirationYear\",\"type\":\"string\"},{\"name\":\"cvv\",\"type\":\"int\"},{\"name\":\"currency\",\"type\":\"string\"},{\"name\":\"status\",\"type\":\"string\"},{\"name\":\"userEmail\",\"type\":[\"null\",\"string\"],\"default\":null}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -61,6 +61,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   @Deprecated public int cvv;
   @Deprecated public java.lang.CharSequence currency;
   @Deprecated public java.lang.CharSequence status;
+  @Deprecated public java.lang.CharSequence userEmail;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -81,8 +82,9 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
    * @param cvv The new value for cvv
    * @param currency The new value for currency
    * @param status The new value for status
+   * @param userEmail The new value for userEmail
    */
-  public PaymentRequest(java.lang.CharSequence id, java.lang.CharSequence bookingId, java.lang.Double price, java.lang.CharSequence cardNumber, java.lang.CharSequence cardHolderName, java.lang.CharSequence expirationMonth, java.lang.CharSequence expirationYear, java.lang.Integer cvv, java.lang.CharSequence currency, java.lang.CharSequence status) {
+  public PaymentRequest(java.lang.CharSequence id, java.lang.CharSequence bookingId, java.lang.Double price, java.lang.CharSequence cardNumber, java.lang.CharSequence cardHolderName, java.lang.CharSequence expirationMonth, java.lang.CharSequence expirationYear, java.lang.Integer cvv, java.lang.CharSequence currency, java.lang.CharSequence status, java.lang.CharSequence userEmail) {
     this.id = id;
     this.bookingId = bookingId;
     this.price = price;
@@ -93,6 +95,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     this.cvv = cvv;
     this.currency = currency;
     this.status = status;
+    this.userEmail = userEmail;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -109,6 +112,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     case 7: return cvv;
     case 8: return currency;
     case 9: return status;
+    case 10: return userEmail;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -127,6 +131,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     case 7: cvv = (java.lang.Integer)value$; break;
     case 8: currency = (java.lang.CharSequence)value$; break;
     case 9: status = (java.lang.CharSequence)value$; break;
+    case 10: userEmail = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -292,6 +297,22 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
   }
 
   /**
+   * Gets the value of the 'userEmail' field.
+   * @return The value of the 'userEmail' field.
+   */
+  public java.lang.CharSequence getUserEmail() {
+    return userEmail;
+  }
+
+  /**
+   * Sets the value of the 'userEmail' field.
+   * @param value the value to set.
+   */
+  public void setUserEmail(java.lang.CharSequence value) {
+    this.userEmail = value;
+  }
+
+  /**
    * Creates a new PaymentRequest RecordBuilder.
    * @return A new PaymentRequest RecordBuilder
    */
@@ -333,6 +354,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
     private int cvv;
     private java.lang.CharSequence currency;
     private java.lang.CharSequence status;
+    private java.lang.CharSequence userEmail;
 
     /** Creates a new Builder */
     private Builder() {
@@ -385,6 +407,10 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
         this.status = data().deepCopy(fields()[9].schema(), other.status);
         fieldSetFlags()[9] = true;
       }
+      if (isValidValue(fields()[10], other.userEmail)) {
+        this.userEmail = data().deepCopy(fields()[10].schema(), other.userEmail);
+        fieldSetFlags()[10] = true;
+      }
     }
 
     /**
@@ -432,6 +458,10 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       if (isValidValue(fields()[9], other.status)) {
         this.status = data().deepCopy(fields()[9].schema(), other.status);
         fieldSetFlags()[9] = true;
+      }
+      if (isValidValue(fields()[10], other.userEmail)) {
+        this.userEmail = data().deepCopy(fields()[10].schema(), other.userEmail);
+        fieldSetFlags()[10] = true;
       }
     }
 
@@ -823,6 +853,45 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
       return this;
     }
 
+    /**
+      * Gets the value of the 'userEmail' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getUserEmail() {
+      return userEmail;
+    }
+
+    /**
+      * Sets the value of the 'userEmail' field.
+      * @param value The value of 'userEmail'.
+      * @return This builder.
+      */
+    public avro.PaymentRequest.Builder setUserEmail(java.lang.CharSequence value) {
+      validate(fields()[10], value);
+      this.userEmail = value;
+      fieldSetFlags()[10] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'userEmail' field has been set.
+      * @return True if the 'userEmail' field has been set, false otherwise.
+      */
+    public boolean hasUserEmail() {
+      return fieldSetFlags()[10];
+    }
+
+
+    /**
+      * Clears the value of the 'userEmail' field.
+      * @return This builder.
+      */
+    public avro.PaymentRequest.Builder clearUserEmail() {
+      userEmail = null;
+      fieldSetFlags()[10] = false;
+      return this;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public PaymentRequest build() {
@@ -838,6 +907,7 @@ public class PaymentRequest extends org.apache.avro.specific.SpecificRecordBase 
         record.cvv = fieldSetFlags()[7] ? this.cvv : (java.lang.Integer) defaultValue(fields()[7]);
         record.currency = fieldSetFlags()[8] ? this.currency : (java.lang.CharSequence) defaultValue(fields()[8]);
         record.status = fieldSetFlags()[9] ? this.status : (java.lang.CharSequence) defaultValue(fields()[9]);
+        record.userEmail = fieldSetFlags()[10] ? this.userEmail : (java.lang.CharSequence) defaultValue(fields()[10]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

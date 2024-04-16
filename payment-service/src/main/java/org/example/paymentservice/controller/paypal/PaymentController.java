@@ -1,6 +1,6 @@
 package org.example.paymentservice.controller.paypal;
 
-import org.example.paymentservice.service.paypal.PayPalService;
+import org.example.paymentservice.service.paypal.PayPalServiceImpl;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,9 +9,9 @@ import reactor.core.publisher.Mono;
 
 @RestController
 public class PaymentController {
-    private final PayPalService payPalService;
+    private final PayPalServiceImpl payPalService;
 
-    public PaymentController(PayPalService payPalService) {
+    public PaymentController(PayPalServiceImpl payPalService) {
         this.payPalService = payPalService;
     }
 
@@ -20,7 +20,7 @@ public class PaymentController {
     public Mono<String> paymentSuccess(Model model,
                                        @RequestParam(value = "token", required = false, defaultValue = "") String token) {
         return payPalService.completePayment(token)
-                .flatMap(completedOrder -> Mono.just("successPayPal"))
+                .flatMap(completedOrder -> Mono.just("Congratulations! Your payment was successful."))
                 .doOnError(throwable -> {
                     throw new RuntimeException("Error processing payment: " + throwable.getMessage());
                 });

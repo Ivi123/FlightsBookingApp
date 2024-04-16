@@ -1,48 +1,40 @@
 package org.example.paymentservice.service.stripe;
 
+import avro.PaymentRequest;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
-import org.example.paymentservice.model.stripe.Payment;
+import org.example.paymentservice.consumer.dlt.DltConsumerService;
+import org.example.paymentservice.mapper.PaymentMapper;
+import org.example.paymentservice.model.Payment;
 import org.example.paymentservice.model.stripe.WebRequest;
 import org.example.paymentservice.model.stripe.WebResponse;
+import org.example.paymentservice.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
-/**
- * Service class for managing payment operations.
- */
+
 @Service
-public class PaymentServiceImpl implements PaymentService {
+public class StripeServiceImpl implements StripeService {
     private final ReactiveMongoTemplate mongoTemplate;
-    private static final Logger log = LoggerFactory.getLogger(PaymentServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(StripeServiceImpl.class);
     private static final String BOOKING_ID = "bookingId";
+    private final DltConsumerService dltConsumerService;
+    private final KafkaProducer kafkaProducer;
 
-
-    /**
-     * Constructor for PaymentService.
-     *
-     * @param mongoTemplate The MongoDB template used for interacting with the database.
-     */
-    public PaymentServiceImpl(ReactiveMongoTemplate mongoTemplate) {
+    public StripeServiceImpl(ReactiveMongoTemplate mongoTemplate, DltConsumerService dltConsumerService, KafkaProducer kafkaProducer) {
         this.mongoTemplate = mongoTemplate;
+        this.dltConsumerService = dltConsumerService;
+        this.kafkaProducer = kafkaProducer;
     }
 
-    /**
-     * Process a payment request.
-     *
-     * @param request The payment request object containing payment details.
-     * @return A Mono containing the response to the payment request.
-     */
     @Override
     public Mono<WebResponse> processPaymentRequest(WebRequest request) {
         try {
@@ -70,8 +62,22 @@ public class PaymentServiceImpl implements PaymentService {
             response.setBookingId(bookingId);
             response.setPaymentId(paymentId);
             response.setStatus(paymentStatus); // Set the payment status in the response
-            log.info("Payment:" + paymentId + " for booking id: " + bookingId + " initial status: " + paymentStatus);
-            return Mono.just(response);
+            // Verifică dacă a expirat plata
+            return findById(paymentId)
+                    .flatMap(payment -> {
+                        LocalDateTime expirationTime = payment.getExpirationTime();
+                        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+
+                        if (currentDateTime.isAfter(expirationTime)) {
+                            log.error("Payment has expired: {}", paymentId);
+                            WebResponse errorResponse = new WebResponse("error", "Payment Payment expiration time has passed. Payment cannot be processed.");
+                            updatePaymentStatusAndSendToKafkaAndDLT(paymentId, payment.getBookingId(), "failed").subscribe();
+
+                            return Mono.just(errorResponse);
+                        }
+
+                        return Mono.just(response);
+                    });
         } catch (StripeException e) {
             e.printStackTrace();
             WebResponse response = new WebResponse("error", "");
@@ -80,47 +86,17 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    /**
-     * Find a payment by its custom ID and booking ID.
-     *
-     * @param id        The custom ID of the payment.
-     * @param bookingId The booking ID associated with the payment.
-     * @return The Payment object if found, otherwise null.
-     */
-    public Mono<Payment> findByCustomIdAndBookingId(String id, String bookingId) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(id).and("bookingId").is(bookingId));
-        return mongoTemplate.findOne(query, Payment.class);
-    }
 
-
-    /**
-     * Find a payment by its ID.
-     *
-     * @param id The ID of the payment.
-     * @return The Payment object if found, otherwise null.
-     */
     public Mono<Payment> findById(String id) {
         return mongoTemplate.findById(id, Payment.class);
     }
 
 
-    /**
-     * Save a payment to the database.
-     *
-     * @param payment The payment object to be saved.
-     */
     public Mono<Payment> savePayment(Payment payment) {
         return mongoTemplate.save(payment)
                 .onErrorMap(e -> new RuntimeException("Failed to save payment: " + e.getMessage(), e));
     }
 
-    /**
-     * Update the status of a payment.
-     *
-     * @param paymentId The ID of the payment.
-     * @param newStatus The new status of the payment.
-     */
     public Mono<Void> updatePaymentStatus(String paymentId, String newStatus) {
         return findById(paymentId)
                 .flatMap(payment -> {
@@ -131,8 +107,29 @@ public class PaymentServiceImpl implements PaymentService {
                         return Mono.error(new RuntimeException("Payment with ID " + paymentId + " not found."));
                     }
                 });
+
     }
 
+    public Mono<Payment> updatePaymentStatusAndSendToKafkaAndDLT(String paymentId, String bookingId, String status) {
+        Mono<Void> updateStatusMono;
+        updateStatusMono = updatePaymentStatus(paymentId, status);
+
+        return updateStatusMono
+                .then(findById(paymentId))
+                .flatMap(payment -> {
+                    PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                    return Mono.fromRunnable(() -> kafkaProducer.sendMessage(bookingId, paymentRequest))
+                            .thenReturn(payment); // Return the payment after sending the message
+                })
+                .doOnNext(payment -> {
+                    // Handle successful processing
+                    if (payment.getStatus().equalsIgnoreCase("failed")) {
+                        // Send to DLT
+                        PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                        dltConsumerService.sendPaymentToDLT(paymentRequest);
+                    }
+                });
+    }
 
 
 }

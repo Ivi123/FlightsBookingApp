@@ -2,7 +2,7 @@ package org.example.paymentservice.controller.stripe;
 
 import org.example.paymentservice.model.stripe.WebRequest;
 import org.example.paymentservice.model.stripe.WebResponse;
-import org.example.paymentservice.service.stripe.PaymentServiceImpl;
+import org.example.paymentservice.service.stripe.StripeServiceImpl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,23 +14,12 @@ import reactor.core.publisher.Mono;
 @RestController
 public class PaymentIntentController {
 
-    private final PaymentServiceImpl paymentService;
+    private final StripeServiceImpl paymentService;
 
-    /**
-     * Constructor for PaymentIntentController.
-     *
-     * @param paymentService An instance of PaymentServiceImpl for processing payment requests.
-     */
-    public PaymentIntentController(PaymentServiceImpl paymentService) {
+    public PaymentIntentController(StripeServiceImpl paymentService) {
         this.paymentService = paymentService;
     }
 
-    /**
-     * Endpoint for creating a payment intent.
-     *
-     * @param request The WebRequest object containing payment details.
-     * @return A Mono containing the WebResponse to the payment request.
-     */
     @PostMapping("/create-payment-intent")
     public Mono<WebResponse> createPaymentIntent(@RequestBody WebRequest request) {
         return paymentService.processPaymentRequest(request);

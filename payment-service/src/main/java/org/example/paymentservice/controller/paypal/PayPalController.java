@@ -2,8 +2,7 @@ package org.example.paymentservice.controller.paypal;
 
 import org.example.paymentservice.model.paypal.CompletedOrder;
 import org.example.paymentservice.model.paypal.PaymentOrder;
-import org.example.paymentservice.service.paypal.PayPalService;
-import org.springframework.ui.Model;
+import org.example.paymentservice.service.paypal.PayPalServiceImpl;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -11,9 +10,9 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/paypal")
 public class PayPalController {
 
-    private final PayPalService payPalService;
+    private final PayPalServiceImpl payPalService;
 
-    public PayPalController(PayPalService payPalService) {
+    public PayPalController(PayPalServiceImpl payPalService) {
         this.payPalService = payPalService;
     }
 
@@ -22,10 +21,8 @@ public class PayPalController {
                                             @RequestParam(value = "paymentId", required = false, defaultValue = "") String paymentId,
                                             @RequestParam(value = "bookingId", required = false, defaultValue = "") String bookingId,
                                             @RequestParam(value = "email", required = false, defaultValue = "") String email) {
-        System.out.println(paymentId);
-        System.out.println(bookingId);
-        System.out.println(totalAmount);
-        return payPalService.createPayment(totalAmount,paymentId,bookingId,email);
+
+        return payPalService.createPayment(totalAmount, paymentId, bookingId);
     }
 
     @PostMapping("/capture")

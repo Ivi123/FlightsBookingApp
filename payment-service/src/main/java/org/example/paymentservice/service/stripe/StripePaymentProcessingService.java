@@ -4,7 +4,8 @@ import avro.PaymentRequest;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentIntentCollection;
-import org.example.paymentservice.mapper.stripe.PaymentMapper;
+import org.example.paymentservice.consumer.dlt.DltConsumerService;
+import org.example.paymentservice.mapper.PaymentMapper;
 import org.example.paymentservice.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +19,16 @@ import java.util.Map;
  * Service class responsible for processing payments and displaying payment details.
  */
 @Service
-public class PaymentProcessingService {
-    private static final Logger log = LoggerFactory.getLogger(PaymentProcessingService.class);
-    private final PaymentServiceImpl paymentService;
+public class StripePaymentProcessingService {
+    private static final Logger LOG = LoggerFactory.getLogger(StripePaymentProcessingService.class);
+    private final StripeServiceImpl paymentService;
     private final KafkaProducer kafkaProducer;
+    private final DltConsumerService dltConsumerService;
 
-    /**
-     * Constructor for PaymentProcessingService.
-     *
-     * @param paymentService An instance of PaymentServiceImpl for handling payment operations.
-     * @param kafkaProducer  An instance of KafkaProducer for sending payment details.
-     */
-    public PaymentProcessingService(PaymentServiceImpl paymentService, KafkaProducer kafkaProducer) {
+    public StripePaymentProcessingService(StripeServiceImpl paymentService, KafkaProducer kafkaProducer, DltConsumerService dltConsumerService) {
         this.paymentService = paymentService;
         this.kafkaProducer = kafkaProducer;
+        this.dltConsumerService = dltConsumerService;
     }
 
     /**
@@ -50,9 +47,6 @@ public class PaymentProcessingService {
                 Map<String, String> metadata = intent.getMetadata();
                 String bookingId = metadata.get("bookingId");
                 String paymentId = metadata.get("paymentId");
-                log.info("*** Payment : {}", paymentId);
-                log.info("*** for booking: {} ", bookingId);
-                log.info("*** status: {}", intent.getStatus());
 
                 // Update status in the database
                 Mono<Void> updateStatusMono;
@@ -72,9 +66,12 @@ public class PaymentProcessingService {
                         .subscribe(
                                 payment -> {
                                     // Handle successful processing
-                                },
-                                error -> {
-                                    // Handle errors
+                                    if(payment.getStatus().equalsIgnoreCase("failed")){
+                                        //send to dlt
+                                        PaymentRequest paymentRequest = PaymentMapper.paymentToPaymentRequest(payment);
+                                        dltConsumerService.sendPaymentToDLT(paymentRequest);
+
+                                    }
                                 }
                         );
             }

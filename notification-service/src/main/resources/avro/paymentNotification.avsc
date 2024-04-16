@@ -26,6 +26,34 @@
     {
       "name": "paymentId",
       "type": "string"
+    },
+    {
+      "name": "operatorId",
+      "type": "string"
+    },
+    {
+      "name": "flightId",
+      "type": "string"
+    },
+    {
+      "name": "departure",
+      "type": "string"
+    },
+    {
+      "name": "destination",
+      "type": "string"
+    },
+    {
+      "name": "numberOfSeats",
+      "type": "int"
+    },
+    {
+      "name": "standardPrice",
+      "type": "double"
+    },
+    {
+      "name": "date",
+      "type": "string"
     }
   ]
 }

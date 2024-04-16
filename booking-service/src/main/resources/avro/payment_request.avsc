@@ -46,6 +46,11 @@
     {
       "name": "status",
       "type": "string"
+    },
+    {
+      "name": "userEmail",
+      "type": ["null", "string"],
+      "default": null
     }
   ]
 }

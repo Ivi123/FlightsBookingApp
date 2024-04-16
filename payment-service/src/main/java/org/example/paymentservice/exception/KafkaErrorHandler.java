@@ -1,6 +1,5 @@
 package org.example.paymentservice.exception;
 
-
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
@@ -21,33 +20,36 @@ public class KafkaErrorHandler implements CommonErrorHandler {
         this.dltConsumerService = dltConsumerService;
     }
 
+    // Handle any other type of exception that occurs during message consumption
     @Override
     public void handleOtherException(Exception exception, Consumer<?, ?> consumer, MessageListenerContainer container, boolean batchListener) {
         handle(exception, consumer);
     }
 
-    private void handle(Exception exception, Consumer<?,?> consumer) {
+    private void handle(Exception exception, Consumer<?, ?> consumer) {
         log.error("Exception thrown", exception);
-        if (exception instanceof RecordDeserializationException ex)
-        {
+        if (exception instanceof RecordDeserializationException ex) {
+            // If the exception is due to deserialization error, seek to the next offset and commit the offset
             consumer.seek(ex.topicPartition(), ex.offset() + 1L);
             consumer.commitSync();
-        } else
-        {
+        } else {
             log.error("Exception not handled", exception);
         }
     }
 
+    // Handle exception thrown during processing of a single record
     @Override
     public boolean handleOne(Exception exception, ConsumerRecord<?, ?> consumerRecord, Consumer<?, ?> consumer, MessageListenerContainer container) {
-        handle(exception,consumer,consumerRecord);
+        handle(exception, consumer, consumerRecord);
         return true;
     }
 
-    private void handle(Exception exception, Consumer<?,?> consumer, ConsumerRecord<?,?> consumerRecord) {
+    private void handle(Exception exception, Consumer<?, ?> consumer, ConsumerRecord<?, ?> consumerRecord) {
         log.error("Exception thrown", exception);
+        // Forward the record to Dead Letter Topic (DLT) for further processing
         dltConsumerService.sendToDLT(consumerRecord);
-        consumer.seek(new TopicPartition(consumerRecord.topic(), consumerRecord.partition()),consumerRecord.offset() + 1L);
+        // Move to the next offset for the partition
+        consumer.seek(new TopicPartition(consumerRecord.topic(), consumerRecord.partition()), consumerRecord.offset() + 1L);
         log.info("Record moved to DLT");
     }
 }

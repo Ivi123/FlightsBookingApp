@@ -1,7 +1,7 @@
 package org.example.paymentservice.controller.stripe;
 
 import org.example.paymentservice.model.stripe.WebRequest;
-import org.example.paymentservice.service.stripe.PaymentProcessingService;
+import org.example.paymentservice.service.stripe.StripePaymentProcessingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,22 +21,12 @@ public class StripeController {
     @Value("${stripe.api.publicKey}")
     private String publicKey;
 
-    private final PaymentProcessingService paymentService;
+    private final StripePaymentProcessingService paymentService;
 
-    public StripeController(PaymentProcessingService paymentService) {
+    public StripeController(StripePaymentProcessingService paymentService) {
         this.paymentService = paymentService;
     }
 
-    /**
-     * Endpoint for the home page.
-     *
-     * @param paymentId The ID of the payment.
-     * @param bookingId The ID of the booking.
-     * @param amount    The amount of the payment.
-     * @param email     The email associated with the payment.
-     * @param model     The model for passing attributes to the view.
-     * @return A Mono containing the view name.
-     */
     @GetMapping("/")
     public Mono<String> home(@RequestParam(value = "paymentId", required = false, defaultValue = "") String paymentId,
                              @RequestParam(value = "bookingId", required = false, defaultValue = "") String bookingId,
@@ -52,6 +42,7 @@ public class StripeController {
         if (paymentId == null) {
             paymentId = ""; // Default value for paymentId if not provided
         }
+
         // Build the WebRequest object using the provided values
         WebRequest request = new WebRequest();
         request.setPaymentId(paymentId);
@@ -79,11 +70,6 @@ public class StripeController {
 
     /**
      * Endpoint for handling form submission.
-     *
-     * @param request       The WebRequest object containing form data.
-     * @param bindingResult The result of the form binding process.
-     * @param model         The model for passing attributes to the view.
-     * @return A Mono containing the view name.
      */
     @PostMapping("/")
     public Mono<String> showCard(@ModelAttribute WebRequest request,

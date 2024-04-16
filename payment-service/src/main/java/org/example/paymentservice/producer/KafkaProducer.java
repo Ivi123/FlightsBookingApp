@@ -9,49 +9,39 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * KafkaProducer class responsible for sending messages to Kafka topics.
- */
 @Service
 public class KafkaProducer {
-    private static final Logger log = LoggerFactory.getLogger(KafkaProducer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KafkaProducer.class);
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    /**
-     * Constructor for KafkaProducer.
-     *
-     * @param kafkaTemplate             KafkaTemplate for sending messages to payment-response-topic.
+    public KafkaProducer(KafkaTemplate<String, Object> kafkaTemplate) {
 
-     */
-    public KafkaProducer( KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    /**
-     * Method to send a payment request message to Kafka topics.
-     *
-     * @param key            The key associated with the message.
-     * @param paymentRequest The payment request object to be sent.
-     */
     public void sendMessage(String key, PaymentRequest paymentRequest) {
         CompletableFuture.supplyAsync(() -> {
             try {
+                // Simulate a 1-second delay
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
+                // Throw an exception in case of thread interruption
                 throw new RuntimeException(e);
             }
-            log.info("Sending message to payment-response-topic:: {}, {}", key, paymentRequest);
+            LOG.info("Sending message to payment-response-topic:: {}, {}", key, paymentRequest);
+            // Send the message to the Kafka topic using KafkaTemplate
             kafkaTemplate.send("payment-response-topic", key, paymentRequest);
-            log.info("Sending message to notification-topic:: {}, {}", key, paymentRequest);
-            kafkaTemplate.send("notification-topic", key, paymentRequest);
             return null;
         }).whenComplete((r, e) -> {
+            // When the operation is completed (either successfully or with failure), this block of code is executed
             if (e == null) {
-                log.info("Payment for booking: " + paymentRequest.getBookingId() + " processed! Please check the status.");
+                // If there's no exception, it means the operation completed successfully
+                LOG.info("Payment for booking: {} processed! Please check the status.", paymentRequest.getBookingId());
             } else {
-                log.error(e.getMessage());
+                // If an exception occurred, log the error message
+                LOG.error(e.getMessage());
             }
         });
-
     }
+
 }
