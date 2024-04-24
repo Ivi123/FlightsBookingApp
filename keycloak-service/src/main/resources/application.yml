@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: keycloak-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9081/realms/FlightsBookingApp
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+server:
+  port: 8087
+
+jwt:
+  auth:
+    converter:
+      resource-id: flights-booking-app
+      principle-attribute: preferred_username
+keycloak:
+  server-url: http://localhost:9081
+  realm: FlightsBookingApp
+  client-id: flights-booking-app
+  client-secret: 6ZuemksdxmcI9Nm4uNFpSQHukS6sxnbt
+  username: oana
+  password: temp123
+
+
