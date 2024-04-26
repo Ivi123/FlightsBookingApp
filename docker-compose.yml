@@ -121,19 +121,6 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092,kafka2:9092,kafka3:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-#
-#  keycloak:
-#    image: quay.io/keycloak/keycloak:latest
-#    container_name: keycloak
-#    networks:
-#      project_network:
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      KEYCLOAK_ADMIN: admin
-#      KEYCLOAK_ADMIN_PASSWORD: admin
-#    command:
-#      - start-dev
 
   mysql-kc:
     image: mysql:8.0.27
@@ -176,3 +163,7 @@ networks:
 volumes:
   mongo-data:
   keycloak-and-mysql-volume:
+#token-exchange: Această caracteristică permite schimbul de token-uri între clienți diferiți.
+#  Token Exchange este o parte a specificației OAuth 2.0 și este utilizată
+#  pentru a permite unui client să obțină un token de acces care să fie folosit cu un alt client.
+#admin-fine-grained-authz: Această caracteristică permite aplicarea unor politici de autorizare detaliată pentru administratori.

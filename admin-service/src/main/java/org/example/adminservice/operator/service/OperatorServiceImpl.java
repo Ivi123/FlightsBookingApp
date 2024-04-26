@@ -5,6 +5,7 @@ import org.example.adminservice.operator.exception.OperatorNotFoundException;
 import org.example.adminservice.operator.mapper.OperatorMapper;
 import org.example.adminservice.operator.model.Operator;
 import org.example.adminservice.operator.repository.OperatorRepository;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,9 @@ public class OperatorServiceImpl implements  OperatorService{
     }
 
     @Override
-    public Operator addOperator(OperatorDto dto) {
+    public Operator addOperator(OperatorDto dto, Jwt jwt) {
         Operator operator = operatorMapper.dtoToEntity(dto);
+        System.out.println("Operator added by "+ jwt.getClaim("email"));
         return operatorRepository.save(operator);
     }
 
