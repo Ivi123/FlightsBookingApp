@@ -170,6 +170,107 @@ services:
     networks:
       - project_network
 
+  admin-service:
+    image: openjdk:17-jdk
+    container_name: admin_service
+    networks:
+      - project_network
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./admin-service:/app
+    working_dir: /app
+    command: java -jar ./target/admin-service-0.0.1-SNAPSHOT.jar
+    environment:
+      SPRING_DATA_MONGODB_USERNAME: user
+      SPRING_DATA_MONGODB_PASSWORD: password
+      SPRING_DATA_MONGODB_HOST: mongo_db
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: flights-db
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_CONSUMER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+      SPRING_KAFKA_CONSUMER_GROUP_ID: admin-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+    depends_on:
+      - mongodb
+      - schema-registry
+
+  booking-service:
+    image: openjdk:17-jdk
+    container_name: booking_service
+    networks:
+      - project_network
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./booking-service:/app
+    working_dir: /app
+    command: java -jar ./target/booking-service-1.0-SNAPSHOT.jar
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://user:password@mongo_db:27017/flight_booking?authSource=admin"
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_CONSUMER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+    depends_on:
+      - mongodb
+      - schema-registry
+
+  flight-search:
+    image: openjdk:17-jdk
+    container_name: flight_search_service
+    networks:
+      - project_network
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./flight-search:/app
+    working_dir: /app
+    command: java -jar ./target/flight-search-0.0.1-SNAPSHOT.jar
+
+  notification-service:
+    image: openjdk:17-jdk
+    container_name: notification_service
+    networks:
+      - project_network
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./notification-service:/app
+    working_dir: /app
+    command: java -jar ./target/notification-service-0.0.1-SNAPSHOT.jar
+    environment:
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_CONSUMER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+    depends_on:
+      - schema-registry
+
+  payment-service:
+    image: openjdk:17-jdk
+    container_name: payment_service
+    networks:
+      - project_network
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./payment-service:/app
+    working_dir: /app
+    command: java -jar ./target/payment-service-0.0.1-SNAPSHOT.jar
+    environment:
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_PRODUCER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "kafka1:9092,kafka2:9092,kafka3:9092"
+      SPRING_KAFKA_CONSUMER_PROPERTIES_SCHEMA_REGISTRY_URL: "http://schema_registry:8081"
+      SPRING_DATA_MONGODB_URI: "mongodb://user:password@mongo_db:27017/payments?authSource=admin"
+    depends_on:
+      - mongodb
+      - schema-registry
+
 networks:
   project_network:
 
