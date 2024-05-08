@@ -14,14 +14,16 @@ public class FlightSearchService {
 
     private final WebClient webClient;
 
-    @Value("${external.api.lufthansa.baseurl}")
-    private String lufthansaApiBaseUrl;
+    private final String lufthansaApiBaseUrl;
+    private final String taromApiBaseUrl;
 
-    @Value("${external.api.tarom.baseurl}")
-    private String taromApiBaseUrl;
-
-    public FlightSearchService(WebClient.Builder webClientBuilder) {
+    public FlightSearchService(
+            @Value("${external.api.lufthansa.baseurl}") String lufthansaApiBaseUrl,
+            @Value("${external.api.tarom.baseurl}") String taromApiBaseUrl,
+            WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        this.lufthansaApiBaseUrl = lufthansaApiBaseUrl;
+        this.taromApiBaseUrl = taromApiBaseUrl;
     }
 
     public Flux<FlightResponseDto> searchFlights(String departure, String destination, String dateFrom, String dateTo) {
@@ -34,7 +36,8 @@ public class FlightSearchService {
     }
 
     //aici extrag toate zborurile din baza de date locala, in functie de departure, destination si date
-    private Flux<FlightDto> retrieveLocalFlights(String departure, String destination, String dateFrom, String dateTo) {
+    protected Flux<FlightDto> retrieveLocalFlights(String departure, String destination, String dateFrom, String dateTo) {
+
         return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/flights/filter")
@@ -49,7 +52,7 @@ public class FlightSearchService {
 
     //aici extrag un flux de elemente unice cu toti operatorii(id-urile lor) ce au zboruri disponibile
     // in functie de filtrele date
-    private Flux<String> extractDistinctOperatorIds(Flux<FlightDto> localFlights) {
+    protected Flux<String> extractDistinctOperatorIds(Flux<FlightDto> localFlights) {
         return localFlights
                 .map(FlightDto::getOperatorId)
                 .distinct();
@@ -57,14 +60,14 @@ public class FlightSearchService {
 
     // Pentru fiecare operatorId, apelăm endpointul de getFunctionalityByOperatorId și extragem funcționalitatea
     // de tip FLIGHT_SEARCH pentru fiecare operator
-    private Flux<String> extractFlightSearchUrls(Flux<String> distinctOperatorIds) {
+    protected Flux<String> extractFlightSearchUrls(Flux<String> distinctOperatorIds) {
         return distinctOperatorIds
                 .flatMap(this::retrieveFunctionalityByOperatorId)
                 .map(FunctionalityDto::getURL)
                 .distinct();
     }
 
-    private Flux<FunctionalityDto> retrieveFunctionalityByOperatorId(String operatorId) {
+    protected Flux<FunctionalityDto> retrieveFunctionalityByOperatorId(String operatorId) {
         return this.webClient.get()
                 .uri("/functionalities/operator/{operatorId}", operatorId)
                 .retrieve()
@@ -73,9 +76,9 @@ public class FlightSearchService {
     }
 
     //iterez prin fiecare url si creez un request catre el
-    private Flux<FlightResponseDto> requestFlightsFromOperators(Flux<String> urls, String departure,
-                                                                String destination, String dateFrom, String dateTo) {
-      return urls.flatMap(url -> {
+    protected Flux<FlightResponseDto> requestFlightsFromOperators(Flux<String> urls, String departure,
+                                                                  String destination, String dateFrom, String dateTo) {
+        return urls.flatMap(url -> {
             try {
                 return makeHttpRequestForFlights(url, departure, destination, dateFrom, dateTo);
             } catch (IllegalArgumentException e) {
@@ -85,8 +88,8 @@ public class FlightSearchService {
     }
 
     //aici descompun si compun la loc url-ul pentru a putea fi apelat serviciul extern local
-    private Flux<FlightResponseDto> makeHttpRequestForFlights(String url, String departure, String destination,
-                                                              String dateFrom, String dateTo) {
+    protected Flux<FlightResponseDto> makeHttpRequestForFlights(String url, String departure, String destination,
+                                                                String dateFrom, String dateTo) {
         String baseUrl = determineBaseUrl(url);
         String completeUrl = baseUrl + "/flight-search";
 
@@ -101,7 +104,7 @@ public class FlightSearchService {
                 .bodyToFlux(FlightResponseDto.class);
     }
 
-    private String determineBaseUrl(String url) {
+    protected String determineBaseUrl(String url) {
         if (url.contains("lufthansa.com")) {
             return lufthansaApiBaseUrl;
         } else if (url.contains("tarom.com")) {

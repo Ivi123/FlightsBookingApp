@@ -15,6 +15,16 @@ public class OperatorDto {
     @NotBlank(message = "IBAN cannot be blank")
     private String IBAN;
 
+    public OperatorDto() {
+    }
+
+    public OperatorDto(String id, String code, String name, String IBAN) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.IBAN = IBAN;
+    }
+
     public String getId() {
         return id;
     }

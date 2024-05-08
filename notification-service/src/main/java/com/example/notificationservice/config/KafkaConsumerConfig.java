@@ -18,10 +18,10 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConsumerConfig {
-    @Value("${spring.kafka.producer.bootstrap-servers}")
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("spring.kafka.consumer.group-id")
+    @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
     @Bean
@@ -68,5 +68,6 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(bookingConsumerFactory());
         return factory;
     }
+
 
 }

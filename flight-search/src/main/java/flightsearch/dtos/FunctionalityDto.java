@@ -6,6 +6,16 @@ public class FunctionalityDto {
     private String URL;
     private FunctionalityType type;
 
+    public FunctionalityDto() {
+    }
+
+    public FunctionalityDto(String id, String operatorId, String URL, FunctionalityType type) {
+        this.id = id;
+        this.operatorId = operatorId;
+        this.URL = URL;
+        this.type = type;
+    }
+
     public String getId() {
         return id;
     }

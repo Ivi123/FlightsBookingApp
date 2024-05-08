@@ -84,4 +84,19 @@ public class FlightDto {
     public void setDestination(String destination) {
         this.destination = destination;
     }
+
+    public FlightDto() {
+    }
+
+    public FlightDto(String id, String operatorId, String departure, String destination, String date, int numberOfSeats, LocalDateTime departureTime, LocalDateTime arrivalTime, double standardPrice) {
+        this.id = id;
+        this.operatorId = operatorId;
+        this.departure = departure;
+        this.destination = destination;
+        this.date = date;
+        this.numberOfSeats = numberOfSeats;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.standardPrice = standardPrice;
+    }
 }
