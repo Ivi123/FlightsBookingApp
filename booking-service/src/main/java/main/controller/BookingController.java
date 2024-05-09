@@ -4,6 +4,8 @@ import main.dto.BookingDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,8 +19,8 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/add")
-    public Mono<ResponseEntity<BookingDTO>> createBooking(@RequestBody Mono<BookingDTO> bookingDTO) {
-        return bookingService.createBooking(bookingDTO)
+    public Mono<ResponseEntity<BookingDTO>> createBooking(@RequestBody Mono<BookingDTO> bookingDTO, @AuthenticationPrincipal Jwt jwt) {
+        return bookingService.createBooking(bookingDTO, jwt)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }

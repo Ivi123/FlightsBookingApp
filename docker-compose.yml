@@ -218,6 +218,18 @@ services:
     working_dir: /app
     command: java -jar ./target/flight-search-0.0.1-SNAPSHOT.jar
 
+  keycloak-service:
+    image: openjdk:17-jdk
+    container_name: keycloak_service
+    networks:
+      - project_network
+    ports:
+      - "8087:8087"
+    volumes:
+      - ./keycloak-service:/app
+    working_dir: /app
+    command: java -jar ./target/keycloak-service-0.0.1-SNAPSHOT.jar
+
   notification-service:
     image: openjdk:17-jdk
     container_name: notification_service
