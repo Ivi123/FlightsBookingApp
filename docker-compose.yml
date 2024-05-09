@@ -122,6 +122,41 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:9092,kafka2:9092,kafka3:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
+  mysql-kc:
+    image: mysql:8.0.27
+    ports:
+      - 3377:3306
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: keycloak_db
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - keycloak-and-mysql-volume:/var/lib/mysql
+    networks:
+      - project_network
+
+  keycloak-w:
+    image: quay.io/keycloak/keycloak:22.0.4
+    command: start-dev
+    ports:
+      - 9081:8080
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN : admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: mysql
+      KC_DB_USERNAME: user
+      KC_DB_PASSWORD: password
+      KC_DB_URL: jdbc:mysql://mysql-kc:3306/keycloak_db
+      KC_FEATURES: token-exchange,admin-fine-grained-authz
+      KC_HOSTNAME: localhost
+    depends_on:
+      - mysql-kc
+    networks:
+      - project_network
+
   admin-service:
     image: openjdk:17-jdk
     container_name: admin_service
@@ -228,3 +263,8 @@ networks:
 
 volumes:
   mongo-data:
+  keycloak-and-mysql-volume:
+#token-exchange: Această caracteristică permite schimbul de token-uri între clienți diferiți.
+#  Token Exchange este o parte a specificației OAuth 2.0 și este utilizată
+#  pentru a permite unui client să obțină un token de acces care să fie folosit cu un alt client.
+#admin-fine-grained-authz: Această caracteristică permite aplicarea unor politici de autorizare detaliată pentru administratori.
