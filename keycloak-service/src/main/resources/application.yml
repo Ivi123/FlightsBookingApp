@@ -19,8 +19,8 @@ keycloak:
   server-url: http://localhost:9081
   realm: FlightsBookingApp
   client-id: flights-booking-app
-  client-secret: 6ZuemksdxmcI9Nm4uNFpSQHukS6sxnbt
-  username: oana
-  password: temp123
+  client-secret: OqmBRM0sGT8DMvofkwbkbuaNIR7fhefS
+  username: admin
+  password: admin
 
 
