@@ -19,7 +19,7 @@ public class FlightDataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        String[] operators = {"6628adddbec58103b3a1b699", "6628ae33bec58103b3a1b69a"};
+        String[] operators = {"6641fad78b87b96fe43d17d2", "6641fabe8b87b96fe43d17d1"};
         String departure = "New York";
         String destination = "London";
 
