@@ -151,7 +151,7 @@ services:
       KC_DB_PASSWORD: password
       KC_DB_URL: jdbc:mysql://mysql-kc:3306/keycloak_db
       KC_FEATURES: token-exchange,admin-fine-grained-authz
-      KC_HOSTNAME: keycloak-w
+      KC_HOSTNAME: localhost
     depends_on:
       - mysql-kc
     networks:
