@@ -34,8 +34,7 @@ public class KeyCloakController {
 
     @GetMapping(path = "/{userName}")
     public List<UserRepresentation> getUser(@PathVariable("userName") String userName){
-        List<UserRepresentation> user = service.getUser(userName);
-        return user;
+        return service.getUser(userName);
     }
 
     @PutMapping(path = "/update/{userId}")

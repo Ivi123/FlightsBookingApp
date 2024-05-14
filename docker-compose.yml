@@ -125,7 +125,7 @@ services:
   mysql-kc:
     image: mysql:8.0.27
     ports:
-      - 3377:3306
+      - "3377:3306"
     restart: unless-stopped
     environment:
       MYSQL_USER: user
@@ -141,7 +141,7 @@ services:
     image: quay.io/keycloak/keycloak:22.0.4
     command: start-dev
     ports:
-      - 9081:8080
+      - "9081:8080"
     restart: unless-stopped
     environment:
       KEYCLOAK_ADMIN : admin
@@ -151,7 +151,7 @@ services:
       KC_DB_PASSWORD: password
       KC_DB_URL: jdbc:mysql://mysql-kc:3306/keycloak_db
       KC_FEATURES: token-exchange,admin-fine-grained-authz
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: keycloak-w
     depends_on:
       - mysql-kc
     networks:
