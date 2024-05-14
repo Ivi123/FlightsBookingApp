@@ -25,10 +25,11 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     private static final Logger log = LoggerFactory.getLogger(JwtAuthConverter.class);
     @Autowired
     private JwtTokenService jwtTokenService;
-    @Value("${security.jwt.principal-claim}")
-    private String principalAttribute;
 
-    @Value("${security.jwt.resource-id}")
+    @Value("${jwt.auth.converter.principle-attribute}")
+    private String principleAttribute;
+
+    @Value("${jwt.auth.converter.resource-id}")
     private String resourceId;
 
     @Value("${security.jwt.role-prefix}")
@@ -44,7 +45,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     }
 
     private String getPrincipalClaimName(Jwt jwt) {
-        return jwt.hasClaim(principalAttribute) ? jwt.getClaimAsString(principalAttribute) : jwt.getClaimAsString(JwtClaimNames.SUB);
+        return jwt.hasClaim(principleAttribute) ? jwt.getClaimAsString(principleAttribute) : jwt.getClaimAsString(JwtClaimNames.SUB);
     }
 
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {

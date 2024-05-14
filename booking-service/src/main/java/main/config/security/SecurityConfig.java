@@ -23,12 +23,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder() {
-        String issuerUri = "http://keycloak-w:8080/realms/FlightsBookingApp";
-        return JwtDecoders.fromIssuerLocation(issuerUri);
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -43,4 +37,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
