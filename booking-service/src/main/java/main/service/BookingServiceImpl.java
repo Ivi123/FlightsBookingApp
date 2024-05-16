@@ -4,11 +4,10 @@ import avro.AdminRequest;
 import main.dto.BookingDTO;
 import main.mapper.BookingMapper;
 import main.kafka.mappers.AdminRequestMapper;
-import main.kafka.mappers.PaymentRequestMapper;
 import main.kafka.producer.BookingProducerService;
+import main.model.Booking;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -25,15 +24,11 @@ public class BookingServiceImpl implements BookingService{
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
-    private PaymentRequestMapper paymentRequestMapper;
-    @Autowired
     private AdminRequestMapper adminRequestMapper;
     @Autowired
     private BookingMapper bookingMapper;
     @Autowired
     private BookingProducerService bookingProducerService;
-    @Autowired
-    private ReactiveMongoTemplate mongoTemplate;
 
     /**
      *
@@ -58,29 +53,27 @@ public class BookingServiceImpl implements BookingService{
     @Override
     public Mono<BookingDTO> createBooking(Mono<BookingDTO> bookingDTOMono, Jwt jwt) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean hasUserRole = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"));
-
-        if (!hasUserRole) {
-            throw new SecurityException("Access denied: user does not have the required role.");
+        if (authentication.getAuthorities().stream().noneMatch(authority -> authority.getAuthority().equals("ROLE_USER"))) {
+            return Mono.error(new SecurityException("Access denied: user does not have the required role."));
         }
 
-        System.out.println("Booking created by " + jwt.getClaim("email"));
-        return bookingDTOMono
-                .map(bookingMapper::toEntity)
-                .flatMap(booking -> {
-                    // Set initial status and expiration time as needed
-                    booking.setStatus("INITIATED");
-                    booking.setCreatedAt(LocalDateTime.now());
-                    booking.setExpiresAt(LocalDateTime.now().plusMinutes(15)); // Set expiration 15 minutes from now
-                    return bookingRepository.save(booking);
-                })
-                .map(bookingMapper::toDTO)
-                .doOnSuccess(bookingDTO -> {
-                    // Preparing admin request based on the booking details
-                    AdminRequest adminRequest = adminRequestMapper.toAdminRequest(bookingMapper.toEntity(bookingDTO));
-                    // Sending to admin topic for initial processing
-                    bookingProducerService.sendAdminRequest(bookingDTO.getId(), adminRequest);
+        return bookingDTOMono.map(bookingMapper::toEntity)
+                .flatMap(booking ->
+                        bookingRepository.findByPaymentDetails_CardNumberAndFlightDetails_FlightId(booking.getPaymentDetails().getCardNumber(), booking.getFlightDetails().getFlightId())
+                                .switchIfEmpty(Mono.defer(() -> saveAndProcessBooking(booking, jwt)))
+                                .map(bookingMapper::toDTO)
+                );
+    }
+
+    private Mono<Booking> saveAndProcessBooking(Booking booking, Jwt jwt) {
+        booking.setStatus("INITIATED");
+        booking.setCreatedAt(LocalDateTime.now());
+        booking.setExpiresAt(LocalDateTime.now().plusMinutes(15)); // Expiry time
+        return bookingRepository.save(booking)
+                .doOnSuccess(savedBooking -> {
+                    AdminRequest adminRequest = adminRequestMapper.toAdminRequest(savedBooking);
+                    bookingProducerService.sendAdminRequest(savedBooking.getId(), adminRequest);
+                    System.out.println("Booking created by " + jwt.getClaim("email"));
                 });
     }
 
