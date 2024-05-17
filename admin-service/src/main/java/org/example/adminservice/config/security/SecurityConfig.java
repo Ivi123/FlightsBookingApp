@@ -33,9 +33,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers("/operator/**").hasRole("admin")
-                                .requestMatchers("/flights/**").hasRole("operator")
-                                .requestMatchers("/functionalities/**").hasRole("operator")
+                                .requestMatchers("/operator/**").hasAnyRole("operator", "admin")
+                                .requestMatchers("/flights/**").hasAnyRole("operator", "admin")
+                                .requestMatchers("/functionalities/**").hasAnyRole("operator", "admin")
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt

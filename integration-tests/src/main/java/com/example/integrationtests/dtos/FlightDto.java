@@ -1,10 +1,6 @@
-package org.example.adminservice.flight.model;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.example.integrationtests.dtos;
 
-@Document(collection = "flights")
-public class Flight {
-    @Id
+public class FlightDto {
     private String id;
     private String operatorId;
     private String departure;
@@ -12,11 +8,7 @@ public class Flight {
     private int numberOfSeats;
     private String date;
 
-    public Flight() {
-    }
-
-    public Flight(String id, String operatorId, String departure, String destination, int numberOfSeats, String date) {
-        this.id = id;
+    public FlightDto(String operatorId, String departure, String destination, int numberOfSeats, String date) {
         this.operatorId = operatorId;
         this.departure = departure;
         this.destination = destination;

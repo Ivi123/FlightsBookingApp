@@ -8,10 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="payment-service" />
         <module name="keycloak-service" />
+        <module name="booking-service" />
         <module name="flight-search" />
         <module name="admin-service" />
         <module name="notification-service" />
-        <module name="booking-service" />
+        <module name="integration-tests" />
       </profile>
     </annotationProcessing>
   </component>
@@ -20,6 +21,7 @@
       <module name="admin-service" options="-parameters" />
       <module name="booking-service" options="-parameters" />
       <module name="flight-search" options="-parameters" />
+      <module name="integration-tests" options="-parameters" />
       <module name="keycloak-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="payment-service" options="-parameters" />
