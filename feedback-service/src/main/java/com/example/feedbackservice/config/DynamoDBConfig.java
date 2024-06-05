@@ -13,11 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DynamoDBConfig {
 
-    @Value("${amazon.aws.accesskey}")
+/*    @Value("${amazon.aws.accesskey}")
     private String amazonAWSAccessKey;
 
-//    @Value("${amazon.aws.secretkey}")
-//    private String amazonAWSSecretKey;
+    @Value("${amazon.aws.secretkey}")
+    private String amazonAWSSecretKey;*/
 
     @Value("${amazon.aws.serviceEndpoint}")
     private String serviceEndpoint;
@@ -41,7 +41,7 @@ public class DynamoDBConfig {
                 )
                 .withCredentials(
                         new AWSStaticCredentialsProvider(
-                                new BasicAWSCredentials(amazonAWSAccessKey, "secretKey")
+                                new BasicAWSCredentials("amazonAWSAccessKey", "amazonAWSSecretKey")
                         )
                 ).build();
     }
