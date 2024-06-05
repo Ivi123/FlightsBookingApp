@@ -9,6 +9,7 @@
         <module name="payment-service" />
         <module name="keycloak-service" />
         <module name="booking-service" />
+        <module name="feedback-service" />
         <module name="flight-search" />
         <module name="admin-service" />
         <module name="notification-service" />
@@ -20,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="admin-service" options="-parameters" />
       <module name="booking-service" options="-parameters" />
+      <module name="feedback-service" options="-parameters" />
       <module name="flight-search" options="-parameters" />
       <module name="integration-tests" options="-parameters" />
       <module name="keycloak-service" options="-parameters" />
