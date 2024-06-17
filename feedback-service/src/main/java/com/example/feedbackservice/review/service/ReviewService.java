@@ -36,14 +36,15 @@ public class ReviewService {
         return reviewRepository.getAllByOperatorId(id);
     }
 
-    public Double getScoreByOperatorId(String id) {
+    public String getScoreByOperatorId(String id) {
         List<Review> reviews = reviewRepository.getAllByOperatorId(id);
         List<Integer> scores = reviews
                 .stream()
                 .map(review -> convertScore(review.getScore()))
                 .collect(Collectors.toList());
 
-        return scores.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+        double score = scores.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+        return "Review score for " + id + " is " + score;
     }
 
     public Integer convertScore(ReviewScore reviewScore) {

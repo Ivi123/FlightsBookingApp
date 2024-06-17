@@ -1,4 +1,4 @@
-package com.example.feedbackservice.converter;
+package com.example.feedbackservice.feedback.converter;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 import com.example.feedbackservice.feedback.entity.FeedbackType;

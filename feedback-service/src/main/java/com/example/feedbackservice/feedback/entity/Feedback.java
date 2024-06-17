@@ -1,7 +1,7 @@
 package com.example.feedbackservice.feedback.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.example.feedbackservice.converter.FeedbackTypeConverter;
+import com.example.feedbackservice.feedback.converter.FeedbackTypeConverter;
 
 @DynamoDBTable(tableName = "feedback")
 public class Feedback {

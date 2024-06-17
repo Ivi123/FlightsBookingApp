@@ -41,7 +41,7 @@ public class ReviewController {
     }
 
     @GetMapping("/score/{id}")
-    public Double getScoreByOperatorId(@PathVariable String id) {
+    public String getScoreByOperatorId(@PathVariable String id) {
         return reviewService.getScoreByOperatorId(id);
     }
 }
