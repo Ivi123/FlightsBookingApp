@@ -12,6 +12,18 @@ public class Flight {
     private int numberOfSeats;
     private String date;
 
+    public Flight() {
+    }
+
+    public Flight(String id, String operatorId, String departure, String destination, int numberOfSeats, String date) {
+        this.id = id;
+        this.operatorId = operatorId;
+        this.departure = departure;
+        this.destination = destination;
+        this.numberOfSeats = numberOfSeats;
+        this.date = date;
+    }
+
     public int getNumberOfSeats() {
         return numberOfSeats;
     }

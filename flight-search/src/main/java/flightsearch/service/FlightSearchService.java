@@ -3,30 +3,46 @@ package flightsearch.service;
 import flightsearch.dtos.FunctionalityDto;
 import flightsearch.dtos.FlightDto;
 import flightsearch.dtos.FlightResponseDto;
+import flightsearch.dtos.LoginDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @Service
 public class FlightSearchService {
-
     private final WebClient webClient;
-
+    private final WebClient webClientAuth;
     private final String lufthansaApiBaseUrl;
     private final String taromApiBaseUrl;
+    private String authToken;
 
     public FlightSearchService(
             @Value("${external.api.lufthansa.baseurl}") String lufthansaApiBaseUrl,
             @Value("${external.api.tarom.baseurl}") String taromApiBaseUrl,
             WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        this.webClientAuth = webClientBuilder.baseUrl("http://localhost:8087").build();
         this.lufthansaApiBaseUrl = lufthansaApiBaseUrl;
         this.taromApiBaseUrl = taromApiBaseUrl;
     }
 
+    private String obtainAuthToken() {
+        LoginDto loginDto = new LoginDto("ivona", "1234567");
+
+        Mono<String> tokenMono = webClientAuth.post()
+                .uri("/api/user/login")
+                .bodyValue(loginDto)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        return "Bearer " + tokenMono.block();
+    }
+
     public Flux<FlightResponseDto> searchFlights(String departure, String destination, String dateFrom, String dateTo) {
+        authToken = obtainAuthToken();
         Flux<FlightDto> localFlights = retrieveLocalFlights(departure, destination, dateFrom, dateTo);
         Flux<String> distinctOperatorIds = extractDistinctOperatorIds(localFlights);
         Flux<String> urls = extractFlightSearchUrls(distinctOperatorIds);
@@ -46,6 +62,7 @@ public class FlightSearchService {
                         .queryParam("dateFrom", dateFrom)
                         .queryParam("dateTo", dateTo)
                         .build())
+                .header("Authorization", authToken)
                 .retrieve()
                 .bodyToFlux(FlightDto.class);
     }
@@ -70,6 +87,7 @@ public class FlightSearchService {
     protected Flux<FunctionalityDto> retrieveFunctionalityByOperatorId(String operatorId) {
         return this.webClient.get()
                 .uri("/functionalities/operator/{operatorId}", operatorId)
+                .header("Authorization", authToken)
                 .retrieve()
                 .bodyToFlux(FunctionalityDto.class)
                 .filter(functionality -> "FLIGHT_SEARCH".equals(functionality.getType().toString()));
@@ -100,6 +118,7 @@ public class FlightSearchService {
                         .queryParam("dateFrom", dateFrom)
                         .queryParam("dateTo", dateTo)
                         .build())
+                .header("Authorization", authToken)
                 .retrieve()
                 .bodyToFlux(FlightResponseDto.class);
     }

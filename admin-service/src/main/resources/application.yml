@@ -7,6 +7,12 @@ spring:
       port: 27017
       database: flights-db
       authentication-database: admin
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9081/realms/FlightsBookingApp
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
   #kafka
   kafka:
@@ -32,3 +38,10 @@ spring:
         schema:
          registry:
           url: http://127.0.0.1:8081
+keycloak:
+  client-id: flights-booking-app
+jwt:
+  auth:
+    converter:
+      resource-id: flights-booking-app
+      principle-attribute: preferred_username
